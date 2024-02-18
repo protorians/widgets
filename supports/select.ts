@@ -1,4 +1,6 @@
 import type {
+    IOptionGroupProps,
+    IOptionProps,
     ISelectProps,
     IStateSchema,
     IWidget
@@ -7,16 +9,40 @@ import { Widget } from "./widget";
 
 
 
-export default class SelectWidget<S extends IStateSchema>
+export class OptionGroupWidget<S extends IStateSchema>
 
-    extends Widget<ISelectProps, S, HTMLTextAreaElement>
+    extends Widget<IOptionGroupProps, S, HTMLOptGroupElement>
 
-    implements IWidget<ISelectProps, S, HTMLTextAreaElement>
+    implements IWidget<IOptionGroupProps, S, HTMLOptGroupElement>
 
 {
 
-    get tagname(): string {
-        return 'select'
-    }
+    get tagname(): string { return 'optgroup' }
+
+}
+
+
+export class OptionWidget<S extends IStateSchema>
+
+    extends Widget<IOptionProps, S, HTMLOptionElement>
+
+    implements IWidget<IOptionProps, S, HTMLOptionElement>
+
+{
+
+    get tagname(): string { return 'option' }
+
+}
+
+
+export class SelectWidget<S extends IStateSchema>
+
+    extends Widget<ISelectProps, S, HTMLSelectElement>
+
+    implements IWidget<ISelectProps, S, HTMLSelectElement>
+
+{
+
+    get tagname(): string { return 'select' }
 
 }

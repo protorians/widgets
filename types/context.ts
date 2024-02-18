@@ -1,5 +1,6 @@
 import type { IProps } from "./props";
-import type { IStateSchema, IStates } from "./state";
+import type { IStatePayload, IStateSchema, IStates } from "./state";
+import { ISupportableValue } from "./values";
 import type { IWidget, IWidgetElements } from "./widget";
 
 
@@ -18,17 +19,13 @@ export interface IContext<P extends IProps, S extends IStateSchema, E extends IW
     get state(): IStates<S>;
 
 
-    // useState(name: string): this;
+    useState(name: string): this;
 
-    // getState(name: string): this;
-
-    // setState(name: string, value: ISupportableValue): this;
+    setState(payload: IStatePayload<S>): this;
 
 
-    // useRef(name: string): this;
+    useRef(name: string): IContextuableWidget<P, S, E>;
 
-    // getRef(name: string): this;
-
-    // setRef(name: string, value: ISupportableValue): this;
+    setRef(name: string, value: ISupportableValue): this;
 
 }

@@ -16,9 +16,7 @@ export class PictureSourceWidget<S extends IStateSchema>
 
 {
 
-    get tagname(): string {
-        return 'source'
-    }
+    get tagname(): string { return 'source' }
 
 }
 
@@ -31,8 +29,6 @@ export default class PictureWidget<S extends IStateSchema>
 
 {
 
-    get tagname(): string {
-        return 'picture'
-    }
+    get tagname(): string { return 'picture' }
 
 }

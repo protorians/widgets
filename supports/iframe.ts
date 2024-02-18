@@ -4,14 +4,12 @@ import { Widget } from "./widget";
 
 export class IFrameWidget<S extends IStateSchema>
 
-    extends Widget<IIFrameProps, S, HTMLTextAreaElement>
+    extends Widget<IIFrameProps, S, HTMLIFrameElement>
 
-    implements IWidget<IIFrameProps, S, HTMLTextAreaElement>
+    implements IWidget<IIFrameProps, S, HTMLIFrameElement>
 
 {
 
-    get tagname(): string {
-        return 'iframe'
-    }
+    get tagname(): string { return 'iframe' }
 
 }

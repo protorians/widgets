@@ -19,7 +19,7 @@ export class Widget<P extends IProps, S extends IStateSchema, E extends IWidgetE
 
     #props: IWidgetProps<P, S, E>;
 
-    #context: IContextuable<P, S, E>;
+    #context: IContextuable<IProps, IStateSchema, IWidgetElements>;
 
     constructor(props: IWidgetProps<P, S, E>) {
 
@@ -44,14 +44,13 @@ export class Widget<P extends IProps, S extends IStateSchema, E extends IWidgetE
 
     }
 
-    useContext(context: IContextuable<P, S, E>): this {
+    useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this {
 
         this.#context = context
 
         return this;
 
     }
-
 
     content(value: IChildren): this {
 
@@ -71,7 +70,7 @@ export class Widget<P extends IProps, S extends IStateSchema, E extends IWidgetE
 
     className(value: IClassName | IClassName[]): this {
 
-        console.log('set content', value)
+        console.log('set className', value)
 
         return this;
 

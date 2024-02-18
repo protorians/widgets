@@ -56,7 +56,28 @@ export interface ICommonProps {
 }
 
 
-export type IInputType = 'text'
+export interface IAnchorProps extends ICommonProps {
+
+    href: string;
+
+    hreflang?: string;
+
+    ping?: string;
+
+    referrerpolicy?: IReferrerPolicy;
+
+    target?: ITarget;
+
+    type?: string;
+
+    download?: string;
+
+    media?: string;
+
+}
+
+
+export type IInputableType = 'text'
 
     | 'button'
 
@@ -117,9 +138,44 @@ export type IInputableCommonProps = {
 
 }
 
+
+export type IButtonType = 'button' | 'reset' | 'submit' | 'menu'
+
+export interface IButtonProps extends IInputableProps {
+
+    popoverTarget?: string;
+
+    popoverTargetAction?: string;
+
+    type?: IButtonType;
+
+}
+
 export interface IInputProps extends IInputableProps {
 
-    type?: IInputType;
+    type?: IInputableType;
+
+}
+
+
+export interface IOptionGroupProps extends ICommonProps {
+
+    disabled?: boolean;
+
+    label: string;
+
+}
+
+
+export interface IOptionProps extends ICommonProps {
+
+    disabled?: boolean;
+
+    selected?: boolean;
+
+    label: string;
+
+    value?: string | number;
 
 }
 
@@ -132,6 +188,8 @@ export interface ITextareaProps extends IInputableProps {
 }
 
 export interface IInputableProps extends ICommonProps, IInputableCommonProps {
+
+    name?: string;
 
     alt?: string;
 

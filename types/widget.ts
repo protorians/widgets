@@ -1,4 +1,5 @@
 
+import { IActions } from "./actions";
 import type {
     IClassName,
     IStyle,
@@ -30,6 +31,8 @@ export type IWidgetProps<P extends IProps, S extends IStateSchema, E extends IWi
 
     context?: IContextuable<P, S, E>;
 
+    actions?: IActions;
+
 }
 
 export interface IWidget<P extends IProps, S extends IStateSchema, E extends IWidgetElements> {
@@ -41,12 +44,12 @@ export interface IWidget<P extends IProps, S extends IStateSchema, E extends IWi
 
     get props(): IWidgetProps<P, S, E>;
 
-    get context(): IContextuable<P, S, E>;
+    get context(): IContextuable<IProps, IStateSchema, IWidgetElements>;
 
 
     initialize(): this;
 
-    useContext(context: IContextuable<P, S, E>): this;
+    useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this;
 
 
     content(value: IChildren): this;

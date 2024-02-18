@@ -3,7 +3,7 @@ import { Widget } from "./widget";
 
 
 
-export default class TextWidget<S extends IStateSchema>
+export class TextWidget<S extends IStateSchema>
 
     extends Widget<ICommonProps, S, HTMLSpanElement>
 

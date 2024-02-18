@@ -5,14 +5,12 @@ import { Widget } from "./widget";
 
 export class FormWidget<S extends IStateSchema>
 
-    extends Widget<IFormProps, S, HTMLTextAreaElement>
+    extends Widget<IFormProps, S, HTMLFormElement>
 
-    implements IWidget<IFormProps, S, HTMLTextAreaElement>
+    implements IWidget<IFormProps, S, HTMLFormElement>
 
 {
 
-    get tagname(): string {
-        return 'iframe'
-    }
+    get tagname(): string { return 'form' }
 
 }

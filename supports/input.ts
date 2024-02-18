@@ -3,16 +3,14 @@ import { Widget } from "./widget";
 
 
 
-export default class InputWidget<S extends IStateSchema>
+export class InputWidget<S extends IStateSchema>
 
-    extends Widget<IInputableProps, S, HTMLTextAreaElement>
+    extends Widget<IInputableProps, S, HTMLInputElement>
 
-    implements IWidget<IInputableProps, S, HTMLTextAreaElement>
+    implements IWidget<IInputableProps, S, HTMLInputElement>
 
 {
 
-    get tagname(): string {
-        return 'input'
-    }
+    get tagname(): string { return 'input' }
 
 }

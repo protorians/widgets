@@ -15,6 +15,12 @@ export type IStateProps = {
 
 }
 
+export type IStatePayload<S extends IStateSchema> = {
+
+    [K in keyof S]?: ISupportableValue
+
+}
+
 export interface IState<V extends ISupportableValue> {
 
     get name(): string;
