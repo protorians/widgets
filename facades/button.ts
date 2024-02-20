@@ -10,6 +10,6 @@ export function buttonWidget<S extends IStateSchema>(props: IWidgetProps<IButton
 
     if (typeof props == 'string') props = { child: props }
 
-    return new ButtonWidget<S>(props)
+    return (new ButtonWidget<S>(props)).render()
 
 }

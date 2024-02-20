@@ -1,3 +1,4 @@
+import { IEngine } from "./engine";
 import type { IProps } from "./props";
 import type { IStatePayload, IStateSchema, IStates } from "./state";
 import { ISupportableValue } from "./values";
@@ -14,9 +15,9 @@ export type IContextuableWidget<P extends IProps, S extends IStateSchema, E exte
 
 export interface IContext<P extends IProps, S extends IStateSchema, E extends IWidgetElements> {
 
-    get widget(): IContextuableWidget<P, S, E>;
-
     get state(): IStates<S>;
+
+    get engine(): IEngine<P, S, E>;
 
 
     useState(name: string): this;

@@ -3,7 +3,7 @@ import type { ISupportableValue } from "../types/values";
 
 
 
-export class State<V extends ISupportableValue> implements IState<V>{
+export class WidgetState<V extends ISupportableValue> implements IState<V>{
 
     #name: string;
 
@@ -46,7 +46,7 @@ export class State<V extends ISupportableValue> implements IState<V>{
 }
 
 
-export class States<S extends IStateSchema> implements IStates<S>{
+export class WidgetStates<S extends IStateSchema> implements IStates<S>{
 
     #entries: IStateEntries<S> = {} as IStateEntries<S>
 

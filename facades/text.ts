@@ -10,6 +10,6 @@ export function textWidget<S extends IStateSchema>(props: string | IWidgetProps<
 
     if (typeof props == 'string') props = { child: props }
 
-    return new TextWidget<S>(props)
+    return (new TextWidget<S>(props)).render()
 
 }

@@ -15,7 +15,11 @@ import type {
 
 export type IWidgetElements = Element | HTMLElement;
 
-export type IWidgetProps<P extends IProps, S extends IStateSchema, E extends IWidgetElements> = P & {
+export type IWidgetProps<
+    P extends IProps,
+    S extends IStateSchema,
+    E extends IWidgetElements
+> = P & {
 
     ref?: IReference<P, S, E>;
 
@@ -44,12 +48,10 @@ export interface IWidget<P extends IProps, S extends IStateSchema, E extends IWi
 
     get props(): IWidgetProps<P, S, E>;
 
-    get context(): IContextuable<IProps, IStateSchema, IWidgetElements>;
-
 
     initialize(): this;
 
-    useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this;
+    // useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this;
 
 
     content(value: IChildren): this;

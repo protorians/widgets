@@ -8,8 +8,6 @@ import type {
     IStyle,
     IStateSchema
 } from "../types";
-import type { IContextuable } from "../types/context";
-import { Context } from "./context";
 
 
 
@@ -19,13 +17,9 @@ export class Widget<P extends IProps, S extends IStateSchema, E extends IWidgetE
 
     #props: IWidgetProps<P, S, E>;
 
-    #context: IContextuable<IProps, IStateSchema, IWidgetElements>;
-
     constructor(props: IWidgetProps<P, S, E>) {
 
         this.#props = props;
-
-        this.#context = props.context || new Context(this);
 
     }
 
@@ -35,22 +29,19 @@ export class Widget<P extends IProps, S extends IStateSchema, E extends IWidgetE
 
     get props(): IWidgetProps<P, S, E> { return this.#props; }
 
-    get context(): IContextuable<P, S, E> { return this.#context }
-
-
     initialize(): this {
 
         return this;
 
     }
 
-    useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this {
+    // useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this {
 
-        this.#context = context
+    //     this.#context = context
 
-        return this;
+    //     return this;
 
-    }
+    // }
 
     content(value: IChildren): this {
 
@@ -77,6 +68,8 @@ export class Widget<P extends IProps, S extends IStateSchema, E extends IWidgetE
     }
 
     render(): this {
+
+        console.log('widget.render', this.constructor.name)
 
         return this;
 
