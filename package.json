@@ -35,5 +35,8 @@
   "engines": {
     "npm": ">=8.18.0",
     "node": ">=18.8.0"
+  },
+  "dependencies": {
+    "@protorians/signalable": "^0.0.6"
   }
 }
