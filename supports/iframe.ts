@@ -1,15 +1,15 @@
-import { IIFrameProps, IStateSchema, IWidget } from "../types";
-import { Widget } from "./widget";
+import {IIFrameProps, IWidget} from '../types';
+import {Widget} from './widget';
 
 
-export class IFrameWidget<S extends IStateSchema>
+export class IFrameWidget
 
-    extends Widget<IIFrameProps, S, HTMLIFrameElement>
+  extends Widget<IIFrameProps, HTMLIFrameElement>
 
-    implements IWidget<IIFrameProps, S, HTMLIFrameElement>
+  implements IWidget<IIFrameProps, HTMLIFrameElement> {
 
-{
-
-    get tagname(): string { return 'iframe' }
+  get tag(): string {
+    return 'iframe';
+  }
 
 }

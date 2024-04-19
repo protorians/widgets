@@ -1,18 +1,15 @@
-import type { ICommonProps, IStateSchema, IWidget } from "../types";
-import { Widget } from "./widget";
+import type {ICommonProps, IWidget} from '../types';
+import {Widget} from './widget';
 
 
+export class TextWidget
 
-export class TextWidget<S extends IStateSchema>
+  extends Widget<ICommonProps, HTMLSpanElement>
 
-    extends Widget<ICommonProps, S, HTMLSpanElement>
+  implements IWidget<ICommonProps, HTMLSpanElement> {
 
-    implements IWidget<ICommonProps, S, HTMLSpanElement>
-
-{
-
-    get tagname(): string {
-        return 'span'
-    }
+  get tag(): string {
+    return 'span';
+  }
 
 }

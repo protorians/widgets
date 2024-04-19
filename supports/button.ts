@@ -1,16 +1,16 @@
-import type { IButtonProps, IStateSchema, IWidget } from "../types";
+import type { IButtonProps, IWidget } from "../types";
 import { Widget } from "./widget";
 
 
 
-export class ButtonWidget<S extends IStateSchema>
+export class ButtonWidget
 
-    extends Widget<IButtonProps, S, HTMLButtonElement>
+    extends Widget<IButtonProps, HTMLButtonElement>
 
-    implements IWidget<IButtonProps, S, HTMLButtonElement>
+    implements IWidget<IButtonProps, HTMLButtonElement>
 
 {
 
-    get tagname(): string { return 'button' }
+    get tag(): string { return 'button' }
 
 }

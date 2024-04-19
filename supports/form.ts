@@ -1,16 +1,15 @@
-import type { IFormProps, IStateSchema, IWidget } from "../types";
-import { Widget } from "./widget";
+import type {IFormProps, IWidget} from '../types';
+import {Widget} from './widget';
 
 
+export class FormWidget
 
-export class FormWidget<S extends IStateSchema>
+  extends Widget<IFormProps, HTMLFormElement>
 
-    extends Widget<IFormProps, S, HTMLFormElement>
+  implements IWidget<IFormProps, HTMLFormElement> {
 
-    implements IWidget<IFormProps, S, HTMLFormElement>
-
-{
-
-    get tagname(): string { return 'form' }
+  get tag(): string {
+    return 'form';
+  }
 
 }

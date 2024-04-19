@@ -1,94 +1,92 @@
 import type {
-    ICommonProps,
-    IStateSchema,
-    IWidget
-} from "../types";
-import { Widget } from "./widget";
+  ICommonProps,
+  IWidget,
+} from '../types';
+import {Widget} from './widget';
 
 
+export class TableCaptionWidget
 
-export class TableCaptionWidget<S extends IStateSchema>
+  extends Widget<ICommonProps, HTMLTableCaptionElement>
 
-    extends Widget<ICommonProps, S, HTMLTableCaptionElement>
+  implements IWidget<ICommonProps, HTMLTableCaptionElement> {
 
-    implements IWidget<ICommonProps, S, HTMLTableCaptionElement>
-
-{
-
-    get tagname(): string { return 'caption' }
+  get tag(): string {
+    return 'caption';
+  }
 
 }
 
 
-export class TableHeadWidget<S extends IStateSchema>
+export class TableHeadWidget
 
-    extends Widget<ICommonProps, S, HTMLTableCellElement>
+  extends Widget<ICommonProps, HTMLTableCellElement>
 
-    implements IWidget<ICommonProps, S, HTMLTableCellElement>
+  implements IWidget<ICommonProps, HTMLTableCellElement> {
 
-{
-
-    get tagname(): string { return 'th' }
-
-}
-
-
-export class TableBodyWidget<S extends IStateSchema>
-
-    extends Widget<ICommonProps, S, HTMLTableSectionElement>
-
-    implements IWidget<ICommonProps, S, HTMLTableSectionElement>
-
-{
-
-    get tagname(): string { return 'tbody' }
+  get tag(): string {
+    return 'th';
+  }
 
 }
 
-export class TableFootWidget<S extends IStateSchema>
 
-    extends Widget<ICommonProps, S, HTMLTableSectionElement>
+export class TableBodyWidget
 
-    implements IWidget<ICommonProps, S, HTMLTableSectionElement>
+  extends Widget<ICommonProps, HTMLTableSectionElement>
 
-{
+  implements IWidget<ICommonProps, HTMLTableSectionElement> {
 
-    get tagname(): string { return 'tbody' }
-
-}
-
-export class TableRowWidget<S extends IStateSchema>
-
-    extends Widget<ICommonProps, S, HTMLTableRowElement>
-
-    implements IWidget<ICommonProps, S, HTMLTableRowElement>
-
-{
-
-    get tagname(): string { return 'tr' }
+  get tag(): string {
+    return 'tbody';
+  }
 
 }
 
-export class TableCellWidget<S extends IStateSchema>
+export class TableFootWidget
 
-    extends Widget<ICommonProps, S, HTMLTableCellElement>
+  extends Widget<ICommonProps, HTMLTableSectionElement>
 
-    implements IWidget<ICommonProps, S, HTMLTableCellElement>
+  implements IWidget<ICommonProps, HTMLTableSectionElement> {
 
-{
-
-    get tagname(): string { return 'td' }
+  get tag(): string {
+    return 'tbody';
+  }
 
 }
 
-export default class TableWidget<S extends IStateSchema>
+export class TableRowWidget
 
-    extends Widget<ICommonProps, S, HTMLTableElement>
+  extends Widget<ICommonProps, HTMLTableRowElement>
 
-    implements IWidget<ICommonProps, S, HTMLTableElement>
+  implements IWidget<ICommonProps, HTMLTableRowElement> {
 
-{
+  get tag(): string {
+    return 'tr';
+  }
 
-    get tagname(): string { return 'table' }
+}
+
+export class TableCellWidget
+
+  extends Widget<ICommonProps, HTMLTableCellElement>
+
+  implements IWidget<ICommonProps, HTMLTableCellElement> {
+
+  get tag(): string {
+    return 'td';
+  }
+
+}
+
+export default class TableWidget
+
+  extends Widget<ICommonProps, HTMLTableElement>
+
+  implements IWidget<ICommonProps, HTMLTableElement> {
+
+  get tag(): string {
+    return 'table';
+  }
 
 }

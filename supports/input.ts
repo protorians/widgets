@@ -1,16 +1,15 @@
-import type { IInputableProps, IStateSchema, IWidget } from "../types";
-import { Widget } from "./widget";
+import type {IInputableProps, IWidget} from '../types';
+import {Widget} from './widget';
 
 
+export class InputWidget
 
-export class InputWidget<S extends IStateSchema>
+  extends Widget<IInputableProps, HTMLInputElement>
 
-    extends Widget<IInputableProps, S, HTMLInputElement>
+  implements IWidget<IInputableProps, HTMLInputElement> {
 
-    implements IWidget<IInputableProps, S, HTMLInputElement>
-
-{
-
-    get tagname(): string { return 'input' }
+  get tag(): string {
+    return 'input';
+  }
 
 }

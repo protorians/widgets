@@ -1,48 +1,46 @@
 import type {
-    IOptionGroupProps,
-    IOptionProps,
-    ISelectProps,
-    IStateSchema,
-    IWidget
-} from "../types";
-import { Widget } from "./widget";
+  IOptionGroupProps,
+  IOptionProps,
+  ISelectProps,
+  IWidget,
+} from '../types';
+import {Widget} from './widget';
 
 
+export class OptionGroupWidget
 
-export class OptionGroupWidget<S extends IStateSchema>
+  extends Widget<IOptionGroupProps, HTMLOptGroupElement>
 
-    extends Widget<IOptionGroupProps, S, HTMLOptGroupElement>
+  implements IWidget<IOptionGroupProps, HTMLOptGroupElement> {
 
-    implements IWidget<IOptionGroupProps, S, HTMLOptGroupElement>
-
-{
-
-    get tagname(): string { return 'optgroup' }
+  get tag(): string {
+    return 'optgroup';
+  }
 
 }
 
 
-export class OptionWidget<S extends IStateSchema>
+export class OptionWidget
 
-    extends Widget<IOptionProps, S, HTMLOptionElement>
+  extends Widget<IOptionProps, HTMLOptionElement>
 
-    implements IWidget<IOptionProps, S, HTMLOptionElement>
+  implements IWidget<IOptionProps, HTMLOptionElement> {
 
-{
-
-    get tagname(): string { return 'option' }
+  get tag(): string {
+    return 'option';
+  }
 
 }
 
 
-export class SelectWidget<S extends IStateSchema>
+export class SelectWidget
 
-    extends Widget<ISelectProps, S, HTMLSelectElement>
+  extends Widget<ISelectProps, HTMLSelectElement>
 
-    implements IWidget<ISelectProps, S, HTMLSelectElement>
+  implements IWidget<ISelectProps, HTMLSelectElement> {
 
-{
-
-    get tagname(): string { return 'select' }
+  get tag(): string {
+    return 'select';
+  }
 
 }

@@ -1,17 +1,17 @@
-import type { IStateSchema, ITextareaProps, IWidget } from "../types";
-import { Widget } from "./widget";
+import type {
+  ITextareaProps,
+  IWidget,
+} from '../types';
+import {Widget} from './widget';
 
+export class TextareaWidget
 
-export class TextareaWidget<S extends IStateSchema>
+  extends Widget<ITextareaProps, HTMLTextAreaElement>
 
-    extends Widget<ITextareaProps, S, HTMLTextAreaElement>
+  implements IWidget<ITextareaProps, HTMLTextAreaElement> {
 
-    implements IWidget<ITextareaProps, S, HTMLTextAreaElement>
-
-{
-
-    get tagname(): string {
-        return 'textarea'
-    }
+  get tag(): string {
+    return 'textarea';
+  }
 
 }

@@ -1,16 +1,15 @@
-import type { IAnchorProps, IStateSchema, IWidget } from "../types";
-import { Widget } from "./widget";
+import type {IAnchorProps, IWidget} from '../types';
+import {Widget} from './widget';
 
 
+export class AnchorWidget
 
-export class AnchorWidget<S extends IStateSchema>
+  extends Widget<IAnchorProps, HTMLAnchorElement>
 
-    extends Widget<IAnchorProps, S, HTMLAnchorElement>
+  implements IWidget<IAnchorProps, HTMLAnchorElement> {
 
-    implements IWidget<IAnchorProps, S, HTMLAnchorElement>
-
-{
-
-    get tagname(): string { return 'a' }
+  get tag(): string {
+    return 'a';
+  }
 
 }

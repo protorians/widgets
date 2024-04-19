@@ -1,34 +1,32 @@
 import type {
-    IPictureProps,
-    IPictureSourceProps,
-    IStateSchema,
-    IWidget
-} from "../types";
-import { Widget } from "./widget";
+  IPictureProps,
+  IPictureSourceProps,
+  IWidget,
+} from '../types';
+import {Widget} from './widget';
 
 
+export class PictureSourceWidget
 
-export class PictureSourceWidget<S extends IStateSchema>
+  extends Widget<IPictureSourceProps, HTMLSourceElement>
 
-    extends Widget<IPictureSourceProps, S, HTMLSourceElement>
+  implements IWidget<IPictureSourceProps, HTMLSourceElement> {
 
-    implements IWidget<IPictureSourceProps, S, HTMLSourceElement>
-
-{
-
-    get tagname(): string { return 'source' }
+  get tag(): string {
+    return 'source';
+  }
 
 }
 
 
-export default class PictureWidget<S extends IStateSchema>
+export default class PictureWidget
 
-    extends Widget<IPictureProps, S, HTMLSourceElement>
+  extends Widget<IPictureProps, HTMLSourceElement>
 
-    implements IWidget<IPictureProps, S, HTMLSourceElement>
+  implements IWidget<IPictureProps, HTMLSourceElement> {
 
-{
-
-    get tagname(): string { return 'picture' }
+  get tag(): string {
+    return 'picture';
+  }
 
 }
