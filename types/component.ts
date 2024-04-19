@@ -1,8 +1,16 @@
-import { IProps } from "./props";
-import { IStateSchema } from "./state";
-import { IWidget, IWidgetElements } from "./widget";
+import {IProps} from './props';
+import {IWidget, IWidgetElements} from './widget';
+import {IObject} from './values';
 
 
+export type IComponentConstruct<Props extends IObject> = (props: Props) => IWidget<IProps, IWidgetElements>
 
-export type IComponentConstruct<Props> = (props: Props) =>
-    IWidget<IProps, IStateSchema, IWidgetElements>
+export interface IComponent<Props extends IObject> {
+
+  get props(): Props | undefined;
+
+  set widget(widget: IWidget<IProps, IWidgetElements>);
+
+  get widget(): (IWidget<IProps, IWidgetElements>) | undefined;
+
+}

@@ -1,32 +1,39 @@
-import { IEngine } from "./engine";
-import type { IProps } from "./props";
-import type { IStatePayload, IStateSchema, IStates } from "./state";
-import { ISupportableValue } from "./values";
-import type { IWidget, IWidgetElements } from "./widget";
+import type {IProps} from './props';
+import type {IWidget, IWidgetElements} from './widget';
+import {IObject} from './values';
+import {IComponent} from './component';
 
 
-export type IContextuable<P extends IProps, S extends IStateSchema, E extends IWidgetElements> =
-    IContext<P, S, E> | IContext<IProps, IStateSchema, IWidgetElements>
+export type IContext<P extends IProps, E extends IWidgetElements> = {
 
-export type IContextuableWidget<P extends IProps, S extends IStateSchema, E extends IWidgetElements> =
-    IWidget<P, S, E> | IWidget<IProps, S, IWidgetElements>
+  widget: IWidget<P, E>;
 
+  event?: Event;
 
-
-export interface IContext<P extends IProps, S extends IStateSchema, E extends IWidgetElements> {
-
-    get state(): IStates<S>;
-
-    get engine(): IEngine<P, S, E>;
-
-
-    useState(name: string): this;
-
-    setState(payload: IStatePayload<S>): this;
-
-
-    useRef(name: string): IContextuableWidget<P, S, E>;
-
-    setRef(name: string, value: ISupportableValue): this;
+  component?: IComponent<IObject>
 
 }
+
+export type IContextuable<P extends IProps, E extends IWidgetElements> = IContext<P, E>
+
+// export type IContextuable = IContext<IProps, IWidgetElements>
+//
+// export type IContextuableWidget<P extends IProps, E extends IWidgetElements> = IWidget<P,  E> | IWidget<IProps, IWidgetElements>
+//
+// export interface IContext<P extends IProps, E extends IWidgetElements> {
+//
+//     get state(): IStates<IStateSchema>;
+//
+//     useState(name: string): this;
+//
+//     setState(payload: IStatePayload<IStateSchema>): this;
+//
+//     getState<S extends IStateSchema>(name: keyof S): IStates<S>[keyof IStates<S>];
+//
+//     useRef(name: string): this;
+//
+//     setRef(name: string, value: ISupportableValue): this;
+//
+//     render(widget: IWidget<P, E> | IWidget<IProps, IWidgetElements>): IWidget<P, E>;
+//
+// }

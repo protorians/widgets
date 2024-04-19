@@ -1,140 +1,144 @@
-import type { IChildren } from "./index";
+import type {ICallableValue, IChildren, IWidgetElements} from './index';
 import type {
-    IBoolean,
-    IDataValue,
-    IFormRelationship,
-    ILoading,
-    IOnOff,
-    IReferrerPolicy,
-    ISandbox,
-    ITarget,
-    IYesNo,
-} from "./values";
+  IBoolean,
+  IDataValue,
+  IFormRelationship,
+  ILoading,
+  IOnOff,
+  IReferrerPolicy,
+  ISandbox,
+  ITarget,
+  IYesNo,
+} from './values';
 
 
 export type IPropsExtended = {
 
-    [K: string]: IDataValue;
+  [K: string]: IDataValue;
 
 }
 
 export type IProps = Partial<
-    ICommonProps
-    | IVideoProps
-    | IPictureSourceProps
-    | IPictureProps
-    | IAudioProps
-    | IIFrameProps
+  ICommonProps
+  | IVideoProps
+  | IPictureSourceProps
+  | IPictureProps
+  | IAudioProps
+  | IIFrameProps
 >
+
+export type IOperatingProps<T> = {
+  [K in keyof T]: T[keyof T] | ICallableValue
+}
 
 export interface ICommonProps {
 
-    accesskey?: string;
+  accesskey?: string;
 
-    contenteditable?: string;
+  contenteditable?: string;
 
-    dir?: string;
+  dir?: string;
 
-    id?: string;
+  id?: string;
 
-    lang?: string;
+  lang?: string;
 
-    title?: string;
+  title?: string;
 
-    tabindex?: number;
+  tabindex?: number;
 
-    spellcheck?: boolean;
+  spellcheck?: boolean;
 
-    draggable?: boolean;
+  draggable?: boolean;
 
-    hidden?: boolean;
+  hidden?: boolean;
 
-    translate?: IYesNo;
+  translate?: IYesNo;
 
-    rel?: string;
+  rel?: string;
 
 }
 
 
 export interface IAnchorProps extends ICommonProps {
 
-    href: string;
+  href: string;
 
-    hreflang?: string;
+  hreflang?: string;
 
-    ping?: string;
+  ping?: string;
 
-    referrerpolicy?: IReferrerPolicy;
+  referrerpolicy?: IReferrerPolicy;
 
-    target?: ITarget;
+  target?: ITarget;
 
-    type?: string;
+  type?: string;
 
-    download?: string;
+  download?: string;
 
-    media?: string;
+  media?: string;
 
 }
 
 
 export type IInputableType = 'text'
 
-    | 'button'
+  | 'button'
 
-    | 'color'
+  | 'color'
 
-    | 'date'
+  | 'date'
 
-    | 'datetime-local'
+  | 'datetime-local'
 
-    | 'email'
+  | 'email'
 
-    | 'file'
+  | 'file'
 
-    | 'hidden'
+  | 'hidden'
 
-    | 'image'
+  | 'image'
 
-    | 'month'
+  | 'month'
 
-    | 'number'
+  | 'number'
 
-    | 'password'
+  | 'password'
 
-    | 'radio'
+  | 'radio'
 
-    | 'range'
+  | 'range'
 
-    | 'reset'
+  | 'reset'
 
-    | 'search'
+  | 'search'
 
-    | 'submit'
+  | 'submit'
 
-    | 'tel'
+  | 'tel'
 
-    | 'time'
+  | 'time'
 
-    | 'url'
+  | 'url'
 
-    | 'week'
+  | 'week'
 
-    | 'checkbox';
+  | 'checkbox';
 
 
 export type IInputableCommonProps = {
 
-    form?: string;
+  form?: string;
 
-    formAction?: string;
+  formAction?: string;
 
-    formEnctype?: string;
+  formEnctype?: string;
 
-    formMethod?: 'get' | 'post';
+  formMethod?: 'get' | 'post';
 
-    formNovalidate?: boolean;
+  formNovalidate?: boolean;
 
-    formTarget?: ITarget;
+  formTarget?: ITarget;
 
 }
 
@@ -143,39 +147,39 @@ export type IButtonType = 'button' | 'reset' | 'submit' | 'menu'
 
 export interface IButtonProps extends IInputableProps {
 
-    popoverTarget?: string;
+  popoverTarget?: string;
 
-    popoverTargetAction?: string;
+  popoverTargetAction?: string;
 
-    type?: IButtonType;
+  type?: IButtonType;
 
 }
 
 export interface IInputProps extends IInputableProps {
 
-    type?: IInputableType;
+  type?: IInputableType;
 
 }
 
 
 export interface IOptionGroupProps extends ICommonProps {
 
-    disabled?: boolean;
+  disabled?: boolean;
 
-    label: string;
+  label: string;
 
 }
 
 
 export interface IOptionProps extends ICommonProps {
 
-    disabled?: boolean;
+  disabled?: boolean;
 
-    selected?: boolean;
+  selected?: boolean;
 
-    label: string;
+  label: string;
 
-    value?: string | number;
+  value?: string | number;
 
 }
 
@@ -189,147 +193,148 @@ export interface ITextareaProps extends IInputableProps {
 
 export interface IInputableProps extends ICommonProps, IInputableCommonProps {
 
-    name?: string;
+  name?: string;
 
-    alt?: string;
+  alt?: string;
 
-    autocomplete?: IOnOff;
+  autocomplete?: IOnOff;
 
-    autofocus?: boolean;
+  autofocus?: boolean;
 
-    checked?: boolean;
+  checked?: boolean;
 
-    dirname?: string;
+  dirname?: string;
 
-    disabled?: boolean;
+  disabled?: boolean;
 
-    list?: string;
+  list?: string;
 
-    max?: number | string;
+  max?: number | string;
 
-    min?: number | string;
+  min?: number | string;
 
-    maxlength?: number;
+  maxlength?: number;
 
-    minlength?: number;
+  minlength?: number;
 
-    multiple?: boolean;
+  multiple?: boolean;
 
-    pattern?: RegExp;
+  pattern?: RegExp;
 
-    placeholder?: string;
+  placeholder?: string;
 
-    readonly?: boolean;
+  readonly?: boolean;
 
-    required?: boolean;
+  required?: boolean;
 
-    size?: number;
+  size?: number;
 
-    // src?: string;
+  // src?: string;
 
-    step?: number;
+  step?: number;
 
-    value?: string;
+  value?: string;
 
 }
+
 export interface IFormProps extends ICommonProps {
 
-    acceptCharset?: string;
+  acceptCharset?: string;
 
-    action?: string;
+  action?: string;
 
-    autocomplete?: 'on' | 'off';
+  autocomplete?: 'on' | 'off';
 
-    enctype?: string;
+  enctype?: string;
 
-    method?: 'get' | 'post';
+  method?: 'get' | 'post';
 
-    name?: string;
+  name?: string;
 
-    novalidate?: boolean;
+  novalidate?: boolean;
 
-    rel?: IFormRelationship;
+  rel?: IFormRelationship;
 
-    target?: ITarget;
+  target?: ITarget;
 
-    child: IChildren;
+  child: IChildren<IProps, IWidgetElements>;
 
 }
 
 export interface IVideoProps extends ICommonProps {
 
-    autoplay?: boolean;
+  autoplay?: boolean;
 
-    controls?: boolean;
+  controls?: boolean;
 
-    loop?: boolean;
+  loop?: boolean;
 
-    muted?: boolean;
+  muted?: boolean;
 
-    width?: string;
+  width?: string;
 
-    height?: string;
+  height?: string;
 
-    poster?: string;
+  poster?: string;
 
-    preload?: 'auto' | 'metadata' | 'none';
+  preload?: 'auto' | 'metadata' | 'none';
 
-    src?: string;
+  src?: string;
 
 }
 
 export interface IPictureSourceProps extends ICommonProps {
 
-    srcset?: string;
+  srcset?: string;
 
-    media?: string;
+  media?: string;
 
-    src?: string;
+  src?: string;
 
 }
 
 export interface IPictureProps extends ICommonProps {
 
-    source?: IPictureSourceProps | IPictureSourceProps[];
+  source?: IPictureSourceProps | IPictureSourceProps[];
 
-    src?: string;
+  src?: string;
 
-    alt?: string;
+  alt?: string;
 
 }
 
 export interface IAudioProps extends ICommonProps {
 
-    autoplay?: boolean;
+  autoplay?: boolean;
 
-    controls?: boolean;
+  controls?: boolean;
 
-    loop?: boolean;
+  loop?: boolean;
 
-    muted?: boolean;
+  muted?: boolean;
 
-    preload?: boolean;
+  preload?: boolean;
 
-    src: string;
+  src: string;
 
 }
 
 export interface IIFrameProps extends ICommonProps {
 
-    allow?: string;
+  allow?: string;
 
-    allowfullscreen?: IBoolean;
+  allowfullscreen?: IBoolean;
 
-    allowpaymentrequest?: IBoolean;
+  allowpaymentrequest?: IBoolean;
 
-    loading?: ILoading;
+  loading?: ILoading;
 
-    name?: string;
+  name?: string;
 
-    referrerpolicy?: IReferrerPolicy;
+  referrerpolicy?: IReferrerPolicy;
 
-    sandbox?: ISandbox;
+  sandbox?: ISandbox;
 
-    src: string;
+  src: string;
 
 }

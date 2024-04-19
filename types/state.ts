@@ -1,49 +1,32 @@
 import type { ISupportableValue } from "./values";
+import {ISignalables} from '@protorians/signalable/types';
+import {PointerWidget} from '../foundation/pointer';
+import {IPointer} from './pointer';
 
-export interface IStateSchema {
+export type IStateSignals<V extends ISupportableValue> = {
 
-    [K: string]: ISupportableValue
+    'pointer:updated': IPointer<any, any>;
 
-}
+    'pointers:updated': IPointer<any, any>[];
 
+    updated: V;
 
-export type IStateProps = {
+    destroy: IState<V>;
 
-    name: string;
-
-    initial?: ISupportableValue;
-
-}
-
-export type IStatePayload<S extends IStateSchema> = {
-
-    [K in keyof S]?: ISupportableValue
+    used: PointerWidget<any, any>;
 
 }
 
 export interface IState<V extends ISupportableValue> {
 
-    get name(): string;
-
     get value(): V | undefined;
 
     get initial(): V | undefined;
 
+    get signal(): Readonly<ISignalables<V | undefined, IStateSignals<V>>>;
+
     set(value: V): this;
 
     unset(): this;
-
-}
-
-
-export type IStateEntries<S extends IStateSchema> = {
-
-    [K in keyof S]: S[K]
-
-}
-
-export interface IStates<S extends IStateSchema> {
-
-    get entries(): IStateEntries<S>
 
 }

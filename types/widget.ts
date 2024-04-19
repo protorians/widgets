@@ -1,66 +1,66 @@
-
-import { IActions } from "./actions";
+import {IActions} from './actions';
 import type {
-    IClassName,
-    IStyle,
-    IReference,
-    IChildren,
-    IPropsExtended,
-    IProps,
-    IContextuable,
-    IStates,
-    IStateSchema
-} from "./index";
+  IStyle,
+  IChildren,
+  IPropsExtended,
+  IProps,
+  IClassNames,
+  IDataValue,
+  IComponent,
+  IReference,
+  IObject,
+} from './index';
 
 
-export type IWidgetElements = Element | HTMLElement;
+export type IWidgetElements = HTMLElement | DocumentFragment;
 
-export type IWidgetProps<
-    P extends IProps,
-    S extends IStateSchema,
-    E extends IWidgetElements
-> = P & {
+export type IWidgetPrimitiveProps<P extends IProps, E extends IWidgetElements> = {
 
-    ref?: IReference<P, S, E>;
+  ref?: IReference<P, E> | undefined
 
-    state?: IStates<S>;
+  child: IChildren<P, E> | undefined;
 
-    child: IChildren | undefined;
+  style?: IStyle;
 
-    style?: IStyle;
+  className?: IClassNames;
 
-    data?: IPropsExtended;
+  data?: IPropsExtended;
 
-    ns?: IPropsExtended;
+  ns?: IPropsExtended;
 
-    context?: IContextuable<P, S, E>;
-
-    actions?: IActions;
+  actions?: IActions<P, E>;
 
 }
 
-export interface IWidget<P extends IProps, S extends IStateSchema, E extends IWidgetElements> {
+export type IWidgetProps<P extends IProps, E extends IWidgetElements> = P & IWidgetPrimitiveProps<P, E>
 
+export interface IWidget<P extends IProps, E extends IWidgetElements> {
 
-    get tagname(): string;
+  props: Partial<IWidgetProps<P, E>>;
 
-    get element(): E;
+  get tag(): string;
 
-    get props(): IWidgetProps<P, S, E>;
+  get element(): E;
 
+  get component(): IComponent<IObject> | undefined;
 
-    initialize(): this;
+  useComponent<Props extends IObject>(component: IComponent<Props>|undefined): this;
 
-    // useContext<IP extends IProps, IS extends IStateSchema, IE extends IWidgetElements>(context: IContextuable<IP, IS, IE>): this;
+  initialize(): this;
 
+  child(value: IChildren<P, E>): this;
 
-    content(value: IChildren): this;
+  style(value?: IStyle): this;
 
-    style(value: IStyle): this;
+  className(value?: IClassNames): this;
 
-    className(value: IClassName[]): this;
+  data(value?: IPropsExtended): this;
 
-    render(): this
+  ns(value?: IPropsExtended): this;
+
+  attrib(name: keyof P, value: P[keyof P] | IDataValue): this;
+
+  render(): this;
 
 
 }

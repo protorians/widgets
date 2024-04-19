@@ -1,22 +1,19 @@
 import type { IProps } from "./props";
-import type { IStateSchema } from "./state";
 import type {
     IWidget,
     IWidgetElements
 } from "./widget"
+import type {IElementMetrics} from './element';
 
 
+export interface IReference<P extends IProps, E extends IWidgetElements> {
 
-export type IReferenceProps = {
+    get widget(): IWidget<P, E> | undefined;
 
-    name: string;
+    use(widget: IWidget<P, E>): this;
 
-}
-
-export interface IReference<P extends IProps, S extends IStateSchema, E extends IWidgetElements> {
-
-    name: string;
-
-    widget: IWidget<P, S, E>;
+    metrics(): IElementMetrics<P, E> | undefined;
 
 }
+
+export type IReferenceCallback<P extends IProps, E extends IWidgetElements> = (widget: IWidget<P, E>) => IReference<P, E>
