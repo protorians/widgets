@@ -1,23 +1,40 @@
-import type { IComponentConstruct } from "../types/component";
-import { WidgetContext, WidgetEngine } from "./index";
+import type {
+  IComponent,
+  IComponentConstruct,
+  IObject,
+  IProps,
+  IWidget,
+  IWidgetElements,
+} from '../types';
 
 
-export function Component<Props>(
-    component: IComponentConstruct<Props>,
-) {
+export class WidgetComponent<P extends IObject> implements IComponent<P>{
 
-    return (props: Props) => {
+  #props: P | undefined;
 
-        const context = new WidgetContext(
-            new WidgetEngine(
-                component(props)
-            )
-        )
+  #widget: IWidget<IProps, IWidgetElements> | undefined;
 
-        console.warn('Create component', context)
+  constructor(props: P) {
+    this.#props = props;
+  }
 
-        return context.engine.main
+  get props() {
+    return this.#props;
+  }
 
-    }
+  set widget(widget: IWidget<IProps, IWidgetElements>){
+    this.#widget = this.#widget || widget || undefined;
+  }
+
+  get widget(): (IWidget<IProps, IWidgetElements>) | undefined{
+    return this.#widget || undefined;
+  }
+
+}
+
+
+export function component<Props extends IObject>(component: IComponentConstruct<Props>) {
+
+  return (props: Props) => component(props).useComponent(new WidgetComponent<Props>(props)).render();
 
 }
