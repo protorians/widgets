@@ -1,7 +1,7 @@
 {
   "name": "@protorians/widgets",
   "version": "0.0.1",
-  "description": "HTML Widget's Manager",
+  "description": "Widget's Maker",
   "main": "index.js",
   "types": "./global.d.ts",
   "scripts": {
