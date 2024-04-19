@@ -1,14 +1,11 @@
 import type {
-    ICommonProps,
-    IWidgetProps,
-    IStateSchema
-} from "../types/index";
-import { Widget } from "../supports/index";
+  ICommonProps,
+  IWidgetProps,
+} from '../types';
+import {Widget} from '../supports';
 
+export function widget(props: IWidgetProps<ICommonProps, HTMLElement>) {
 
-
-export function widget<S extends IStateSchema>(props: IWidgetProps<ICommonProps, S, HTMLElement>) {
-
-    return (new Widget<ICommonProps, S, HTMLElement>(props)).render()
+  return (new Widget<ICommonProps, HTMLElement>(props));
 
 }

@@ -1,15 +1,14 @@
 import type {
     IWidgetProps,
-    IStateSchema,
     IProps,
     IWidgetElements
-} from "../types/index";
-import { Widget } from "../supports/index";
+} from '../types';
+import { Widget } from '../supports';
 
 
 
-export function customWidget<P extends IProps, S extends IStateSchema, E extends IWidgetElements>(props: IWidgetProps<P, S, E>) {
+export function customWidget<P extends IProps, E extends IWidgetElements>(props: IWidgetProps<P, E>) {
 
-    return (new Widget<P, S, E>(props)).render()
+    return (new Widget<P, E>(props))
 
 }

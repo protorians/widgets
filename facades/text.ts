@@ -1,15 +1,14 @@
 import type {
-    ICommonProps,
-    IWidgetProps,
-    IStateSchema
-} from "../types/index";
-import { TextWidget } from "../supports/text";
+  ICommonProps,
+  IWidgetProps,
+} from '../types';
+import {TextWidget} from '../supports';
 
 
-export function textWidget<S extends IStateSchema>(props: string | IWidgetProps<ICommonProps, S, HTMLSpanElement>) {
+export function textWidget(props: string | IWidgetProps<ICommonProps, HTMLSpanElement>) {
 
-    if (typeof props == 'string') props = { child: props }
+  if (typeof props == 'string') props = {child: props};
 
-    return (new TextWidget<S>(props)).render()
+  return (new TextWidget(props));
 
 }
