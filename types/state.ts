@@ -1,7 +1,9 @@
 import type { ISupportableValue } from "./values";
 import {ISignalables} from '@protorians/signalable/types';
-import {PointerWidget} from '../foundation/pointer';
 import {IPointer} from './pointer';
+import {IProps} from './props';
+import {IWidgetElements} from './widget';
+import {IChildCallback} from './children';
 
 export type IStateSignals<V extends ISupportableValue> = {
 
@@ -13,7 +15,7 @@ export type IStateSignals<V extends ISupportableValue> = {
 
     destroy: IState<V>;
 
-    used: PointerWidget<any, any>;
+    used: IPointer<any, any>;
 
 }
 
@@ -28,5 +30,7 @@ export interface IState<V extends ISupportableValue> {
     set(value: V): this;
 
     unset(): this;
+
+    use<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): IPointer<P, E>
 
 }

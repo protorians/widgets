@@ -77,7 +77,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   }
 
-  use<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>) {
+  use<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): PointerWidget<P, E> {
 
     const pointer = new PointerWidget(callback);
 
