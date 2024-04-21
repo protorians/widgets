@@ -1,8 +1,12 @@
 import {
   IComponentConstruct,
-  IElement, IElementMetrics,
+  IElement,
+  IElementMetrics,
   IElementSignal,
-  IObject, IProps, IWidget, IWidgetElements,
+  IObject,
+  IProps,
+  IWidget,
+  IWidgetElements,
 } from '../types';
 import {ISignalables} from '@protorians/signalable/types';
 import {Signalables} from '@protorians/signalable/supports';
@@ -34,6 +38,9 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
 
   get signal() {
     return this.#signal;
+  }
+
+  prepared() {
   }
 
   mounted() {
@@ -83,8 +90,10 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
   connectedCallback(): void {
     if (this.use) {
       this.mount(this.use);
-      this.signal.dispatch('connected', this);
+    } else {
+      this.prepared();
     }
+    this.signal.dispatch('connected', this);
   }
 
   disconnectedCallback() {
@@ -102,53 +111,52 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
 }
 
 
+export class WidgetElementMetrics<P extends IProps, E extends IWidgetElements> implements IElementMetrics<P, E> {
 
-export class WidgetElementMetrics<P extends IProps, E extends IWidgetElements> implements IElementMetrics<P, E>{
-  
   width?: Readonly<number>;
-  
+
   height?: Readonly<number>;
-  
+
   x?: Readonly<number>;
-  
+
   y?: Readonly<number>;
-  
+
   top?: Readonly<number>;
-  
+
   right?: Readonly<number>;
-  
+
   bottom?: Readonly<number>;
-  
+
   left?: Readonly<number>;
-  
-  json?: Readonly<string>
-  
+
+  json?: Readonly<string>;
+
   constructor(public widget: Readonly<IWidget<P, E>>) {
-    
+
     const rect = widget.element instanceof HTMLElement ? widget.element.getBoundingClientRect() : undefined;
-    
-    if(rect){
-      
+
+    if (rect) {
+
       this.width = rect.width;
-      
+
       this.height = rect.height;
-      
+
       this.x = rect.x;
-      
+
       this.y = rect.y;
-      
+
       this.top = rect.top;
-      
+
       this.right = rect.right;
-      
+
       this.bottom = rect.bottom;
-      
+
       this.left = rect.left;
-      
+
       this.json = JSON.stringify(rect.toJSON());
-      
+
     }
-    
+
   }
-  
+
 }
