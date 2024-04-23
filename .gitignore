@@ -1,4 +1,5 @@
 node_modules
 *.lock
-*-lock.yaml
-/.vscode
+pnpm-lock.yaml
+.vscode/*
+.idea/*
