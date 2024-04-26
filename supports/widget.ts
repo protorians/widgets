@@ -11,13 +11,12 @@ import type {
   IComponent,
   IContextuable,
   IObject,
+  IActions, IChildCallback,
 } from '../types';
 import {decamelize} from '../utilities/camelization';
 import {attribution} from '../utilities/attributionable';
-import {IActions} from '../types/actions';
-import {createContext} from '../foundation';
-import {WIDGET_NATIVE_PROPS} from '../foundation/constants';
-import {PointerWidget} from '../foundation/pointer';
+import {createContext, WIDGET_NATIVE_PROPS, PointerWidget} from '../foundation';
+import {allowEditableElement} from '../utilities/elements';
 
 
 export class Widget<P extends IProps, E extends IWidgetElements> implements IWidget<P, E> {
@@ -45,6 +44,16 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
   }
 
 
+  protected defineElement(element: E) {
+    this.#element = element;
+    return this;
+  }
+
+  protected defineComponent(component: IComponent<IObject>) {
+    this.#component = component;
+    return this;
+  }
+
   initialize(): this {
 
     return this;
@@ -71,7 +80,9 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
       if (value instanceof PointerWidget) {
 
-        this.#element.append(value.bind(this).refresh().marker || document.createDocumentFragment());
+        const r = value.bind(this).render().marker;
+
+        if (r && r.current) this.#element.append(r.current);
 
       } else if (typeof value == 'object' && Array.isArray(value)) {
 
@@ -137,6 +148,78 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
     return this;
 
   }
+
+  value(value?: string): this {
+
+    const element = allowEditableElement(this.element);
+
+    value = value || '';
+
+    if (element) element.value = value;
+
+    else if (this.element instanceof HTMLElement) this.element.innerHTML = value;
+
+    else this.element.append(document.createTextNode(value));
+
+    return this;
+
+  }
+
+
+  trigger(type ?: keyof HTMLElementEventMap): this {
+
+    type = type || 'click';
+
+    /* @ts-ignore */
+    if (this.element instanceof HTMLElement && type in this.element && typeof this.element[type] == 'function') this.element[type]();
+
+    return this;
+  }
+
+
+  listen(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>, options?: boolean | AddEventListenerOptions): this {
+
+    if (this.element instanceof HTMLElement) {
+      this.element.addEventListener(type, event => listener(
+        createContext({
+          widget: this,
+          component: this.#component,
+          event,
+        }),
+      ), options);
+    }
+
+    return this;
+  }
+
+
+  on(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>): this {
+
+    if (this.element instanceof HTMLElement) {
+      // @ts-ignore
+      this.element[`on${type.toLowerCase()}`] = (e: Event) => listener(
+        createContext({
+          widget: this,
+          event: e,
+          component: this.#component,
+        }),
+      );
+    }
+
+    return this;
+  }
+
+
+  manipulate(callback: IChildCallback<P, E>): this {
+    callback(
+      createContext({
+        widget: this,
+        component: this.#component,
+      }),
+    );
+    return this;
+  }
+
 
   data(data?: IPropsExtended): this {
 
@@ -222,6 +305,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
     return this;
 
   }
+
 
   render(): this {
 
