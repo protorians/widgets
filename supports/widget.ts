@@ -90,7 +90,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
       } else if (typeof value == 'function') {
 
-        this.child(value(createContext({widget: this, component: this.#component})));
+        this.child(value(createContext<P, E>({widget: this, component: this.#component})));
 
       } else if (value instanceof Promise) {
 
@@ -181,7 +181,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
     if (this.element instanceof HTMLElement) {
       this.element.addEventListener(type, event => listener(
-        createContext({
+        createContext<P, E>({
           widget: this,
           component: this.#component,
           event,
@@ -198,7 +198,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
     if (this.element instanceof HTMLElement) {
       // @ts-ignore
       this.element[`on${type.toLowerCase()}`] = (e: Event) => listener(
-        createContext({
+        createContext<P, E>({
           widget: this,
           event: e,
           component: this.#component,
@@ -212,7 +212,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
   manipulate(callback: IChildCallback<P, E>): this {
     callback(
-      createContext({
+      createContext<P, E>({
         widget: this,
         component: this.#component,
       }),
@@ -296,7 +296,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
         .forEach(({0: type, 1: callback}) =>
           this.element.addEventListener(type, event =>
             callback(
-              createContext({widget: this, event, component: this.#component} as IContextuable<P, E>),
+              createContext<P, E>({widget: this, event, component: this.#component} as IContextuable<P, E>),
             ),
           ),
         );
