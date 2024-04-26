@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "description": "Widget's Maker",
   "main": "index.js",
   "types": "./global.d.ts",
@@ -9,8 +9,15 @@
     "build": "tsc",
     "typing": "npm-dts generate -o ./global.d.ts -c -L debug"
   },
-  "keywords": [],
+  "keywords": [
+    "protorians",
+    "widget",
+    "library"
+  ],
   "author": "Y. Yannick GOBOU",
+  "repository": {
+    "url": "https://github.com/protorians/widgets.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^18.7.13",
