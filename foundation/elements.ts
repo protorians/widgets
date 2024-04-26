@@ -32,6 +32,10 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
     return this.#props;
   }
 
+  set props( props ){
+    this.#props = props
+  }
+
   get component() {
     return this.#component;
   }
@@ -40,7 +44,8 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
     return this.#signal;
   }
 
-  prepared() {
+  bootstrap(): this {
+    return this;
   }
 
   mounted() {
@@ -69,38 +74,30 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
 
   }
 
-  mount(component: IComponentConstruct<Props>) {
+  mount(component?: IComponentConstruct<Props>) {
 
-    this.#component = component;
+    if (component) {
+      this.#component = component;
+      this.initialize();
+      this.innerHTML = '';
+      this.append(this.#component(this.props).element);
+      this.signal.dispatch('mounted', this);
+      this.mounted();
 
-    this.initialize();
-
-    this.innerHTML = '';
-
-    this.append(this.#component(this.props).element);
-
-    this.signal.dispatch('mounted', this);
-
-    this.mounted();
+    }
 
     return this;
 
   }
 
   connectedCallback(): void {
-    if (this.use) {
-      this.mount(this.use);
-    } else {
-      this.prepared();
-    }
+    this.bootstrap().mount(this.use);
     this.signal.dispatch('connected', this);
   }
 
   disconnectedCallback() {
     this.signal.dispatch('disconnected', this);
-
     this.unmounted();
-
   }
 
   adoptedCallback() {

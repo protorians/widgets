@@ -47,7 +47,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
   updatePointers() {
 
     this.pointers.forEach(pointer => {
-      pointer.refresh();
+      pointer.render();
       this.signal.dispatch('pointer:updated', pointer);
     });
 

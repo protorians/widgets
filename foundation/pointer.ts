@@ -1,39 +1,131 @@
-import {
-  IChildCallback, IContext,
-  IPointer, IPointerRendering,
+import type {
+  IChild,
+  IChildCallback,
+  IContext,
+  IPointer,
+  IPointerCollectionChild,
+  IPointerCollectionChildren,
+  IPointerMarker,
   IPointerSignals,
   IProps,
   IWidget,
-  IWidgetElements,
+  IWidgetElements, IPointerMarkerElement,
 } from '../types';
 import {createContext} from './context';
 import {Signalables, type ISignalables} from '@protorians/signalable';
 import {Widget} from '../supports';
+import {setMarkerOnPointer} from '../utilities/pointer';
+
+
+
+export class PointerWidgetMarkerElement extends HTMLTemplateElement implements IPointerMarkerElement {
+
+  #queues: IPointerCollectionChild[] = [];
+
+  queue(child: IPointerCollectionChild): this {
+    this.#queues.push(child);
+    return this;
+  }
+
+  queues(): IPointerCollectionChild[] {
+    return this.#queues;
+  }
+
+  clearQueues() {
+
+    try {
+
+      this.#queues.forEach(child =>
+        child?.parentElement?.removeChild(child));
+
+    } catch (er) {
+      console.error('PointerWidgetMarkerElement::queues', er);
+    }
+
+    this.#queues = [];
+    return this;
+  }
+
+  consumeQueue(child: IPointerCollectionChild | undefined) {
+
+    return setMarkerOnPointer(this, child);
+
+  }
+
+  autoload() {
+    this.#queues = this.#queues.map(this.consumeQueue.bind(this))
+      .filter(c => typeof c != 'undefined');
+    return this;
+  }
+
+  connectedCallback() {
+    this.autoload();
+  }
+
+}
+
+
+export class PointerWidgetMarker implements IPointerMarker {
+
+  #current: IPointerMarkerElement | undefined;
+
+
+  static tagName: string = 'pointer-widget-marker';
+
+  get current() {
+    return this.#current;
+  }
+
+  hydrate(): this {
+    this.#current = new PointerWidgetMarkerElement;
+    this.#current.setAttribute('widget:pointer', '');
+    return this;
+  }
+
+  queue(child: IPointerCollectionChild): this {
+    this.current?.queue(child);
+    return this;
+  }
+
+  consume(child: IPointerCollectionChild): this {
+
+    if (this.current) {
+
+      this.queue(child).queues()?.map(queue =>
+        this.current ? setMarkerOnPointer(this.current, queue) : undefined);
+
+    }
+
+    return this;
+  }
+
+  queues(): IPointerCollectionChild[] | undefined {
+    return this.current?.queues();
+  }
+
+}
+
 
 export class PointerWidget<P extends IProps, E extends IWidgetElements> implements IPointer<P, E> {
 
   #parent: IWidget<IProps, IWidgetElements> | undefined;
 
-  #marker: IPointerRendering;
-
   #signal: Readonly<ISignalables<IChildCallback<P, E> | undefined, IPointerSignals<P, E>>>;
 
-  #rendering: IPointerRendering | undefined;
+
+  marker: Readonly<IPointerMarker>;
+
 
   constructor(public callback: IChildCallback<P, E> | undefined) {
 
     this.#signal = new Signalables(callback);
 
-    this.#marker = document.createDocumentFragment();
+    this.marker = (new PointerWidgetMarker).hydrate();
 
   }
 
   get parent(): IWidget<IProps, IWidgetElements> | undefined {
     return this.#parent;
-  }
-
-  get marker() {
-    return this.#marker;
   }
 
   get signal() {
@@ -56,19 +148,17 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
     return this;
   }
 
-  render(): IPointerRendering {
+  renderChild(child: IChild<P, E>): IPointerCollectionChildren {
 
-    const render = this.call();
-
-    if (render) {
-      if (render instanceof HTMLElement || render instanceof DocumentFragment) {
-        return render;
-      } else if (render instanceof Widget) {
-        return render.render().element;
-      } else if (typeof render == 'object') {
-        return document.createTextNode(`${JSON.stringify(render)}`);
+    if (child) {
+      if (Array.isArray(child)) {
+        return child.map(c => this.renderChild(c)) as IPointerCollectionChildren;
+      } else if (child instanceof HTMLElement || child instanceof DocumentFragment) {
+        return child;
+      } else if (child instanceof Widget) {
+        return child.render().element;
       } else {
-        return document.createTextNode(`${render}`);
+        return document.createTextNode(`${typeof child == 'object' ? JSON.stringify(child) : child}`);
       }
     }
 
@@ -76,35 +166,31 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
 
   }
 
-  refresh(): this {
+  clear() {
+    this.marker.current?.clearQueues();
+    return this;
+  }
 
-    this.#marker = this.#rendering || this.#marker;
-
-    this.#rendering = this.render();
-
-    if (this.#rendering && this.#marker) {
-
-      if (this.#marker instanceof Text) {
-
-        const marker = document.createDocumentFragment();
-
-        marker.append(this.#rendering);
-
-        this.#marker.parentElement?.replaceChild(marker, this.#marker);
-
-        this.#marker = marker;
-
-      } else {
-
-        this.#marker.appendChild(this.#rendering);
-
-        this.#marker.parentElement?.replaceChild(this.#rendering, this.#marker);
-
-      }
-
-      this.#signal.dispatch('refresh', this.#rendering);
-
+  append(child: IPointerCollectionChild) {
+    if (!this.marker.current?.isConnected) {
+      this.marker.queue(child);
+    } else {
+      this.marker.consume(child);
     }
+    return this;
+  }
+
+  appendChild(child: IPointerCollectionChild): IPointerCollectionChild {
+    this.append(child);
+    return child;
+  }
+
+  render(): this {
+
+    const children = this.clear().renderChild(this.call());
+
+    (Array.isArray(children) ? children : [children])
+      .map(child => this.appendChild(child));
 
     return this;
   }
@@ -112,6 +198,7 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
   destroy(): this {
     this.#signal.dispatch('destroyed', undefined);
     this.callback = undefined;
+    this.marker.current?.clearQueues();
     return this;
   }
 
@@ -120,5 +207,17 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
     this.#signal.dispatch('bound', this.#parent);
     return this;
   }
+
+}
+
+
+if (!customElements.get(PointerWidgetMarker.tagName)) {
+
+  customElements.define(
+    PointerWidgetMarker.tagName,
+    PointerWidgetMarkerElement, {
+      extends: 'template',
+    },
+  );
 
 }

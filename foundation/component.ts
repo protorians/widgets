@@ -32,7 +32,6 @@ export class WidgetComponent<P extends IObject> implements IComponent<P>{
 
 }
 
-
 export function component<Props extends IObject>(component: IComponentConstruct<Props>) {
 
   return (props: Props) => component(props).useComponent(new WidgetComponent<Props>(props)).render();

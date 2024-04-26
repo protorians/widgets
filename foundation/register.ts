@@ -5,9 +5,11 @@ import {WidgetElement} from './elements';
 
 export function register<Props extends IObject>(name: string, component: IComponentConstruct<Props>) {
 
-  customElements.define(decamelize(name, '-'), class extends WidgetElement<Props> {
+  name = decamelize(name, '-');
 
-    use = component
+  customElements.define(name.includes('-') ? name : `widget-${ name }`, class extends WidgetElement<Props> {
+
+    use = component;
 
   });
 
