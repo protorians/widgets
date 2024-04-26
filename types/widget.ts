@@ -9,6 +9,7 @@ import type {
   IComponent,
   IReference,
   IObject,
+  IChildCallback,
 } from './index';
 
 
@@ -53,6 +54,16 @@ export interface IWidget<P extends IProps, E extends IWidgetElements> {
   style(value?: IStyle): this;
 
   className(value?: IClassNames): this;
+
+  value(value?: string): this;
+
+  trigger(fn ?: keyof HTMLElementEventMap): this;
+
+  listen(type : keyof HTMLElementEventMap, listener: IChildCallback<P, E>, options?: boolean | AddEventListenerOptions): this
+
+  on(type : keyof HTMLElementEventMap, listener: IChildCallback<P, E>): this;
+
+  manipulate(callback: IChildCallback<P, E>): this;
 
   data(value?: IPropsExtended): this;
 

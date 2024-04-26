@@ -6,9 +6,9 @@ import {ISignalables} from '@protorians/signalable/types';
 
 export type IPointerSignals<P extends IProps, E extends IWidgetElements> = {
 
-  defined: IChildCallback<P, E>|undefined;
+  defined: IChildCallback<P, E> | undefined;
 
-  refresh: IPointerRendering;
+  refresh: IPointerBond;
 
   destroyed: undefined;
 
@@ -16,13 +16,46 @@ export type IPointerSignals<P extends IProps, E extends IWidgetElements> = {
 
 }
 
-export type IPointerRendering = HTMLElement | DocumentFragment | Text | undefined;
 
-export interface IPointer<P extends IProps, E extends IWidgetElements>{
+export type IPointerBond = Element | Node | undefined;
+
+export type IPointerCollectionChild = Text | HTMLElement | DocumentFragment | undefined;
+
+export type IPointerCollectionChildren = IPointerCollectionChild | IPointerCollectionChild[];
+
+
+export interface IPointerMarkerElement extends HTMLTemplateElement {
+
+  queue(child: IPointerCollectionChild): this;
+
+  queues(): IPointerCollectionChild[];
+
+  clearQueues(): this;
+
+  autoload(): this;
+
+}
+
+
+export interface IPointerMarker {
+
+  get current(): IPointerMarkerElement | undefined;
+
+  hydrate(): this;
+
+  queue(child: IPointerCollectionChild): this;
+
+  consume(child: IPointerCollectionChild): this;
+
+  queues(): IPointerCollectionChild[] | undefined;
+
+}
+
+export interface IPointer<P extends IProps, E extends IWidgetElements> {
+
+  marker: Readonly<IPointerMarker>;
 
   get parent(): IWidget<IProps, IWidgetElements> | undefined;
-
-  get marker(): IPointerRendering;
 
   get signal(): Readonly<ISignalables<IChildCallback<P, E> | undefined, IPointerSignals<P, E>>>;
 
@@ -32,12 +65,16 @@ export interface IPointer<P extends IProps, E extends IWidgetElements>{
 
   use(callback: IChildCallback<P, E>): this;
 
-  refresh(): this;
-
-  destroy(): this;
+  render(): this;
 
   bind(widget: IWidget<IProps, IWidgetElements>): this;
 
-  render(): IPointerRendering;
+  append(child: IPointerCollectionChild): this;
+
+  appendChild(child: IPointerCollectionChild): IPointerCollectionChild;
+
+  destroy(): this;
+
+  clear(): this;
 
 }

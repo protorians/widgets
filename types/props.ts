@@ -159,6 +159,8 @@ export interface IInputProps extends IInputableProps {
 
   type?: IInputableType;
 
+  child?: undefined;
+
 }
 
 

@@ -1,8 +1,5 @@
 import type { IProps } from "./props";
-import type {
-    IWidget,
-    IWidgetElements
-} from "./widget"
+import type {IWidget, IWidgetElements} from "./widget"
 import type {IElementMetrics} from './element';
 
 

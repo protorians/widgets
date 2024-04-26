@@ -13,6 +13,7 @@ export type IElementSignal<Props extends IObject> = {
   mounted: IElement<Props>;
 }
 
+export type IEditableElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 export interface IElement<Props extends IObject> extends HTMLElement {
 
@@ -29,6 +30,8 @@ export interface IElement<Props extends IObject> extends HTMLElement {
   sync(): this;
 
   mount(component: IComponentConstruct<Props>): this;
+
+  bootstrap(): this;
 
   mounted(): void;
 
