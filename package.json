@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.1-alpha.7",
+  "version": "0.0.1-alpha.11",
   "description": "Widget's Maker",
   "main": "index.js",
   "types": "./global.d.ts",
@@ -8,7 +8,7 @@
     "dev": "tsc --watch",
     "build": "tsc",
     "typing": "npm-dts generate -o ./global.d.ts -c -L debug",
-    "postinstall": "npx tsc"
+    "postinstall": "tsc"
   },
   "keywords": [
     "protorians",
@@ -37,14 +37,14 @@
     "prettier-eslint": "^15.0.1",
     "prettier-eslint-cli": "^7.1.0",
     "prettier-linter-helpers": "^1.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.3.3"
+    "ts-node": "^10.9.1"
   },
   "engines": {
     "npm": ">=8.18.0",
     "node": ">=18.8.0"
   },
   "dependencies": {
-    "@protorians/signalable": "^0.0.6"
+    "@protorians/signalable": "^0.0.6",
+    "typescript": "^5.4.5"
   }
 }
