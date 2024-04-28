@@ -9,14 +9,28 @@ import type {
   IPropsExtended,
   IDataValue,
   IComponent,
-  IContextuable,
   IObject,
-  IActions, IChildCallback,
+  IChildCallback,
+  IWidgetSignalable,
+  IManipulateCallback,
+  IWidgetSignalableListeners,
+  IEventStaticListeners,
+  IEventListeners,
+  IWidgetAttributesMap,
+  IEventStaticListenerPayload, IWidgetListenerMap,
 } from '../types';
-import {decamelize} from '../utilities/camelization';
-import {attribution} from '../utilities/attributionable';
-import {createContext, WIDGET_NATIVE_PROPS, PointerWidget} from '../foundation';
-import {allowEditableElement} from '../utilities/elements';
+import {
+  decamelize,
+  attribution,
+  allowEditableElement,
+  createWidgetSignalableDispatcher,
+} from '../utilities';
+import {
+  createContext,
+  ExAFactory,
+  WIDGET_NATIVE_PROPS,
+} from '../foundation';
+import {Signalables} from '@protorians/signalable';
 
 
 export class Widget<P extends IProps, E extends IWidgetElements> implements IWidget<P, E> {
@@ -25,9 +39,15 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
   #component: IComponent<IObject> | undefined;
 
-  constructor(public props: IWidgetProps<P, E>) {
+  #ready: boolean = false;
+
+  signal: IWidgetSignalable<P, E>;
+
+  constructor(public props: Readonly<Partial<IWidgetProps<P, E>>>) {
 
     this.#element = document.createElement(this.tag) as E;
+
+    this.signal = new Signalables(props);
 
   }
 
@@ -43,21 +63,30 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
     return this.#component;
   }
 
+  get ready() {
+    return this.#ready;
+  }
 
-  protected defineElement(element: E) {
+  defineElement(element: E): this {
     this.#element = element;
+
+    this.signal.dispatch(
+      'defineElement',
+      createWidgetSignalableDispatcher<E, P, E>(this, element),
+    );
+
     return this;
   }
 
-  protected defineComponent(component: IComponent<IObject>) {
+  defineComponent<C extends IObject>(component: IComponent<C>): this {
     this.#component = component;
+
+    this.signal.dispatch(
+      'defineComponent',
+      createWidgetSignalableDispatcher<IComponent<C>, P, E>(this, component),
+    );
+
     return this;
-  }
-
-  initialize(): this {
-
-    return this;
-
   }
 
   useComponent<Props extends IObject>(component: IComponent<Props> | undefined): this {
@@ -68,6 +97,11 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
       this.#component = component;
 
+      this.signal.dispatch(
+        'useComponent',
+        createWidgetSignalableDispatcher<IComponent<Props>, P, E>(this, component),
+      );
+
     }
 
     return this;
@@ -76,76 +110,21 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
   child(value?: IChildren<IProps, IWidgetElements>): this {
 
-    if (value) {
+    this.signal.dispatch('child', createWidgetSignalableDispatcher<typeof value, P, E>(this, value));
 
-      if (value instanceof PointerWidget) {
-
-        const r = value.bind(this).render().marker;
-
-        if (r && r.current) this.#element.append(r.current);
-
-      } else if (typeof value == 'object' && Array.isArray(value)) {
-
-        value.forEach(c => this.child(c));
-
-      } else if (typeof value == 'function') {
-
-        this.child(value(createContext<P, E>({widget: this, component: this.#component})));
-
-      } else if (value instanceof Promise) {
-
-        value.then(c => this.child(c));
-        // .catch(er => this.child(er))
-
-      } else if (value instanceof Widget) {
-
-        this.#element.append(value.useComponent(this.#component).render().element);
-
-      } else if (value instanceof HTMLElement || value instanceof DocumentFragment) {
-
-        this.#element.append(value);
-
-      } else if (typeof value == 'string') {
-
-        this.#element.append(document.createTextNode(value));
-
-      } else {
-
-        this.#element.append(document.createTextNode(`${value}`));
-      }
-
-    }
-
-    return this;
+    return ExAFactory.children<P, E>(this, value) as typeof this;
 
   }
 
-  style(value?: IStyle): this {
+  style(value?: IStyle<P, E>): this {
 
-    if (value && this.#element instanceof HTMLElement)
-      Object.entries(value).forEach(({0: property, 1: value}) =>
-        // @ts-ignore
-        this.#element.style[property] = value as CSSStyleDeclaration[ keyof CSSStyleDeclaration ],
-      );
-
-    return this;
+    return ExAFactory.style<P, E>(this, value) as typeof this;
 
   }
 
-  className(values?: IClassNames): this {
+  className(values?: IClassNames<P, E>): this {
 
-    if (values && this.#element instanceof HTMLElement) {
-
-      if (Array.isArray(values)) values.forEach(value => (this.#element instanceof HTMLElement)
-        ? this.#element.classList.add(value)
-        : undefined,
-      );
-
-      else this.#element.classList.add(values);
-
-    }
-
-    return this;
+    return ExAFactory.className<P, E>(this, values) as typeof this;
 
   }
 
@@ -161,17 +140,44 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
     else this.element.append(document.createTextNode(value));
 
+    this.signal.dispatch(
+      'value',
+      createWidgetSignalableDispatcher<string | undefined, P, E>(this, value),
+    );
+
     return this;
 
   }
 
+  html(value?: string) {
+
+    if (this.element instanceof HTMLElement) this.element.innerHTML = `${value}`;
+
+    else if (this.element instanceof DocumentFragment) this.element.textContent = `${value}`;
+
+    this.signal.dispatch(
+      'html',
+      createWidgetSignalableDispatcher<string | undefined, P, E>(this, value),
+    );
+
+    return this;
+  }
+
 
   trigger(type ?: keyof HTMLElementEventMap): this {
-
     type = type || 'click';
 
     /* @ts-ignore */
-    if (this.element instanceof HTMLElement && type in this.element && typeof this.element[type] == 'function') this.element[type]();
+    if (this.element instanceof HTMLElement && type in this.element && typeof this.element[type] == 'function') {
+      /* @ts-ignore */
+      this.element[type || 'click']();
+
+      this.signal.dispatch(
+        'trigger',
+        createWidgetSignalableDispatcher<keyof HTMLElementEventMap, P, E>(this, type),
+      );
+
+    }
 
     return this;
   }
@@ -180,6 +186,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
   listen(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>, options?: boolean | AddEventListenerOptions): this {
 
     if (this.element instanceof HTMLElement) {
+
       this.element.addEventListener(type, event => listener(
         createContext<P, E>({
           widget: this,
@@ -187,36 +194,96 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
           event,
         }),
       ), options);
+
+      this.signal.dispatch(
+        'listen',
+        createWidgetSignalableDispatcher<IWidgetListenerMap<P, E>, P, E>(this, {
+          type,
+          listener,
+          options,
+        }),
+      );
+
     }
 
     return this;
   }
 
+  listens(listeners: IEventListeners<P, E>): this {
 
-  on(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>): this {
+    Object.entries(listeners)
+      .forEach(({0: type, 1: callback}) => {
+
+        if (typeof callback == 'function') {
+          this.listen(type as keyof HTMLElementEventMap, callback, false);
+        } else if (typeof callback == 'object') {
+          this.listen(type as keyof HTMLElementEventMap, callback.call, callback.options);
+        }
+
+      });
+
+    return this;
+  }
+
+  ons(listeners: IEventStaticListeners<P, E>): this {
+
+    Object.entries(listeners)
+      .forEach(({0: type, 1: callback}) =>
+        this.on(type as keyof IEventStaticListeners<P, E>, callback));
+
+    return this;
+  }
+
+  on<V extends keyof IEventStaticListeners<P, E>>(type: V, listener: IEventStaticListeners<P, E>[V]): this {
 
     if (this.element instanceof HTMLElement) {
       // @ts-ignore
-      this.element[`on${type.toLowerCase()}`] = (e: Event) => listener(
-        createContext<P, E>({
-          widget: this,
-          event: e,
-          component: this.#component,
+      this.element[`on${type.toLowerCase()}`] = (e: Event) => {
+
+        if (typeof listener == 'undefined') e.preventDefault();
+
+        else if (listener === null) {
+          // @ts-ignore
+          this.element[`on${type.toLowerCase()}`] = null;
+        } else if (typeof listener == 'boolean') {
+          return listener;
+        } else if (typeof listener == 'function') {
+          return listener(
+            createContext<P, E>({
+              widget: this,
+              event: e,
+              component: this.#component,
+            }),
+          );
+        }
+
+      };
+
+      this.signal.dispatch(
+        'on',
+        createWidgetSignalableDispatcher<IEventStaticListenerPayload<V, P, E>, P, E>(this, {
+          type,
+          listener,
         }),
       );
+
     }
 
     return this;
   }
 
 
-  manipulate(callback: IChildCallback<P, E>): this {
+  manipulate(callback: IManipulateCallback<P, E>): this {
+
     callback(
       createContext<P, E>({
         widget: this,
         component: this.#component,
       }),
     );
+
+    this.signal.dispatch('manipulate', createWidgetSignalableDispatcher<typeof callback, P, E>(this, callback));
+
     return this;
   }
 
@@ -230,6 +297,12 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
             ? this.#element.dataset[decamelize(name, '-')] = `${value}`
             : undefined,
       );
+
+      this.signal.dispatch(
+        'data',
+        createWidgetSignalableDispatcher<IPropsExtended, P, E>(this, data),
+      );
+
     }
 
     return this;
@@ -244,6 +317,12 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
             ? this.#element.setAttribute(`${name}`, `${value}`)
             : undefined,
       );
+
+      this.signal.dispatch(
+        'ns',
+        createWidgetSignalableDispatcher<IPropsExtended, P, E>(this, ns),
+      );
+
     }
 
     return this;
@@ -282,32 +361,56 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
         throw 'unsupported attribute';
 
       }
+
+      this.signal.dispatch(
+        'attributes',
+        createWidgetSignalableDispatcher<IWidgetAttributesMap<P>, P, E>(this, {
+          name,
+          value,
+        }),
+      );
+
     }
 
     return this;
   }
 
 
-  actions(actions: IActions<P, E>) {
+  remove(): this {
 
-    if (this.#element instanceof HTMLElement) {
+    if (this.#element instanceof HTMLElement) this.#element.remove();
 
-      Object.entries(actions)
-        .forEach(({0: type, 1: callback}) =>
-          this.element.addEventListener(type, event =>
-            callback(
-              createContext<P, E>({widget: this, event, component: this.#component} as IContextuable<P, E>),
-            ),
-          ),
-        );
+    else this.#element.parentElement?.removeChild(this.#element);
 
-    }
+    this.signal.dispatch('remove', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
+
     return this;
 
+  }
+
+
+  onSignal<Si extends keyof IWidgetSignalableListeners<P, E>>(name: Si, callback: IWidgetSignalableListeners<P, E>[Si]) {
+    // @ts-ignore
+    this.signal.listen(name, callback);
+    return this;
+  }
+
+
+  onSignals(signals: Partial<IWidgetSignalableListeners<P, E>>): this {
+
+    Object.entries(signals).forEach(({0: name, 1: callback}) =>
+      this.onSignal(name as keyof IWidgetSignalableListeners<P, E>, callback));
+
+    return this;
   }
 
 
   render(): this {
+
+    this.signal.dispatch('initialize', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
+
+
+    if (this.props.signal) this.onSignals(this.props.signal);
 
     if (this.props.ref) this.props.ref.use(this);
 
@@ -321,14 +424,39 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
     if (this.props.child) this.child(this.props.child);
 
-    if (this.props.actions) this.actions(this.props.actions);
+    if (this.props.on) this.ons(this.props.on);
+
+    if (this.props.listen) this.listens(this.props.listen);
+
 
     Object.entries(this.props).forEach(
       ({0: name, 1: value}) => {
-        if (!WIDGET_NATIVE_PROPS.includes(name))
-          this.attrib(name as keyof P, value as P[keyof P]);
+        if (!WIDGET_NATIVE_PROPS.includes(name)) {
+
+          switch (typeof value) {
+
+            case 'function':
+              this.attrib(name as keyof P, value(
+                createContext<P, E>({
+                  widget: this,
+                  component: this.component,
+                }),
+              ) as P[keyof P]);
+              break;
+
+            default:
+              this.attrib(name as keyof P, value as P[keyof P]);
+              break;
+
+          }
+
+        }
       },
     );
+
+    this.#ready = true;
+
+    this.signal.dispatch('ready', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
 
     return this;
 

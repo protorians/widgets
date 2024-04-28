@@ -2,6 +2,7 @@ export * from '../foundation/context';
 export * from './form';
 export * from './iframe';
 export * from './input';
+export * from './source';
 export * from './picture';
 export * from './select';
 export * from './table';

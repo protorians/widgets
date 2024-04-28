@@ -1,5 +1,6 @@
 import type {
   ICommonProps,
+  ITableCellProps,
   IWidget,
 } from '../types';
 import {Widget} from './widget';
@@ -20,9 +21,9 @@ export class TableCaptionWidget
 
 export class TableHeadWidget
 
-  extends Widget<ICommonProps, HTMLTableCellElement>
+  extends Widget<ITableCellProps, HTMLTableCellElement>
 
-  implements IWidget<ICommonProps, HTMLTableCellElement> {
+  implements IWidget<ITableCellProps, HTMLTableCellElement> {
 
   get tag(): string {
     return 'th';
@@ -50,7 +51,7 @@ export class TableFootWidget
   implements IWidget<ICommonProps, HTMLTableSectionElement> {
 
   get tag(): string {
-    return 'tbody';
+    return 'tfoot';
   }
 
 }
@@ -69,9 +70,9 @@ export class TableRowWidget
 
 export class TableCellWidget
 
-  extends Widget<ICommonProps, HTMLTableCellElement>
+  extends Widget<ITableCellProps, HTMLTableCellElement>
 
-  implements IWidget<ICommonProps, HTMLTableCellElement> {
+  implements IWidget<ITableCellProps, HTMLTableCellElement> {
 
   get tag(): string {
     return 'td';
@@ -79,7 +80,7 @@ export class TableCellWidget
 
 }
 
-export default class TableWidget
+export class TableWidget
 
   extends Widget<ICommonProps, HTMLTableElement>
 
