@@ -5,7 +5,7 @@ import type {
 import {TextWidget} from '../supports';
 
 
-export function textWidget(props: string | IWidgetProps<ICommonProps, HTMLSpanElement>) {
+export function text(props: string | IWidgetProps<ICommonProps, HTMLSpanElement>) {
 
   if (typeof props == 'string') props = {child: props};
 
