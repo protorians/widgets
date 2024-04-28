@@ -14,7 +14,7 @@ import type {
 import {createContext} from './context';
 import {Signalables, type ISignalables} from '@protorians/signalable';
 import {Widget} from '../supports';
-import {setMarkerOnPointer} from '../utilities/pointer';
+import {setMarkerOnPointer} from '../utilities';
 
 
 
@@ -134,8 +134,8 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
 
   call() {
     return (this.#parent && this.callback) ? this.callback(
-      createContext<IProps, IWidgetElements>({
-        widget: this.#parent,
+      createContext<P, E>({
+        widget: this.#parent as IWidget<any, any>,
         component: this.#parent?.component,
       }) as IContext<P, E>,
     ) || undefined
@@ -202,8 +202,8 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
     return this;
   }
 
-  bind(widget: IWidget<IProps, IWidgetElements>): this {
-    this.#parent = widget;
+  bind(widget: IWidget<P, E>): this {
+    this.#parent = widget as IWidget<any, any>;
     this.#signal.dispatch('bound', this.#parent);
     return this;
   }
