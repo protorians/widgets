@@ -67,7 +67,7 @@ export interface IPointer<P extends IProps, E extends IWidgetElements> {
 
   render(): this;
 
-  bind(widget: IWidget<IProps, IWidgetElements>): this;
+  bind(widget: IWidget<P, E>): this;
 
   append(child: IPointerCollectionChild): this;
 

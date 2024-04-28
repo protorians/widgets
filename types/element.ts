@@ -3,6 +3,8 @@ import {IComponentConstruct} from './component';
 import {ISignalables} from '@protorians/signalable/types';
 import {IProps} from './props';
 import {IWidget, IWidgetElements} from './widget';
+import {IContext} from './context';
+import {IChildCallback} from './children';
 
 
 export type IElementSignal<Props extends IObject> = {
@@ -85,14 +87,56 @@ export type IStyleExtended = {
 
 }
 
-export type IStyle = IStyleExtended | {
 
-  [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K];
+export type IStyleCallback<P extends IProps, E extends IWidgetElements> = (context: Partial<IContext<P, E>>) => CSSStyleDeclaration[ keyof CSSStyleDeclaration ];
+
+export type IStyle<P extends IProps, E extends IWidgetElements> = IStyleExtended | {
+
+  [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | IStyleCallback<P, E>;
 
 }
 
-export type IStyles = IStyle[]
+// export type IStyles = IStyle<IProps, IWidgetElements>[]
 
-export type IClassName = string;
+export type IClassName<P extends IProps, E extends IWidgetElements> = string | IClassNameCallback<P, E> | undefined;
 
-export type IClassNames = IClassName | IClassName[];
+export type IClassNames<P extends IProps, E extends IWidgetElements> = IClassName<P, E> | IClassName<P, E>[];
+
+export type IClassNameCallback<P extends IProps, E extends IWidgetElements> = (context: Partial<IContext<P, E>>) => string | undefined;
+
+
+export type IEventStaticListener<P extends IProps, E extends IWidgetElements> =
+  IChildCallback<P, E>
+  | boolean
+  | null
+  | undefined;
+
+export type IEventStaticListeners<P extends IProps, E extends IWidgetElements> = Partial<{
+  [K in keyof HTMLElementEventMap]: IEventStaticListener<P, E>
+}>
+
+
+export type IEventStaticListenerPayload<K extends keyof HTMLElementEventMap, P extends IProps, E extends IWidgetElements> = {
+    type: K,
+    listener: IEventStaticListener<P, E>
+  }
+
+export type IEventStaticListenersMap<P extends IProps, E extends IWidgetElements> = Partial<{
+  [K in keyof HTMLElementEventMap]: IEventStaticListenerPayload<K, P, E>
+}>
+
+
+export type IEventListenerMapped<P extends IProps, E extends IWidgetElements> = {
+  call: IChildCallback<P, E>;
+  options?: boolean | AddEventListenerOptions;
+}
+
+export type IEventListener<P extends IProps, E extends IWidgetElements> =
+  IChildCallback<P, E>
+  | IEventListenerMapped<P, E>
+
+export type IEventListeners<P extends IProps, E extends IWidgetElements> = Partial<{
+  [K in keyof HTMLElementEventMap]: IEventListener<P, E>
+}>
+
+

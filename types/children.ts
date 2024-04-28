@@ -6,7 +6,7 @@ import {IPointer} from './pointer';
 
 export type IChildCallback<P extends IProps, E extends IWidgetElements> = (context: Partial<IContext<P, E>>) => void | IChild<P, E>;
 
-export type IChild<P extends IProps, E extends IWidgetElements> = IDataValue | IWidget<P, E> | IChildCallback<P, E> | IPointer<P, E>
+export type IChild<P extends IProps, E extends IWidgetElements> = IDataValue | IWidget<P, E> | IChildCallback<P, E> | IPointer<P, E>;
 
 export type IChildOnly<P extends IProps, E extends IWidgetElements> = IDataValue | IWidget<P, E>
 

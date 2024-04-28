@@ -1,4 +1,4 @@
-import type {ICallableValue, IChildren, IWidgetElements} from './index';
+import type {ICallableValue} from './index';
 import type {
   IBoolean,
   IDataValue,
@@ -21,7 +21,7 @@ export type IPropsExtended = {
 export type IProps = Partial<
   ICommonProps
   | IVideoProps
-  | IPictureSourceProps
+  | ISourceProps
   | IPictureProps
   | IAudioProps
   | IIFrameProps
@@ -259,7 +259,7 @@ export interface IFormProps extends ICommonProps {
 
   target?: ITarget;
 
-  child: IChildren<IProps, IWidgetElements>;
+  // child: IChildren<IProps, IWidgetElements>;
 
 }
 
@@ -285,7 +285,7 @@ export interface IVideoProps extends ICommonProps {
 
 }
 
-export interface IPictureSourceProps extends ICommonProps {
+export interface ISourceProps extends ICommonProps {
 
   srcset?: string;
 
@@ -297,7 +297,7 @@ export interface IPictureSourceProps extends ICommonProps {
 
 export interface IPictureProps extends ICommonProps {
 
-  source?: IPictureSourceProps | IPictureSourceProps[];
+  source?: ISourceProps | ISourceProps[];
 
   src?: string;
 
@@ -340,3 +340,17 @@ export interface IIFrameProps extends ICommonProps {
   src: string;
 
 }
+
+
+export interface ITableCellProps extends ICommonProps {
+
+  scope?: string;
+
+  rowspan?: number;
+
+  colspan?: number;
+
+}
+
+
+
