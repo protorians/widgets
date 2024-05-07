@@ -76,6 +76,10 @@ export interface IHelmetProps extends ICommonProps{
 
 }
 
+export interface INavProps extends ICommonProps{
+
+}
+
 export interface IStackProps extends ICommonProps{
 
 }

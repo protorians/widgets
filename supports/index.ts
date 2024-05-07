@@ -16,3 +16,4 @@ export * from './footer';
 export * from './helmet';
 export * from './frame';
 export * from './stack';
+export * from './nav';
