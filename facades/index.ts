@@ -12,7 +12,7 @@ export * from './select';
 export * from './source';
 export * from './state';
 export * from './table';
-export * from './text';
+export * from './span';
 export * from './textarea';
 export * from './widget';
 export * from './article';

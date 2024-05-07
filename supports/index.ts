@@ -6,7 +6,7 @@ export * from './source';
 export * from './picture';
 export * from './select';
 export * from './table';
-export * from './text';
+export * from './span';
 export * from './textarea';
 export * from './widget';
 export * from './link';
