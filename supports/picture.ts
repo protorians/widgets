@@ -2,7 +2,7 @@ import type {IPictureProps, IWidget} from '../types';
 import {Widget} from './widget';
 
 
-export class PictureWidget
+export class WidgetPicture
 
   extends Widget<IPictureProps, HTMLSourceElement>
 

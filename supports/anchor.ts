@@ -2,7 +2,7 @@ import type {IAnchorProps, IWidget} from '../types';
 import {Widget} from './widget';
 
 
-export class AnchorWidget
+export class WidgetAnchor
 
   extends Widget<IAnchorProps, HTMLAnchorElement>
 

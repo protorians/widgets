@@ -6,7 +6,7 @@ import type {
 import {Widget} from './widget';
 
 
-export class TableCaptionWidget
+export class WidgetTableCaption
 
   extends Widget<ICommonProps, HTMLTableCaptionElement>
 
@@ -19,7 +19,7 @@ export class TableCaptionWidget
 }
 
 
-export class TableHeadWidget
+export class WidgetTableHead
 
   extends Widget<ITableCellProps, HTMLTableCellElement>
 
@@ -32,7 +32,7 @@ export class TableHeadWidget
 }
 
 
-export class TableBodyWidget
+export class WidgetTableBody
 
   extends Widget<ICommonProps, HTMLTableSectionElement>
 
@@ -44,7 +44,7 @@ export class TableBodyWidget
 
 }
 
-export class TableFootWidget
+export class WidgetTableFoot
 
   extends Widget<ICommonProps, HTMLTableSectionElement>
 
@@ -56,7 +56,7 @@ export class TableFootWidget
 
 }
 
-export class TableRowWidget
+export class WidgetTableRow
 
   extends Widget<ICommonProps, HTMLTableRowElement>
 
@@ -68,7 +68,7 @@ export class TableRowWidget
 
 }
 
-export class TableCellWidget
+export class WidgetTableCell
 
   extends Widget<ITableCellProps, HTMLTableCellElement>
 
@@ -80,7 +80,7 @@ export class TableCellWidget
 
 }
 
-export class TableWidget
+export class WidgetTable
 
   extends Widget<ICommonProps, HTMLTableElement>
 

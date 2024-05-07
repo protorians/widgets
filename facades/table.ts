@@ -1,38 +1,38 @@
 import type {IWidgetProps, ICommonProps, ITableCellProps} from '../types';
 import {
-  TableBodyWidget,
-  TableCaptionWidget,
-  TableCellWidget,
-  TableFootWidget,
-  TableHeadWidget,
-  TableRowWidget,
-  TableWidget,
+  WidgetTableBody,
+  WidgetTableCaption,
+  WidgetTableCell,
+  WidgetTableFoot,
+  WidgetTableHead,
+  WidgetTableRow,
+  WidgetTable,
 } from '../supports';
 
 export function table(props: IWidgetProps<ICommonProps, HTMLTableElement>) {
-  return (new TableWidget(props));
+  return (new WidgetTable(props));
 }
 
 export function tableCell(props: IWidgetProps<ITableCellProps, HTMLTableCellElement>) {
-  return (new TableCellWidget(props));
+  return (new WidgetTableCell(props));
 }
 
 export function tableRow(props: IWidgetProps<ICommonProps, HTMLTableRowElement>) {
-  return (new TableRowWidget(props));
+  return (new WidgetTableRow(props));
 }
 
 export function tableFoot(props: IWidgetProps<ICommonProps, HTMLTableSectionElement>) {
-  return (new TableFootWidget(props));
+  return (new WidgetTableFoot(props));
 }
 
 export function tableBody(props: IWidgetProps<ICommonProps, HTMLTableSectionElement>) {
-  return (new TableBodyWidget(props));
+  return (new WidgetTableBody(props));
 }
 
 export function tableHead(props: IWidgetProps<ITableCellProps, HTMLTableCellElement>) {
-  return (new TableHeadWidget(props));
+  return (new WidgetTableHead(props));
 }
 
 export function tableCaption(props: IWidgetProps<ICommonProps, HTMLTableCaptionElement>) {
-  return (new TableCaptionWidget(props));
+  return (new WidgetTableCaption(props));
 }

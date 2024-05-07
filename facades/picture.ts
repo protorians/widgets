@@ -1,6 +1,6 @@
 import type {IWidgetProps, IPictureProps} from '../types';
-import {PictureWidget} from '../supports';
+import {WidgetPicture} from '../supports';
 
 export function picture(props: IWidgetProps<IPictureProps, HTMLPictureElement>) {
-  return (new PictureWidget(props));
+  return (new WidgetPicture(props));
 }

@@ -7,7 +7,7 @@ import type {
 import {Widget} from './widget';
 
 
-export class OptionGroupWidget
+export class WidgetOptionGroup
 
   extends Widget<IOptionGroupProps, HTMLOptGroupElement>
 
@@ -20,7 +20,7 @@ export class OptionGroupWidget
 }
 
 
-export class OptionWidget
+export class WidgetOption
 
   extends Widget<IOptionProps, HTMLOptionElement>
 
@@ -33,7 +33,7 @@ export class OptionWidget
 }
 
 
-export class SelectWidget
+export class WidgetSelect
 
   extends Widget<ISelectProps, HTMLSelectElement>
 

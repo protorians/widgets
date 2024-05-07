@@ -2,7 +2,7 @@ import {IIFrameProps, IWidget} from '../types';
 import {Widget} from './widget';
 
 
-export class IFrameWidget
+export class WidgetIFrame
 
   extends Widget<IIFrameProps, HTMLIFrameElement>
 

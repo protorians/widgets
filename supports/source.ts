@@ -1,7 +1,7 @@
 import type {ISourceProps, IWidget} from '../types';
 import {Widget} from './widget';
 
-export class SourceWidget
+export class WidgetSource
 
   extends Widget<ISourceProps, HTMLSourceElement>
 

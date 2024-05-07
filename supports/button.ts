@@ -3,7 +3,7 @@ import { Widget } from "./widget";
 
 
 
-export class ButtonWidget
+export class WidgetButton
 
     extends Widget<IButtonProps, HTMLButtonElement>
 

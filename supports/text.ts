@@ -2,7 +2,7 @@ import type {ICommonProps, IWidget} from '../types';
 import {Widget} from './widget';
 
 
-export class TextWidget
+export class WidgetText
 
   extends Widget<ICommonProps, HTMLSpanElement>
 

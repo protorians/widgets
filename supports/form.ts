@@ -2,7 +2,7 @@ import type {IFormProps, IWidget} from '../types';
 import {Widget} from './widget';
 
 
-export class FormWidget
+export class WidgetForm
 
   extends Widget<IFormProps, HTMLFormElement>
 

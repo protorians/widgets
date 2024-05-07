@@ -1,6 +1,6 @@
 import type {IWidgetProps, ISourceProps} from '../types';
-import {SourceWidget} from '../supports';
+import {WidgetSource} from '../supports';
 
 export function source(props: IWidgetProps<ISourceProps, HTMLSourceElement>) {
-  return (new SourceWidget(props));
+  return (new WidgetSource(props));
 }

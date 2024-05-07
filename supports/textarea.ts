@@ -4,7 +4,7 @@ import type {
 } from '../types';
 import {Widget} from './widget';
 
-export class TextareaWidget
+export class WidgetTextarea
 
   extends Widget<ITextareaProps, HTMLTextAreaElement>
 

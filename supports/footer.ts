@@ -4,7 +4,7 @@ import type {
 } from '../types';
 import {Widget} from './widget';
 
-export class FooterWidget
+export class WidgetFooter
 
   extends Widget<ICommonProps, HTMLElement>
 

@@ -2,7 +2,7 @@ import type {IInputableProps, IWidget} from '../types';
 import {Widget} from './widget';
 
 
-export class InputWidget
+export class WidgetInput
 
   extends Widget<IInputableProps, HTMLInputElement>
 

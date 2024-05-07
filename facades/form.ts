@@ -1,6 +1,6 @@
 import type {IWidgetProps, IFormProps} from '../types';
-import {FormWidget} from '../supports';
+import {WidgetForm} from '../supports';
 
 export function form(props: IWidgetProps<IFormProps, HTMLFormElement>) {
-  return (new FormWidget(props));
+  return (new WidgetForm(props));
 }
