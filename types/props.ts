@@ -60,6 +60,22 @@ export interface ICommonProps {
 }
 
 
+export interface ISpanProps extends ICommonProps{
+
+}
+
+export interface IParagraphProps extends ICommonProps{
+
+}
+
+export interface IHeadingProps extends ICommonProps{
+
+}
+
+export interface IStrongProps extends ICommonProps{
+
+}
+
 export interface IArticleProps extends ICommonProps{
 
 }
