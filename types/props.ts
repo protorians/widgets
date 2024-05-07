@@ -60,6 +60,32 @@ export interface ICommonProps {
 }
 
 
+export interface IArticleProps extends ICommonProps{
+
+}
+
+export interface IFooterProps extends ICommonProps{
+
+}
+
+export interface IFrameProps extends ICommonProps{
+
+}
+
+export interface IHelmetProps extends ICommonProps{
+
+}
+
+export interface IStackProps extends ICommonProps{
+
+}
+
+
+export interface IArticleProps extends ICommonProps{
+
+}
+
+
 export interface IAnchorProps extends ICommonProps {
 
   href: string;

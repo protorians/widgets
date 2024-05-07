@@ -1,6 +1,6 @@
-import type {IWidgetProps, ICommonProps} from '../types';
+import type {IWidgetProps, IArticleProps} from '../types';
 import {WidgetArticle} from '../supports';
 
-export function Article(props: IWidgetProps<ICommonProps, HTMLElement>) {
+export function Article(props: IWidgetProps<IArticleProps, HTMLElement>) {
   return (new WidgetArticle(props));
 }

@@ -1,14 +1,14 @@
 import type {
-  ICommonProps,
+  IHelmetProps,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetHelmet
 
-  extends WidgetNode<ICommonProps, HTMLElement>
+  extends WidgetNode<IHelmetProps, HTMLElement>
 
-  implements IWidget<ICommonProps, HTMLElement> {
+  implements IWidget<IHelmetProps, HTMLElement> {
 
   get tag(): string {
     return 'header';

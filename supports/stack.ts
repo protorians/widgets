@@ -1,14 +1,14 @@
 import type {
-  ICommonProps,
+  IStackProps,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetStack
 
-  extends WidgetNode<ICommonProps, HTMLElement>
+  extends WidgetNode<IStackProps, HTMLElement>
 
-  implements IWidget<ICommonProps, HTMLElement> {
+  implements IWidget<IStackProps, HTMLElement> {
 
   get tag(): string {
     return 'section';
