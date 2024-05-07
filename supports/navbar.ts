@@ -4,7 +4,7 @@ import type {
 } from '../types';
 import {WidgetNode} from './widget';
 
-export class WidgetNav
+export class WidgetNavbar
 
   extends WidgetNode<INavProps, HTMLElement>
 
