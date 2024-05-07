@@ -10,15 +10,15 @@ import {Signalables, type ISignalables} from '@protorians/signalable';
 
 export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
-  #value?: V;
+  #value: V;
 
   #initial?: V;
 
-  #signal: Readonly<ISignalables<V | undefined, IStateSignals<V>>>;
+  #signal: Readonly<ISignalables<V, IStateSignals<V>>>;
 
   #pointers: IPointer<any, any>[] = [];
 
-  constructor(value?: V) {
+  constructor(value: V) {
 
     this.#value = value;
 
@@ -28,7 +28,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   }
 
-  get value(): V | undefined {
+  get value(): V {
     return this.#value;
   }
 
@@ -69,6 +69,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   unset(): this {
 
+    // @ts-ignore
     this.#value = undefined;
 
     this.signal.dispatch('destroy', this);
@@ -77,7 +78,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   }
 
-  use<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): PointerWidget<P, E> {
+  widget<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): PointerWidget<P, E> {
 
     const pointer = new PointerWidget(callback);
 
@@ -114,6 +115,13 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
   divide(value?: number) {
     if (typeof this.#value == 'number') {
       this.set((this.#value / (value || 1)) as V);
+    }
+    return this;
+  }
+
+  push<D>(value: D){
+    if(Array.isArray(this.value)){
+      this.value.push(value)
     }
     return this;
   }

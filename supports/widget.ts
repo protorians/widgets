@@ -22,12 +22,11 @@ import type {
 import {
   decamelize,
   attribution,
-  allowEditableElement,
   createWidgetSignalableDispatcher,
 } from '../utilities';
 import {
   createContext,
-  ExAFactory,
+  WidgetFactory,
   WIDGET_NATIVE_PROPS,
 } from '../foundation';
 import {Signalables} from '@protorians/signalable';
@@ -69,7 +68,6 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
   defineElement(element: E): this {
     this.#element = element;
-
     this.signal.dispatch(
       'defineElement',
       createWidgetSignalableDispatcher<E, P, E>(this, element),
@@ -80,7 +78,6 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
   defineComponent<C extends IObject>(component: IComponent<C>): this {
     this.#component = component;
-
     this.signal.dispatch(
       'defineComponent',
       createWidgetSignalableDispatcher<IComponent<C>, P, E>(this, component),
@@ -92,9 +89,7 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
   useComponent<Props extends IObject>(component: IComponent<Props> | undefined): this {
 
     if (component) {
-
       component.widget = this;
-
       this.#component = component;
 
       this.signal.dispatch(
@@ -110,76 +105,39 @@ export class Widget<P extends IProps, E extends IWidgetElements> implements IWid
 
   child(value?: IChildren<IProps, IWidgetElements>): this {
 
-    this.signal.dispatch('child', createWidgetSignalableDispatcher<typeof value, P, E>(this, value));
-
-    return ExAFactory.children<P, E>(this, value) as typeof this;
+    return WidgetFactory.setChildren<P, E>(this, value) as typeof this;
 
   }
 
   style(value?: IStyle<P, E>): this {
 
-    return ExAFactory.style<P, E>(this, value) as typeof this;
+    return WidgetFactory.setStyle<P, E>(this, value) as typeof this;
 
   }
 
   className(values?: IClassNames<P, E>): this {
 
-    return ExAFactory.className<P, E>(this, values) as typeof this;
+    return WidgetFactory.setClassName<P, E>(this, values) as typeof this;
 
   }
 
   value(value?: string): this {
 
-    const element = allowEditableElement(this.element);
-
-    value = value || '';
-
-    if (element) element.value = value;
-
-    else if (this.element instanceof HTMLElement) this.element.innerHTML = value;
-
-    else this.element.append(document.createTextNode(value));
-
-    this.signal.dispatch(
-      'value',
-      createWidgetSignalableDispatcher<string | undefined, P, E>(this, value),
-    );
-
-    return this;
+    return WidgetFactory.setValue<P, E>(this, value) as typeof this;
 
   }
 
-  html(value?: string) {
+  html(value?: string): this {
 
-    if (this.element instanceof HTMLElement) this.element.innerHTML = `${value}`;
+    return WidgetFactory.setHtml<P, E>(this, value) as typeof this;
 
-    else if (this.element instanceof DocumentFragment) this.element.textContent = `${value}`;
-
-    this.signal.dispatch(
-      'html',
-      createWidgetSignalableDispatcher<string | undefined, P, E>(this, value),
-    );
-
-    return this;
   }
 
 
   trigger(type ?: keyof HTMLElementEventMap): this {
-    type = type || 'click';
 
-    /* @ts-ignore */
-    if (this.element instanceof HTMLElement && type in this.element && typeof this.element[type] == 'function') {
-      /* @ts-ignore */
-      this.element[type || 'click']();
+    return WidgetFactory.setTrigger<P, E>(this, type) as typeof this;
 
-      this.signal.dispatch(
-        'trigger',
-        createWidgetSignalableDispatcher<keyof HTMLElementEventMap, P, E>(this, type),
-      );
-
-    }
-
-    return this;
   }
 
 

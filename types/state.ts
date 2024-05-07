@@ -25,12 +25,12 @@ export interface IState<V extends ISupportableValue> {
 
   get initial(): V | undefined;
 
-  get signal(): Readonly<ISignalables<V | undefined, IStateSignals<V>>>;
+  get signal(): Readonly<ISignalables<V, IStateSignals<V>>>;
 
   set(value: V): this;
 
   unset(): this;
 
-  use<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): IPointer<P, E>;
+  widget<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): IPointer<P, E>;
 
 }

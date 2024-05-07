@@ -6,13 +6,12 @@ import type {
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
 import {Widget} from '../supports';
-import {createWidgetSignalableDispatcher} from '../utilities';
+import {allowEditableElement, createWidgetSignalableDispatcher} from '../utilities';
 
 
-export class ExAFactory {
+export class WidgetFactory {
 
-
-  static children<P extends IProps, E extends IWidgetElements>(
+  static setChildren<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     value?: IChildren<IProps, IWidgetElements>,
   ): IWidget<P, E> {
@@ -69,7 +68,7 @@ export class ExAFactory {
   }
 
 
-  static style<P extends IProps, E extends IWidgetElements>(
+  static setStyle<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     value?: IStyle<P, E>,
   ): IWidget<P, E> {
@@ -107,7 +106,7 @@ export class ExAFactory {
   }
 
 
-  static className<P extends IProps, E extends IWidgetElements>(
+  static setClassName<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     values?: IClassNames<P, E>,
   ): IWidget<P, E> {
@@ -126,7 +125,7 @@ export class ExAFactory {
 
         case 'function':
 
-          this.className(widget, values(
+          this.setClassName(widget, values(
             createContext({
               widget: widget,
               component: widget.component,
@@ -137,7 +136,7 @@ export class ExAFactory {
 
         default:
 
-          if (Array.isArray(values)) values.map(value => this.className(widget, value));
+          if (Array.isArray(values)) values.map(value => this.setClassName(widget, value));
 
           break;
 
@@ -149,6 +148,77 @@ export class ExAFactory {
 
     return widget;
   }
+
+
+
+  static setValue<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    value?: string
+  ){
+
+    const element = allowEditableElement(widget.element);
+
+    value = value || '';
+
+    if (element) element.value = value;
+
+    else if (widget.element instanceof HTMLElement) widget.element.innerHTML = value;
+
+    else widget.element.append(document.createTextNode(value));
+
+    widget.signal.dispatch(
+      'value',
+      createWidgetSignalableDispatcher<string | undefined, P, E>(widget, value),
+    );
+
+    return widget;
+
+  }
+
+
+
+
+  static setHtml<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    value?: string
+  ): IWidget<P, E>{
+
+    if (widget.element instanceof HTMLElement) widget.element.innerHTML = `${value}`;
+
+    else if (widget.element instanceof DocumentFragment) widget.element.textContent = `${value}`;
+
+    widget.signal.dispatch(
+      'html',
+      createWidgetSignalableDispatcher<string | undefined, P, E>(widget, value),
+    );
+
+    return widget
+  }
+
+
+
+  static setTrigger<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    type ?: keyof HTMLElementEventMap
+  ): IWidget<P, E>{
+
+    type = type || 'click';
+
+    /* @ts-ignore */
+    if (widget.element instanceof HTMLElement && type in widget.element && typeof widget.element[type] == 'function') {
+      /* @ts-ignore */
+      widget.element[type || 'click']();
+
+      widget.signal.dispatch(
+        'trigger',
+        createWidgetSignalableDispatcher<keyof HTMLElementEventMap, P, E>(widget, type),
+      );
+
+    }
+
+    return widget
+  }
+
 
 
 }
