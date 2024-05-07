@@ -32,7 +32,7 @@ import {
 import {Signalables} from '@protorians/signalable';
 
 
-export class Widget<P extends IProps, E extends IWidgetElements> implements IWidget<P, E> {
+export class WidgetNode<P extends IProps, E extends IWidgetElements> implements IWidget<P, E> {
 
   #element: E;
 

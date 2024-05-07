@@ -1,10 +1,10 @@
 import type {IFormProps, IWidget} from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
 export class WidgetForm
 
-  extends Widget<IFormProps, HTMLFormElement>
+  extends WidgetNode<IFormProps, HTMLFormElement>
 
   implements IWidget<IFormProps, HTMLFormElement> {
 

@@ -9,30 +9,31 @@ import {
   WidgetTable,
 } from '../supports';
 
-export function table(props: IWidgetProps<ICommonProps, HTMLTableElement>) {
+
+export function Table(props: IWidgetProps<ICommonProps, HTMLTableElement>) {
   return (new WidgetTable(props));
 }
 
-export function tableCell(props: IWidgetProps<ITableCellProps, HTMLTableCellElement>) {
+export function TableCell(props: IWidgetProps<ITableCellProps, HTMLTableCellElement>) {
   return (new WidgetTableCell(props));
 }
 
-export function tableRow(props: IWidgetProps<ICommonProps, HTMLTableRowElement>) {
+export function TableRow(props: IWidgetProps<ICommonProps, HTMLTableRowElement>) {
   return (new WidgetTableRow(props));
 }
 
-export function tableFoot(props: IWidgetProps<ICommonProps, HTMLTableSectionElement>) {
+export function TableFoot(props: IWidgetProps<ICommonProps, HTMLTableSectionElement>) {
   return (new WidgetTableFoot(props));
 }
 
-export function tableBody(props: IWidgetProps<ICommonProps, HTMLTableSectionElement>) {
+export function TableBody(props: IWidgetProps<ICommonProps, HTMLTableSectionElement>) {
   return (new WidgetTableBody(props));
 }
 
-export function tableHead(props: IWidgetProps<ITableCellProps, HTMLTableCellElement>) {
+export function TableHead(props: IWidgetProps<ITableCellProps, HTMLTableCellElement>) {
   return (new WidgetTableHead(props));
 }
 
-export function tableCaption(props: IWidgetProps<ICommonProps, HTMLTableCaptionElement>) {
+export function TableCaption(props: IWidgetProps<ICommonProps, HTMLTableCaptionElement>) {
   return (new WidgetTableCaption(props));
 }

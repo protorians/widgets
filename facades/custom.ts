@@ -1,6 +1,6 @@
 import type {IWidgetProps, IProps, IWidgetElements} from '../types';
-import {Widget} from '../supports';
+import {WidgetNode} from '../supports';
 
-export function customw<P extends IProps, E extends IWidgetElements>(props: IWidgetProps<P, E>) {
-  return (new Widget<P, E>(props));
+export function Customw<P extends IProps, E extends IWidgetElements>(props: IWidgetProps<P, E>) {
+  return (new WidgetNode<P, E>(props));
 }

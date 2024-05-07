@@ -2,10 +2,10 @@ import type {
   ICommonProps,
   IWidgetProps,
 } from '../types';
-import {Widget} from '../supports';
+import {WidgetNode} from '../supports';
 
-export function widget(props: IWidgetProps<ICommonProps, HTMLElement>) {
+export function Widget(props: IWidgetProps<ICommonProps, HTMLElement>) {
 
-  return (new Widget<ICommonProps, HTMLElement>(props));
+  return (new WidgetNode<ICommonProps, HTMLElement>(props));
 
 }

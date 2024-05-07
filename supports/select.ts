@@ -4,12 +4,12 @@ import type {
   ISelectProps,
   IWidget,
 } from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
 export class WidgetOptionGroup
 
-  extends Widget<IOptionGroupProps, HTMLOptGroupElement>
+  extends WidgetNode<IOptionGroupProps, HTMLOptGroupElement>
 
   implements IWidget<IOptionGroupProps, HTMLOptGroupElement> {
 
@@ -22,7 +22,7 @@ export class WidgetOptionGroup
 
 export class WidgetOption
 
-  extends Widget<IOptionProps, HTMLOptionElement>
+  extends WidgetNode<IOptionProps, HTMLOptionElement>
 
   implements IWidget<IOptionProps, HTMLOptionElement> {
 
@@ -35,7 +35,7 @@ export class WidgetOption
 
 export class WidgetSelect
 
-  extends Widget<ISelectProps, HTMLSelectElement>
+  extends WidgetNode<ISelectProps, HTMLSelectElement>
 
   implements IWidget<ISelectProps, HTMLSelectElement> {
 

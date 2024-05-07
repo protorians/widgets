@@ -1,6 +1,6 @@
 import type {IWidgetProps, IIFrameProps} from '../types';
-import {WidgetIFrame} from '../supports';
+import {WidgetEmbedFrame} from '../supports';
 
-export function iframe(props: IWidgetProps<IIFrameProps, HTMLIFrameElement>) {
-  return (new WidgetIFrame(props));
+export function EmbedFrame(props: IWidgetProps<IIFrameProps, HTMLIFrameElement>) {
+  return (new WidgetEmbedFrame(props));
 }

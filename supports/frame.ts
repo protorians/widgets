@@ -2,11 +2,11 @@ import type {
   ICommonProps,
   IWidget,
 } from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 export class WidgetFrame
 
-  extends Widget<ICommonProps, HTMLElement>
+  extends WidgetNode<ICommonProps, HTMLElement>
 
   implements IWidget<ICommonProps, HTMLElement> {
 

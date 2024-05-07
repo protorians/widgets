@@ -13,7 +13,7 @@ import type {
 } from '../types';
 import {createContext} from './context';
 import {Signalables, type ISignalables} from '@protorians/signalable';
-import {Widget} from '../supports';
+import {WidgetNode} from '../supports';
 import {setMarkerOnPointer} from '../utilities';
 
 
@@ -155,7 +155,7 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
         return child.map(c => this.renderChild(c)) as IPointerCollectionChildren;
       } else if (child instanceof HTMLElement || child instanceof DocumentFragment) {
         return child;
-      } else if (child instanceof Widget) {
+      } else if (child instanceof WidgetNode) {
         return child.render().element;
       } else {
         return document.createTextNode(`${typeof child == 'object' ? JSON.stringify(child) : child}`);

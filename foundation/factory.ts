@@ -5,7 +5,7 @@ import type {
 } from '../types';
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
-import {Widget} from '../supports';
+import {WidgetNode} from '../supports';
 import {allowEditableElement, createWidgetSignalableDispatcher} from '../utilities';
 
 
@@ -39,7 +39,7 @@ export class WidgetFactory {
 
         value.then(c => widget.child(c));
 
-      } else if (value instanceof Widget) {
+      } else if (value instanceof WidgetNode) {
 
         widget.element.append(value.useComponent(widget.component).render().element);
 

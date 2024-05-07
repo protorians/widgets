@@ -1,10 +1,10 @@
 import type {ICommonProps, IWidget} from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
-export class WidgetText
+export class WidgetSpan
 
-  extends Widget<ICommonProps, HTMLSpanElement>
+  extends WidgetNode<ICommonProps, HTMLSpanElement>
 
   implements IWidget<ICommonProps, HTMLSpanElement> {
 

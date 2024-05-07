@@ -1,10 +1,10 @@
 import type {IAnchorProps, IWidget} from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
 export class WidgetAnchor
 
-  extends Widget<IAnchorProps, HTMLAnchorElement>
+  extends WidgetNode<IAnchorProps, HTMLAnchorElement>
 
   implements IWidget<IAnchorProps, HTMLAnchorElement> {
 

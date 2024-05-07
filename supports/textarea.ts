@@ -2,11 +2,11 @@ import type {
   ITextareaProps,
   IWidget,
 } from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 export class WidgetTextarea
 
-  extends Widget<ITextareaProps, HTMLTextAreaElement>
+  extends WidgetNode<ITextareaProps, HTMLTextAreaElement>
 
   implements IWidget<ITextareaProps, HTMLTextAreaElement> {
 

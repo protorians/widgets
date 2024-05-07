@@ -1,10 +1,10 @@
 import {IIFrameProps, IWidget} from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
-export class WidgetIFrame
+export class WidgetEmbedFrame
 
-  extends Widget<IIFrameProps, HTMLIFrameElement>
+  extends WidgetNode<IIFrameProps, HTMLIFrameElement>
 
   implements IWidget<IIFrameProps, HTMLIFrameElement> {
 

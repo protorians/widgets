@@ -2,13 +2,14 @@ import type {
   ICommonProps,
   IWidgetProps,
 } from '../types';
-import {WidgetText} from '../supports';
+import {WidgetSpan} from '../supports';
 
 
-export function text(props: string | IWidgetProps<ICommonProps, HTMLSpanElement>) {
+export function Span(props: string | IWidgetProps<ICommonProps, HTMLSpanElement>) {
 
   if (typeof props == 'string') props = {child: props};
 
-  return (new WidgetText(props));
+  return (new WidgetSpan(props));
 
 }
+

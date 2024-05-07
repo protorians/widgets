@@ -5,7 +5,7 @@ import type {
 import {WidgetTextarea} from '../supports';
 
 
-export function textarea(props: string | Omit<IWidgetProps<ITextareaProps, HTMLTextAreaElement>, 'child'>) {
+export function Textarea(props: string | Omit<IWidgetProps<ITextareaProps, HTMLTextAreaElement>, 'child'>) {
 
   if (typeof props == 'string') props = {value: props};
 

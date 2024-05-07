@@ -1,10 +1,10 @@
 import type {IPictureProps, IWidget} from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
 export class WidgetPicture
 
-  extends Widget<IPictureProps, HTMLSourceElement>
+  extends WidgetNode<IPictureProps, HTMLSourceElement>
 
   implements IWidget<IPictureProps, HTMLSourceElement> {
 

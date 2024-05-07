@@ -1,10 +1,10 @@
 import type {IInputableProps, IWidget} from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
 export class WidgetInput
 
-  extends Widget<IInputableProps, HTMLInputElement>
+  extends WidgetNode<IInputableProps, HTMLInputElement>
 
   implements IWidget<IInputableProps, HTMLInputElement> {
 

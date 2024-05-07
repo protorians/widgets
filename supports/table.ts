@@ -3,12 +3,12 @@ import type {
   ITableCellProps,
   IWidget,
 } from '../types';
-import {Widget} from './widget';
+import {WidgetNode} from './widget';
 
 
 export class WidgetTableCaption
 
-  extends Widget<ICommonProps, HTMLTableCaptionElement>
+  extends WidgetNode<ICommonProps, HTMLTableCaptionElement>
 
   implements IWidget<ICommonProps, HTMLTableCaptionElement> {
 
@@ -21,7 +21,7 @@ export class WidgetTableCaption
 
 export class WidgetTableHead
 
-  extends Widget<ITableCellProps, HTMLTableCellElement>
+  extends WidgetNode<ITableCellProps, HTMLTableCellElement>
 
   implements IWidget<ITableCellProps, HTMLTableCellElement> {
 
@@ -34,7 +34,7 @@ export class WidgetTableHead
 
 export class WidgetTableBody
 
-  extends Widget<ICommonProps, HTMLTableSectionElement>
+  extends WidgetNode<ICommonProps, HTMLTableSectionElement>
 
   implements IWidget<ICommonProps, HTMLTableSectionElement> {
 
@@ -46,7 +46,7 @@ export class WidgetTableBody
 
 export class WidgetTableFoot
 
-  extends Widget<ICommonProps, HTMLTableSectionElement>
+  extends WidgetNode<ICommonProps, HTMLTableSectionElement>
 
   implements IWidget<ICommonProps, HTMLTableSectionElement> {
 
@@ -58,7 +58,7 @@ export class WidgetTableFoot
 
 export class WidgetTableRow
 
-  extends Widget<ICommonProps, HTMLTableRowElement>
+  extends WidgetNode<ICommonProps, HTMLTableRowElement>
 
   implements IWidget<ICommonProps, HTMLTableRowElement> {
 
@@ -70,7 +70,7 @@ export class WidgetTableRow
 
 export class WidgetTableCell
 
-  extends Widget<ITableCellProps, HTMLTableCellElement>
+  extends WidgetNode<ITableCellProps, HTMLTableCellElement>
 
   implements IWidget<ITableCellProps, HTMLTableCellElement> {
 
@@ -82,7 +82,7 @@ export class WidgetTableCell
 
 export class WidgetTable
 
-  extends Widget<ICommonProps, HTMLTableElement>
+  extends WidgetNode<ICommonProps, HTMLTableElement>
 
   implements IWidget<ICommonProps, HTMLTableElement> {
 
