@@ -1,6 +1,6 @@
-import type {IWidgetProps, IAnchorProps} from '../types';
+import type {IWidgetProps, ILinkProps} from '../types';
 import { WidgetLink} from '../supports';
 
-export function Link(props: IWidgetProps<IAnchorProps, HTMLAnchorElement>) {
+export function Link(props: IWidgetProps<ILinkProps, HTMLAnchorElement>) {
   return (new WidgetLink(props));
 }

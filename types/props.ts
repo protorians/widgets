@@ -25,6 +25,23 @@ export type IProps = Partial<
   | IPictureProps
   | IAudioProps
   | IIFrameProps
+  | IArticleProps
+  | IHeadingProps
+  | IParagraphProps
+  | IStrongProps
+  | IHelmetProps
+  | IFrameProps
+  | IFooterProps
+  | ILinkProps
+  | ISpanProps
+  | IStackProps
+  | ITableProps
+  | ITableCellProps
+  | ITableRowProps
+  | ITableCaption
+  | ITableFooterProps
+  | ITableHeadProps
+  | ITableBody
 >
 
 export type IOperatingProps<T> = {
@@ -92,7 +109,7 @@ export interface IHelmetProps extends ICommonProps{
 
 }
 
-export interface INavProps extends ICommonProps{
+export interface INavbarProps extends ICommonProps{
 
 }
 
@@ -100,13 +117,7 @@ export interface IStackProps extends ICommonProps{
 
 }
 
-
-export interface IArticleProps extends ICommonProps{
-
-}
-
-
-export interface IAnchorProps extends ICommonProps {
+export interface ILinkProps extends ICommonProps {
 
   href: string;
 
@@ -114,7 +125,7 @@ export interface IAnchorProps extends ICommonProps {
 
   ping?: string;
 
-  referrerpolicy?: IReferrerPolicy;
+  referrerPolicy?: IReferrerPolicy;
 
   target?: ITarget;
 
@@ -387,6 +398,30 @@ export interface IIFrameProps extends ICommonProps {
 
 }
 
+
+export interface ITableProps extends ICommonProps {
+
+}
+
+export interface ITableCaption extends ICommonProps {
+
+}
+
+export interface ITableBody extends ICommonProps {
+
+}
+
+export interface ITableFooterProps extends ICommonProps {
+
+}
+
+export interface ITableRowProps extends ICommonProps {
+
+}
+
+export interface ITableHeadProps extends ITableCellProps {
+
+}
 
 export interface ITableCellProps extends ICommonProps {
 

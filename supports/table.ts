@@ -1,6 +1,11 @@
 import type {
-  ICommonProps,
+  ITableBody,
+  ITableCaption,
   ITableCellProps,
+  ITableFooterProps,
+  ITableHeadProps,
+  ITableProps,
+  ITableRowProps,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
@@ -8,9 +13,9 @@ import {WidgetNode} from './widget';
 
 export class WidgetTableCaption
 
-  extends WidgetNode<ICommonProps, HTMLTableCaptionElement>
+  extends WidgetNode<ITableCaption, HTMLTableCaptionElement>
 
-  implements IWidget<ICommonProps, HTMLTableCaptionElement> {
+  implements IWidget<ITableCaption, HTMLTableCaptionElement> {
 
   get tag(): string {
     return 'caption';
@@ -21,9 +26,9 @@ export class WidgetTableCaption
 
 export class WidgetTableHead
 
-  extends WidgetNode<ITableCellProps, HTMLTableCellElement>
+  extends WidgetNode<ITableHeadProps, HTMLTableCellElement>
 
-  implements IWidget<ITableCellProps, HTMLTableCellElement> {
+  implements IWidget<ITableHeadProps, HTMLTableCellElement> {
 
   get tag(): string {
     return 'th';
@@ -34,9 +39,9 @@ export class WidgetTableHead
 
 export class WidgetTableBody
 
-  extends WidgetNode<ICommonProps, HTMLTableSectionElement>
+  extends WidgetNode<ITableBody, HTMLTableSectionElement>
 
-  implements IWidget<ICommonProps, HTMLTableSectionElement> {
+  implements IWidget<ITableBody, HTMLTableSectionElement> {
 
   get tag(): string {
     return 'tbody';
@@ -46,9 +51,9 @@ export class WidgetTableBody
 
 export class WidgetTableFoot
 
-  extends WidgetNode<ICommonProps, HTMLTableSectionElement>
+  extends WidgetNode<ITableFooterProps, HTMLTableSectionElement>
 
-  implements IWidget<ICommonProps, HTMLTableSectionElement> {
+  implements IWidget<ITableFooterProps, HTMLTableSectionElement> {
 
   get tag(): string {
     return 'tfoot';
@@ -58,9 +63,9 @@ export class WidgetTableFoot
 
 export class WidgetTableRow
 
-  extends WidgetNode<ICommonProps, HTMLTableRowElement>
+  extends WidgetNode<ITableRowProps, HTMLTableRowElement>
 
-  implements IWidget<ICommonProps, HTMLTableRowElement> {
+  implements IWidget<ITableRowProps, HTMLTableRowElement> {
 
   get tag(): string {
     return 'tr';
@@ -82,9 +87,9 @@ export class WidgetTableCell
 
 export class WidgetTable
 
-  extends WidgetNode<ICommonProps, HTMLTableElement>
+  extends WidgetNode<ITableProps, HTMLTableElement>
 
-  implements IWidget<ICommonProps, HTMLTableElement> {
+  implements IWidget<ITableProps, HTMLTableElement> {
 
   get tag(): string {
     return 'table';

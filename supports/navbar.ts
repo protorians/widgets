@@ -1,14 +1,14 @@
 import type {
-  INavProps,
+  INavbarProps,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetNavbar
 
-  extends WidgetNode<INavProps, HTMLElement>
+  extends WidgetNode<INavbarProps, HTMLElement>
 
-  implements IWidget<INavProps, HTMLElement> {
+  implements IWidget<INavbarProps, HTMLElement> {
 
   get tag(): string {
     return 'nav';
