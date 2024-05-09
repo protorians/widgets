@@ -1,12 +1,20 @@
 import type {
-  IChildren, IClassNames, IPointer,
-  IProps, IStyle, IWidget,
-  IWidgetElements,
+  IChildCallback,
+  IChildren,
+  IClassNames,
+  IDataValue, IEventListeners, IEventStaticListenerPayload, IEventStaticListeners,
+  IPointer,
+  IProps, IPropsExtended,
+  IStyle,
+  IWidget,
+  IWidgetAttributesMap,
+  IWidgetElements, IWidgetListenerMap,
 } from '../types';
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
 import {WidgetNode} from '../supports';
-import {allowEditableElement, createWidgetSignalableDispatcher} from '../utilities';
+import {allowEditableElement, attribution, createWidgetSignalableDispatcher, decamelize} from '../utilities';
+import {WIDGET_NATIVE_PROPS} from './constants';
 
 
 export class WidgetFactory {
@@ -67,6 +75,163 @@ export class WidgetFactory {
 
   }
 
+
+  static setListen<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    type: keyof HTMLElementEventMap,
+    listener: IChildCallback<P, E>,
+    options?: boolean | AddEventListenerOptions,
+  ): IWidget<P, E> {
+
+    if (widget.element instanceof HTMLElement) {
+
+      widget.element.addEventListener(type, event => listener(
+        createContext<P, E>({
+          widget: widget,
+          component: widget.component,
+          event,
+        }),
+      ), options);
+
+      widget.signal.dispatch(
+        'listen',
+        createWidgetSignalableDispatcher<IWidgetListenerMap<P, E>, P, E>(widget, {
+          type,
+          listener,
+          options,
+        }),
+      );
+
+    }
+
+    return widget;
+  }
+
+
+  static setListens<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    listeners: IEventListeners<P, E>,
+  ): IWidget<P, E> {
+
+    Object.entries(listeners)
+      .forEach(({0: type, 1: callback}) => {
+
+        if (typeof callback == 'function') {
+          widget.listen(type as keyof HTMLElementEventMap, callback, false);
+        } else if (typeof callback == 'object') {
+          widget.listen(type as keyof HTMLElementEventMap, callback.call, callback.options);
+        }
+
+      });
+
+    return widget;
+  }
+
+  static setOns<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    listeners: IEventStaticListeners<P, E>,
+  ): IWidget<P, E> {
+
+    Object.entries(listeners)
+      .forEach(({0: type, 1: callback}) =>
+        this.setOn(
+          widget,
+          type as keyof IEventStaticListeners<P, E>,
+          callback as IEventStaticListeners<P, E>[ keyof IEventStaticListeners<P, E> ],
+        ),
+      );
+
+    return widget;
+  }
+
+  static setOn<P extends IProps, E extends IWidgetElements, V extends keyof IEventStaticListeners<P, E>>(
+    widget: IWidget<P, E>,
+    type: V,
+    listener: IEventStaticListeners<P, E>[V],
+  ): IWidget<P, E> {
+
+    if (widget.element instanceof HTMLElement) {
+      // @ts-ignore
+      widget.element[`on${type.toLowerCase()}`] = (e: Event) => {
+
+        if (typeof listener == 'undefined') e.preventDefault();
+
+        else if (listener === null) {
+          // @ts-ignore
+          widget.element[`on${type.toLowerCase()}`] = null;
+        } else if (typeof listener == 'boolean') {
+          return listener;
+        } else if (typeof listener == 'function') {
+          return listener(
+            createContext<P, E>({
+              widget: widget,
+              event: e,
+              component: widget.component,
+            }),
+          );
+        }
+
+      };
+
+      widget.signal.dispatch(
+        'on',
+        createWidgetSignalableDispatcher<IEventStaticListenerPayload<V, P, E>, P, E>(widget, {
+          type,
+          listener,
+        }),
+      );
+
+    }
+
+    return widget;
+  }
+
+
+  static setData<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    data?: IPropsExtended,
+  ): IWidget<P, E> {
+
+    if (data && widget.element instanceof HTMLElement) {
+      Object.entries(data).forEach(
+        ({0: name, 1: value}) =>
+          (widget.element instanceof HTMLElement)
+            ? widget.element.dataset[decamelize(name, '-')] = `${value}`
+            : undefined,
+      );
+
+      widget.signal.dispatch(
+        'data',
+        createWidgetSignalableDispatcher<IPropsExtended, P, E>(widget, data),
+      );
+
+    }
+
+    return widget;
+  }
+
+  static attribution<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    ns?: IPropsExtended,
+  ): IWidget<P, E> {
+
+    if (ns && widget.element instanceof HTMLElement) {
+      Object.entries(attribution(ns)).forEach(
+        ({0: name, 1: value}) =>
+          (widget.element instanceof HTMLElement)
+            ? widget.element.setAttribute(`${name}`, `${value}`)
+            : undefined,
+      );
+
+      widget.signal.dispatch(
+        'ns',
+        createWidgetSignalableDispatcher<IPropsExtended, P, E>(widget, ns),
+      );
+
+    }
+
+    return widget;
+  }
 
   static setStyle<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
@@ -150,11 +315,10 @@ export class WidgetFactory {
   }
 
 
-
   static setValue<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
-    value?: string
-  ){
+    value?: string,
+  ) {
 
     const element = allowEditableElement(widget.element);
 
@@ -176,12 +340,10 @@ export class WidgetFactory {
   }
 
 
-
-
   static setHtml<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
-    value?: string
-  ): IWidget<P, E>{
+    value?: string,
+  ): IWidget<P, E> {
 
     if (widget.element instanceof HTMLElement) widget.element.innerHTML = `${value}`;
 
@@ -192,15 +354,14 @@ export class WidgetFactory {
       createWidgetSignalableDispatcher<string | undefined, P, E>(widget, value),
     );
 
-    return widget
+    return widget;
   }
-
 
 
   static setTrigger<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,
-    type ?: keyof HTMLElementEventMap
-  ): IWidget<P, E>{
+    type ?: keyof HTMLElementEventMap,
+  ): IWidget<P, E> {
 
     type = type || 'click';
 
@@ -216,9 +377,103 @@ export class WidgetFactory {
 
     }
 
-    return widget
+    return widget;
   }
 
 
+  static setAttribute<P extends IProps, E extends IWidgetElements, A extends keyof P>(
+    widget: IWidget<P, E>,
+    name: A,
+    value: P[A] | IDataValue,
+  ): IWidget<P, E> {
+
+    if (widget.element instanceof HTMLElement) {
+
+      if (value === null) {
+
+        widget.element.setAttribute(`${name as string}`, '');
+
+      } else if (value === undefined) {
+
+        widget.element.removeAttribute(`${name as string}`);
+
+      } else if (typeof value == 'string' || typeof value == 'number') {
+
+        widget.element.setAttribute(`${name as string}`, `${value}`);
+
+      } else if (typeof value == 'boolean') {
+
+        if (value) widget.element.setAttribute(`${name as string}`, `${name as string}`);
+
+        else widget.element.removeAttribute(`${name as string}`);
+
+      } else if (typeof value == 'object') {
+
+        widget.element.setAttribute(`${name as string}`, `${JSON.stringify(value)}`);
+
+      } else {
+
+        console.error('Attribute of', name, value);
+
+        throw 'unsupported attribute';
+
+      }
+
+      widget.signal.dispatch(
+        'attributes',
+        createWidgetSignalableDispatcher<IWidgetAttributesMap<P>, P, E>(widget, {
+          name, value,
+        }),
+      );
+
+    }
+
+    return widget;
+  }
+
+
+  static setAttribuable<P extends IProps, E extends IWidgetElements>(
+    widget: IWidget<P, E>,
+    name: string,
+    value: IDataValue,
+  ): IWidget<P, E> {
+
+    if (!WIDGET_NATIVE_PROPS.includes(name)) {
+
+      widget.attrib(
+        name as keyof P,
+        this.parseValue<P, E, P[keyof P]>(
+          widget,
+          value,
+        ),
+      );
+
+    }
+
+    return widget;
+  }
+
+
+  static parseValue<P extends IProps, E extends IWidgetElements, V>(
+    widget: IWidget<P, E>,
+    value: IDataValue,
+  ): V {
+
+    switch (typeof value) {
+
+      case 'function':
+        return value(
+          createContext<P, E>({
+            widget: widget,
+            component: widget.component,
+          }),
+        ) as V;
+
+      default:
+        return value as V;
+
+    }
+
+  }
 
 }

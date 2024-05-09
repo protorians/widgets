@@ -16,18 +16,13 @@ import type {
   IWidgetSignalableListeners,
   IEventStaticListeners,
   IEventListeners,
-  IWidgetAttributesMap,
-  IEventStaticListenerPayload, IWidgetListenerMap,
 } from '../types';
 import {
-  decamelize,
-  attribution,
   createWidgetSignalableDispatcher,
 } from '../utilities';
 import {
   createContext,
   WidgetFactory,
-  WIDGET_NATIVE_PROPS,
 } from '../foundation';
 import {Signalables} from '@protorians/signalable';
 
@@ -41,14 +36,6 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
   #ready: boolean = false;
 
   signal: IWidgetSignalable<P, E>;
-
-  constructor(public props: Readonly<Partial<IWidgetProps<P, E>>>) {
-
-    this.#element = document.createElement(this.tag) as E;
-
-    this.signal = new Signalables(props);
-
-  }
 
   get tag(): string {
     return 'div';
@@ -64,6 +51,14 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
   get ready() {
     return this.#ready;
+  }
+
+  constructor(public props: Readonly<Partial<IWidgetProps<P, E>>>) {
+
+    this.#element = document.createElement(this.tag) as E;
+
+    this.signal = new Signalables(props);
+
   }
 
   defineElement(element: E): this {
@@ -133,103 +128,35 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
   }
 
-
   trigger(type ?: keyof HTMLElementEventMap): this {
 
     return WidgetFactory.setTrigger<P, E>(this, type) as typeof this;
 
   }
 
-
   listen(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>, options?: boolean | AddEventListenerOptions): this {
 
-    if (this.element instanceof HTMLElement) {
+    return WidgetFactory.setListen<P, E>(this, type, listener, options) as typeof this;
 
-      this.element.addEventListener(type, event => listener(
-        createContext<P, E>({
-          widget: this,
-          component: this.#component,
-          event,
-        }),
-      ), options);
-
-      this.signal.dispatch(
-        'listen',
-        createWidgetSignalableDispatcher<IWidgetListenerMap<P, E>, P, E>(this, {
-          type,
-          listener,
-          options,
-        }),
-      );
-
-    }
-
-    return this;
   }
 
   listens(listeners: IEventListeners<P, E>): this {
 
-    Object.entries(listeners)
-      .forEach(({0: type, 1: callback}) => {
+    return WidgetFactory.setListens<P, E>(this, listeners) as typeof this;
 
-        if (typeof callback == 'function') {
-          this.listen(type as keyof HTMLElementEventMap, callback, false);
-        } else if (typeof callback == 'object') {
-          this.listen(type as keyof HTMLElementEventMap, callback.call, callback.options);
-        }
-
-      });
-
-    return this;
   }
 
   ons(listeners: IEventStaticListeners<P, E>): this {
 
-    Object.entries(listeners)
-      .forEach(({0: type, 1: callback}) =>
-        this.on(type as keyof IEventStaticListeners<P, E>, callback));
+    return WidgetFactory.setOns<P, E>(this, listeners) as typeof this;
 
-    return this;
   }
 
   on<V extends keyof IEventStaticListeners<P, E>>(type: V, listener: IEventStaticListeners<P, E>[V]): this {
 
-    if (this.element instanceof HTMLElement) {
-      // @ts-ignore
-      this.element[`on${type.toLowerCase()}`] = (e: Event) => {
+    return WidgetFactory.setOn<P, E, V>(this, type, listener) as typeof this
 
-        if (typeof listener == 'undefined') e.preventDefault();
-
-        else if (listener === null) {
-          // @ts-ignore
-          this.element[`on${type.toLowerCase()}`] = null;
-        } else if (typeof listener == 'boolean') {
-          return listener;
-        } else if (typeof listener == 'function') {
-          return listener(
-            createContext<P, E>({
-              widget: this,
-              event: e,
-              component: this.#component,
-            }),
-          );
-        }
-
-      };
-
-      this.signal.dispatch(
-        'on',
-        createWidgetSignalableDispatcher<IEventStaticListenerPayload<V, P, E>, P, E>(this, {
-          type,
-          listener,
-        }),
-      );
-
-    }
-
-    return this;
   }
-
 
   manipulate(callback: IManipulateCallback<P, E>): this {
 
@@ -245,92 +172,22 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
     return this;
   }
 
-
   data(data?: IPropsExtended): this {
 
-    if (data && this.#element instanceof HTMLElement) {
-      Object.entries(data).forEach(
-        ({0: name, 1: value}) =>
-          (this.#element instanceof HTMLElement)
-            ? this.#element.dataset[decamelize(name, '-')] = `${value}`
-            : undefined,
-      );
+    return WidgetFactory.setData<P,E>(this, data) as typeof this;
 
-      this.signal.dispatch(
-        'data',
-        createWidgetSignalableDispatcher<IPropsExtended, P, E>(this, data),
-      );
-
-    }
-
-    return this;
   }
 
-  ns(ns?: IPropsExtended): this {
+  attribution(ns?: IPropsExtended): this {
 
-    if (ns && this.#element instanceof HTMLElement) {
-      Object.entries(attribution(ns)).forEach(
-        ({0: name, 1: value}) =>
-          (this.#element instanceof HTMLElement)
-            ? this.#element.setAttribute(`${name}`, `${value}`)
-            : undefined,
-      );
+    return WidgetFactory.attribution<P,E>(this, ns) as typeof this;
 
-      this.signal.dispatch(
-        'ns',
-        createWidgetSignalableDispatcher<IPropsExtended, P, E>(this, ns),
-      );
-
-    }
-
-    return this;
   }
 
-  attrib(name: keyof P, value: P[keyof P] | IDataValue): this {
+  attrib<A extends keyof P>(name: A, value: P[A] | IDataValue): this {
 
-    if (this.#element instanceof HTMLElement) {
+    return WidgetFactory.setAttribute<P, E, A>(this, name, value) as typeof this;
 
-      if (value === null) {
-
-        this.#element.setAttribute(`${name as string}`, '');
-
-      } else if (value === undefined) {
-
-        this.#element.removeAttribute(`${name as string}`);
-
-      } else if (typeof value == 'string' || typeof value == 'number') {
-
-        this.#element.setAttribute(`${name as string}`, `${value}`);
-
-      } else if (typeof value == 'boolean') {
-
-        if (value) this.#element.setAttribute(`${name as string}`, `${name as string}`);
-
-        else this.#element.removeAttribute(`${name as string}`);
-
-      } else if (typeof value == 'object') {
-
-        this.#element.setAttribute(`${name as string}`, `${JSON.stringify(value)}`);
-
-      } else {
-
-        console.error('Attribute of', name, value);
-
-        throw 'unsupported attribute';
-
-      }
-
-      this.signal.dispatch(
-        'attributes',
-        createWidgetSignalableDispatcher<IWidgetAttributesMap<P>, P, E>(this, {
-          name,
-          value,
-        }),
-      );
-
-    }
-
-    return this;
   }
 
 
@@ -362,11 +219,9 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
     return this;
   }
 
-
   render(): this {
 
     this.signal.dispatch('initialize', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
-
 
     if (this.props.signal) this.onSignals(this.props.signal);
 
@@ -378,7 +233,7 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
     if (this.props.data) this.data(this.props.data);
 
-    if (this.props.ns) this.ns(this.props.ns);
+    if (this.props.ns) this.attribution(this.props.ns);
 
     if (this.props.child) this.child(this.props.child);
 
@@ -388,28 +243,8 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
 
     Object.entries(this.props).forEach(
-      ({0: name, 1: value}) => {
-        if (!WIDGET_NATIVE_PROPS.includes(name)) {
-
-          switch (typeof value) {
-
-            case 'function':
-              this.attrib(name as keyof P, value(
-                createContext<P, E>({
-                  widget: this,
-                  component: this.component,
-                }),
-              ) as P[keyof P]);
-              break;
-
-            default:
-              this.attrib(name as keyof P, value as P[keyof P]);
-              break;
-
-          }
-
-        }
-      },
+      ({0: name, 1: value}) =>
+        WidgetFactory.setAttribuable<P, E>(this, name, value),
     );
 
     this.#ready = true;

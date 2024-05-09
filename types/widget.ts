@@ -104,7 +104,7 @@ export interface IWidget<P extends IProps, E extends IWidgetElements> {
 
   data(value?: IPropsExtended): this;
 
-  ns(value?: IPropsExtended): this;
+  attribution(value?: IPropsExtended): this;
 
   attrib(name: keyof P, value: P[keyof P] | IDataValue): this;
 
