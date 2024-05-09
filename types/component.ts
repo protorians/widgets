@@ -3,11 +3,13 @@ import {IWidget, IWidgetElements} from './widget';
 import {IObject} from './values';
 
 
-export type IComponentConstruct<Props extends IObject> = (props: Props) => IWidget<any, any>
+export type IParameters = IObject;
 
-export interface IComponent<Props extends IObject> {
+export type IComponentConstruct<Parameters extends IParameters> = (props: Parameters) => IWidget<any, any>
 
-  get props(): Props | undefined;
+export interface IComponent<Parameters extends IParameters> {
+
+  get parameters(): Parameters | undefined;
 
   set widget(widget: IWidget<any, any>);
 

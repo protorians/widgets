@@ -1,25 +1,25 @@
 import type {
   IComponent,
   IComponentConstruct,
-  IObject,
   IAttributes,
   IWidget,
   IWidgetElements,
+  IParameters,
 } from '../types';
 
 
-export class WidgetComponent<P extends IObject> implements IComponent<P>{
+export class WidgetComponent<P extends IParameters> implements IComponent<P>{
 
-  #props: P | undefined;
+  #parameters: P | undefined;
 
   #widget: IWidget<IAttributes, IWidgetElements> | undefined;
 
   constructor(props: P) {
-    this.#props = props;
+    this.#parameters = props;
   }
 
-  get props() {
-    return this.#props;
+  get parameters() {
+    return this.#parameters;
   }
 
   set widget(widget: IWidget<IAttributes, IWidgetElements>){
@@ -32,8 +32,8 @@ export class WidgetComponent<P extends IObject> implements IComponent<P>{
 
 }
 
-export function component<Props extends IObject>(component: IComponentConstruct<Props>) {
+export function component<Parameters extends IParameters>(component: IComponentConstruct<Parameters>) {
 
-  return (props: Props) => component(props).useComponent(new WidgetComponent<Props>(props)).render();
+  return (props: Parameters) => component(props).useComponent(new WidgetComponent<Parameters>(props)).render();
 
 }
