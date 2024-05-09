@@ -1,4 +1,4 @@
-import type {IFormProps, IInputableProps, IWidget} from '../types';
+import type {IFormProps, IInputableProps, ILabelProps, IWidget} from '../types';
 import {WidgetNode} from './widget';
 
 
@@ -23,6 +23,18 @@ export class WidgetInput
 
   get tag(): string {
     return 'input';
+  }
+
+}
+
+export class WidgetLabel
+
+  extends WidgetNode<ILabelProps, HTMLLabelElement>
+
+  implements IWidget<ILabelProps, HTMLLabelElement> {
+
+  get tag(): string {
+    return 'label';
   }
 
 }

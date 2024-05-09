@@ -250,6 +250,12 @@ export interface ITextareaProps extends IInputableProps {
 
 }
 
+export interface ILabelProps extends IInputableProps {
+
+  for?: string;
+
+}
+
 export interface IInputableProps extends ICommonProps, IInputableCommonProps {
 
   name?: string;
