@@ -22,7 +22,7 @@ import {
 } from '../utilities';
 import {
   createContext,
-  WidgetFactory,
+  WidgetCore,
 } from '../foundation';
 import {Signalables} from '@protorians/signalable';
 
@@ -100,61 +100,61 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
   child(value?: IChildren<IProps, IWidgetElements>): this {
 
-    return WidgetFactory.setChildren<P, E>(this, value) as typeof this;
+    return WidgetCore.setChildren<P, E>(this, value) as typeof this;
 
   }
 
   style(value?: IStyle<P, E>): this {
 
-    return WidgetFactory.setStyle<P, E>(this, value) as typeof this;
+    return WidgetCore.setStyle<P, E>(this, value) as typeof this;
 
   }
 
   className(values?: IClassNames<P, E>): this {
 
-    return WidgetFactory.setClassName<P, E>(this, values) as typeof this;
+    return WidgetCore.setClassName<P, E>(this, values) as typeof this;
 
   }
 
   value(value?: string): this {
 
-    return WidgetFactory.setValue<P, E>(this, value) as typeof this;
+    return WidgetCore.setValue<P, E>(this, value) as typeof this;
 
   }
 
   html(value?: string): this {
 
-    return WidgetFactory.setHtml<P, E>(this, value) as typeof this;
+    return WidgetCore.setHtml<P, E>(this, value) as typeof this;
 
   }
 
   trigger(type ?: keyof HTMLElementEventMap): this {
 
-    return WidgetFactory.setTrigger<P, E>(this, type) as typeof this;
+    return WidgetCore.setTrigger<P, E>(this, type) as typeof this;
 
   }
 
   listen(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>, options?: boolean | AddEventListenerOptions): this {
 
-    return WidgetFactory.setListen<P, E>(this, type, listener, options) as typeof this;
+    return WidgetCore.setListen<P, E>(this, type, listener, options) as typeof this;
 
   }
 
   listens(listeners: IEventListeners<P, E>): this {
 
-    return WidgetFactory.setListens<P, E>(this, listeners) as typeof this;
+    return WidgetCore.setListens<P, E>(this, listeners) as typeof this;
 
   }
 
   ons(listeners: IEventStaticListeners<P, E>): this {
 
-    return WidgetFactory.setOns<P, E>(this, listeners) as typeof this;
+    return WidgetCore.setOns<P, E>(this, listeners) as typeof this;
 
   }
 
   on<V extends keyof IEventStaticListeners<P, E>>(type: V, listener: IEventStaticListeners<P, E>[V]): this {
 
-    return WidgetFactory.setOn<P, E, V>(this, type, listener) as typeof this
+    return WidgetCore.setOn<P, E, V>(this, type, listener) as typeof this
 
   }
 
@@ -174,19 +174,19 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
   data(data?: IPropsExtended): this {
 
-    return WidgetFactory.setData<P,E>(this, data) as typeof this;
+    return WidgetCore.setData<P,E>(this, data) as typeof this;
 
   }
 
   attribution(ns?: IPropsExtended): this {
 
-    return WidgetFactory.attribution<P,E>(this, ns) as typeof this;
+    return WidgetCore.attribution<P,E>(this, ns) as typeof this;
 
   }
 
   attrib<A extends keyof P>(name: A, value: P[A] | IDataValue): this {
 
-    return WidgetFactory.setAttribute<P, E, A>(this, name, value) as typeof this;
+    return WidgetCore.setAttribute<P, E, A>(this, name, value) as typeof this;
 
   }
 
@@ -244,7 +244,7 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
     Object.entries(this.props).forEach(
       ({0: name, 1: value}) =>
-        WidgetFactory.setAttribuable<P, E>(this, name, value),
+        WidgetCore.setAttribuable<P, E>(this, name, value),
     );
 
     this.#ready = true;

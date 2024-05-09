@@ -17,7 +17,7 @@ import {allowEditableElement, attribution, createWidgetSignalableDispatcher, dec
 import {WIDGET_NATIVE_PROPS} from './constants';
 
 
-export class WidgetFactory {
+export class WidgetCore {
 
   static setChildren<P extends IProps, E extends IWidgetElements>(
     widget: IWidget<P, E>,

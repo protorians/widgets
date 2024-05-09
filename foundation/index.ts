@@ -6,5 +6,5 @@ export * from './pointer';
 export * from './elements';
 export * from './constants';
 export * from './refs';
-export * from './factory';
+export * from './core';
 export * from './exception';
