@@ -1,12 +1,12 @@
 import type {
   IContext, IContextuable,
-  IProps,
+  IAttributes,
   IWidgetElements,
 } from '../types';
 
 
 
-export function createContext<P extends IProps, E extends IWidgetElements>(context: IContextuable<P, E>): Partial<IContext<P, E>>{
+export function createContext<P extends IAttributes, E extends IWidgetElements>(context: IContextuable<P, E>): Partial<IContext<P, E>>{
 
   return {
     widget: context.widget,

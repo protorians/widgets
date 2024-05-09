@@ -1,5 +1,5 @@
 export * from './children';
-export * from './props';
+export * from './attributes';
 export * from './reference';
 export * from './state';
 export * from './widget';

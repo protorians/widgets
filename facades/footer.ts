@@ -1,6 +1,6 @@
-import type {IWidgetProps, IFooterProps} from '../types';
+import type {IAttributesScope, IFooterAttributes} from '../types';
 import {WidgetFooter} from '../supports';
 
-export function Footer(props: IWidgetProps<IFooterProps, HTMLElement>) {
+export function Footer(props: IAttributesScope<IFooterAttributes, HTMLElement>) {
   return (new WidgetFooter(props));
 }

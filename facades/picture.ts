@@ -1,6 +1,6 @@
-import type {IWidgetProps, IPictureProps} from '../types';
+import type {IAttributesScope, IPictureAttributes} from '../types';
 import {WidgetPicture} from '../supports';
 
-export function Picture(props: IWidgetProps<IPictureProps, HTMLPictureElement>) {
+export function Picture(props: IAttributesScope<IPictureAttributes, HTMLPictureElement>) {
   return (new WidgetPicture(props));
 }

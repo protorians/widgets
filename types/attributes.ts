@@ -12,43 +12,53 @@ import type {
 } from './values';
 
 
-export type IPropsExtended = {
+export type IExtendedAttributes = {
 
   [K: string]: IDataValue;
 
 }
 
-export type IProps = Partial<
-  ICommonProps
-  | IVideoProps
+export type IAttributes = Partial<
+  ICommonAttributes
+  | IVideoAttributes
   | ISourceProps
-  | IPictureProps
-  | IAudioProps
-  | IIFrameProps
-  | IArticleProps
-  | IHeadingProps
-  | IParagraphProps
-  | IStrongProps
-  | IHelmetProps
-  | IFrameProps
-  | IFooterProps
-  | ILinkProps
-  | ISpanProps
-  | IStackProps
-  | ITableProps
-  | ITableCellProps
-  | ITableRowProps
-  | ITableCaption
-  | ITableFooterProps
-  | ITableHeadProps
-  | ITableBody
+  | IPictureAttributes
+  | IAudioAttributes
+  | IIFrameAttributes
+  | IArticleAttributes
+  | IHeadingAttributes
+  | IParagraphAttributes
+  | IStrongAttributes
+  | IHelmetAttributes
+  | IFrameAttributes
+  | IFooterAttributes
+  | ILinkAttributes
+  | ISpanAttributes
+  | IStackAttributes
+  | ITableAttributes
+  | ITableCellAttributes
+  | ITableRowAttributes
+  | ITableCaptionAttributes
+  | ITableFooterAttributes
+  | ITableHeadAttributes
+  | ITableBodyAttributes
+  | IButtonAttributes
+  | IInputAttributes
+  | IOptionGroupAttributes
+  | IOptionAttributes
+  | ISelectAttributes
+  | ITextareaAttributes
+  | ILabelAttributes
+  | IInputableAttributes
+  | IFormAttributes
+  | IProgressAttributes
 >
 
 export type IOperatingProps<T> = {
   [K in keyof T]: T[keyof T] | ICallableValue
 }
 
-export interface ICommonProps {
+export interface ICommonAttributes {
 
   accesskey?: string;
 
@@ -77,47 +87,47 @@ export interface ICommonProps {
 }
 
 
-export interface ISpanProps extends ICommonProps{
+export interface ISpanAttributes extends ICommonAttributes{
 
 }
 
-export interface IParagraphProps extends ICommonProps{
+export interface IParagraphAttributes extends ICommonAttributes{
 
 }
 
-export interface IHeadingProps extends ICommonProps{
+export interface IHeadingAttributes extends ICommonAttributes{
 
 }
 
-export interface IStrongProps extends ICommonProps{
+export interface IStrongAttributes extends ICommonAttributes{
 
 }
 
-export interface IArticleProps extends ICommonProps{
+export interface IArticleAttributes extends ICommonAttributes{
 
 }
 
-export interface IFooterProps extends ICommonProps{
+export interface IFooterAttributes extends ICommonAttributes{
 
 }
 
-export interface IFrameProps extends ICommonProps{
+export interface IFrameAttributes extends ICommonAttributes{
 
 }
 
-export interface IHelmetProps extends ICommonProps{
+export interface IHelmetAttributes extends ICommonAttributes{
 
 }
 
-export interface INavbarProps extends ICommonProps{
+export interface INavbarProps extends ICommonAttributes{
 
 }
 
-export interface IStackProps extends ICommonProps{
+export interface IStackAttributes extends ICommonAttributes{
 
 }
 
-export interface ILinkProps extends ICommonProps {
+export interface ILinkAttributes extends ICommonAttributes {
 
   href: string;
 
@@ -138,7 +148,7 @@ export interface ILinkProps extends ICommonProps {
 }
 
 
-export type IInputableType = 'text'
+export type IInputType = 'text'
 
   | 'button'
 
@@ -183,7 +193,7 @@ export type IInputableType = 'text'
   | 'checkbox';
 
 
-export type IInputableCommonProps = {
+export type IInputableCommonAttributes = {
 
   form?: string;
 
@@ -202,7 +212,7 @@ export type IInputableCommonProps = {
 
 export type IButtonType = 'button' | 'reset' | 'submit' | 'menu'
 
-export interface IButtonProps extends IInputableProps {
+export interface IButtonAttributes extends IInputableAttributes {
 
   popoverTarget?: string;
 
@@ -212,16 +222,16 @@ export interface IButtonProps extends IInputableProps {
 
 }
 
-export interface IInputProps extends IInputableProps {
+export interface IInputAttributes extends IInputableAttributes {
 
-  type?: IInputableType;
+  type?: IInputType;
 
   child?: undefined;
 
 }
 
 
-export interface IOptionGroupProps extends ICommonProps {
+export interface IOptionGroupAttributes extends ICommonAttributes {
 
   disabled?: boolean;
 
@@ -230,7 +240,7 @@ export interface IOptionGroupProps extends ICommonProps {
 }
 
 
-export interface IOptionProps extends ICommonProps {
+export interface IOptionAttributes extends ICommonAttributes {
 
   disabled?: boolean;
 
@@ -242,21 +252,21 @@ export interface IOptionProps extends ICommonProps {
 
 }
 
-export interface ISelectProps extends IInputableProps {
+export interface ISelectAttributes extends IInputableAttributes {
 
 }
 
-export interface ITextareaProps extends IInputableProps {
+export interface ITextareaAttributes extends IInputableAttributes {
 
 }
 
-export interface ILabelProps extends IInputableProps {
+export interface ILabelAttributes extends IInputableAttributes {
 
   for?: string;
 
 }
 
-export interface IInputableProps extends ICommonProps, IInputableCommonProps {
+export interface IInputableAttributes extends ICommonAttributes, IInputableCommonAttributes {
 
   name?: string;
 
@@ -302,7 +312,7 @@ export interface IInputableProps extends ICommonProps, IInputableCommonProps {
 
 }
 
-export interface IFormProps extends ICommonProps {
+export interface IFormAttributes extends ICommonAttributes {
 
   acceptCharset?: string;
 
@@ -326,7 +336,7 @@ export interface IFormProps extends ICommonProps {
 
 }
 
-export interface IVideoProps extends ICommonProps {
+export interface IVideoAttributes extends ICommonAttributes {
 
   autoplay?: boolean;
 
@@ -348,7 +358,7 @@ export interface IVideoProps extends ICommonProps {
 
 }
 
-export interface ISourceProps extends ICommonProps {
+export interface ISourceProps extends ICommonAttributes {
 
   srcset?: string;
 
@@ -358,7 +368,7 @@ export interface ISourceProps extends ICommonProps {
 
 }
 
-export interface IProgressProps extends ICommonProps {
+export interface IProgressAttributes extends ICommonAttributes {
 
   value?: string;
 
@@ -368,7 +378,7 @@ export interface IProgressProps extends ICommonProps {
 
 }
 
-export interface IPictureProps extends ICommonProps {
+export interface IPictureAttributes extends ICommonAttributes {
 
   source?: ISourceProps | ISourceProps[];
 
@@ -378,7 +388,7 @@ export interface IPictureProps extends ICommonProps {
 
 }
 
-export interface IAudioProps extends ICommonProps {
+export interface IAudioAttributes extends ICommonAttributes {
 
   autoplay?: boolean;
 
@@ -394,7 +404,7 @@ export interface IAudioProps extends ICommonProps {
 
 }
 
-export interface IIFrameProps extends ICommonProps {
+export interface IIFrameAttributes extends ICommonAttributes {
 
   allow?: string;
 
@@ -415,31 +425,31 @@ export interface IIFrameProps extends ICommonProps {
 }
 
 
-export interface ITableProps extends ICommonProps {
+export interface ITableAttributes extends ICommonAttributes {
 
 }
 
-export interface ITableCaption extends ICommonProps {
+export interface ITableCaptionAttributes extends ICommonAttributes {
 
 }
 
-export interface ITableBody extends ICommonProps {
+export interface ITableBodyAttributes extends ICommonAttributes {
 
 }
 
-export interface ITableFooterProps extends ICommonProps {
+export interface ITableFooterAttributes extends ICommonAttributes {
 
 }
 
-export interface ITableRowProps extends ICommonProps {
+export interface ITableRowAttributes extends ICommonAttributes {
 
 }
 
-export interface ITableHeadProps extends ITableCellProps {
+export interface ITableHeadAttributes extends ITableCellAttributes {
 
 }
 
-export interface ITableCellProps extends ICommonProps {
+export interface ITableCellAttributes extends ICommonAttributes {
 
   scope?: string;
 

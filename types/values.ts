@@ -1,13 +1,13 @@
 import type {
   IContext,
-  IProps,
+  IAttributes,
   IWidget,
   IWidgetElements,
 } from './index';
 
 export type IDataValue = string | number | object | boolean | null | undefined;
 
-export type ICallableValue = (context: Partial<IContext<IProps, IWidgetElements>>) => IDataValue;
+export type ICallableValue = (context: Partial<IContext<IAttributes, IWidgetElements>>) => IDataValue;
 
 export type IObject = {
 
@@ -15,7 +15,7 @@ export type IObject = {
 
 }
 
-export type ISupportableValue = IDataValue | IWidget<IProps, IWidgetElements>
+export type ISupportableValue = IDataValue | IWidget<IAttributes, IWidgetElements>
 
 export type IOnOff = 'on' | 'off';
 

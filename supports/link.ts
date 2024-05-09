@@ -1,12 +1,12 @@
-import type {ILinkProps, IWidget} from '../types';
+import type {ILinkAttributes, IWidget} from '../types';
 import {WidgetNode} from './widget';
 
 
 export class WidgetLink
 
-  extends WidgetNode<ILinkProps, HTMLAnchorElement>
+  extends WidgetNode<ILinkAttributes, HTMLAnchorElement>
 
-  implements IWidget<ILinkProps, HTMLAnchorElement> {
+  implements IWidget<ILinkAttributes, HTMLAnchorElement> {
 
   get tag(): string {
     return 'a';

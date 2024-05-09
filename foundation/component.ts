@@ -2,7 +2,7 @@ import type {
   IComponent,
   IComponentConstruct,
   IObject,
-  IProps,
+  IAttributes,
   IWidget,
   IWidgetElements,
 } from '../types';
@@ -12,7 +12,7 @@ export class WidgetComponent<P extends IObject> implements IComponent<P>{
 
   #props: P | undefined;
 
-  #widget: IWidget<IProps, IWidgetElements> | undefined;
+  #widget: IWidget<IAttributes, IWidgetElements> | undefined;
 
   constructor(props: P) {
     this.#props = props;
@@ -22,11 +22,11 @@ export class WidgetComponent<P extends IObject> implements IComponent<P>{
     return this.#props;
   }
 
-  set widget(widget: IWidget<IProps, IWidgetElements>){
+  set widget(widget: IWidget<IAttributes, IWidgetElements>){
     this.#widget = this.#widget || widget || undefined;
   }
 
-  get widget(): (IWidget<IProps, IWidgetElements>) | undefined{
+  get widget(): (IWidget<IAttributes, IWidgetElements>) | undefined{
     return this.#widget || undefined;
   }
 

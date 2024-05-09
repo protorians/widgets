@@ -1,10 +1,10 @@
 import {IChildCallback, IChildOnly} from './children';
-import {IProps} from './props';
+import {IAttributes} from './attributes';
 import {IWidget, IWidgetElements} from './widget';
 import {ISignalables} from '@protorians/signalable/types';
 
 
-export type IPointerSignals<P extends IProps, E extends IWidgetElements> = {
+export type IPointerSignals<P extends IAttributes, E extends IWidgetElements> = {
 
   defined: IChildCallback<P, E> | undefined;
 
@@ -12,7 +12,7 @@ export type IPointerSignals<P extends IProps, E extends IWidgetElements> = {
 
   destroyed: undefined;
 
-  bound: IWidget<IProps, IWidgetElements> | undefined;
+  bound: IWidget<IAttributes, IWidgetElements> | undefined;
 
 }
 
@@ -51,11 +51,11 @@ export interface IPointerMarker {
 
 }
 
-export interface IPointer<P extends IProps, E extends IWidgetElements> {
+export interface IPointer<P extends IAttributes, E extends IWidgetElements> {
 
   marker: Readonly<IPointerMarker>;
 
-  get parent(): IWidget<IProps, IWidgetElements> | undefined;
+  get parent(): IWidget<IAttributes, IWidgetElements> | undefined;
 
   get signal(): Readonly<ISignalables<IChildCallback<P, E> | undefined, IPointerSignals<P, E>>>;
 

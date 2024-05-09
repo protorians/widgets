@@ -1,13 +1,13 @@
-import type { IButtonProps, IWidget } from "../types";
+import type { IButtonAttributes, IWidget } from "../types";
 import { WidgetNode } from "./widget";
 
 
 
 export class WidgetButton
 
-    extends WidgetNode<IButtonProps, HTMLButtonElement>
+    extends WidgetNode<IButtonAttributes, HTMLButtonElement>
 
-    implements IWidget<IButtonProps, HTMLButtonElement>
+    implements IWidget<IButtonAttributes, HTMLButtonElement>
 
 {
 

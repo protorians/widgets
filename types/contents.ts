@@ -1,10 +1,10 @@
 import type {
-    ICommonProps,
-    IProps
-} from "./props"
+    ICommonAttributes,
+    IAttributes
+} from "./attributes"
 
 
-export type ITextualable = string | ICommonProps;
+export type ITextualable = string | ICommonAttributes;
 
-export type IContenable = IProps;
+export type IContenable = IAttributes;
 

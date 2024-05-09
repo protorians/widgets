@@ -1,10 +1,10 @@
-import type {IProps} from './props';
+import type {IAttributes} from './attributes';
 import type {IWidget, IWidgetElements} from './widget';
 import {IObject} from './values';
 import {IComponent} from './component';
 
 
-export type IContext<P extends IProps, E extends IWidgetElements> = {
+export type IContext<P extends IAttributes, E extends IWidgetElements> = {
 
   widget: IWidget<P, E>;
 
@@ -14,4 +14,4 @@ export type IContext<P extends IProps, E extends IWidgetElements> = {
 
 }
 
-export type IContextuable<P extends IProps, E extends IWidgetElements> = IContext<P, E>
+export type IContextuable<P extends IAttributes, E extends IWidgetElements> = IContext<P, E>

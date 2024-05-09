@@ -1,8 +1,8 @@
 import type {
   IStyle,
   IChildren,
-  IPropsExtended,
-  IProps,
+  IExtendedAttributes,
+  IAttributes,
   IClassNames,
   IDataValue,
   IComponent,
@@ -19,7 +19,7 @@ import {ISignalables} from '@protorians/signalable';
 
 export type IWidgetElements = HTMLElement | DocumentFragment;
 
-export type IWidgetPrimitiveProps<P extends IProps, E extends IWidgetElements> = {
+export type IWidgetPrimitiveProps<P extends IAttributes, E extends IWidgetElements> = {
 
   signal?: Partial<IWidgetSignalableListeners<P, E>>;
 
@@ -31,9 +31,9 @@ export type IWidgetPrimitiveProps<P extends IProps, E extends IWidgetElements> =
 
   className?: IClassNames<P, E>;
 
-  data?: IPropsExtended;
+  data?: IExtendedAttributes;
 
-  ns?: IPropsExtended;
+  ns?: IExtendedAttributes;
 
   // actions?: IActions<P, E>;
 
@@ -43,22 +43,22 @@ export type IWidgetPrimitiveProps<P extends IProps, E extends IWidgetElements> =
 
 }
 
-export type IPropsCallback<P extends IProps, E extends IWidgetElements> = (context: IContext<P, E>) => string | undefined;
+export type IPropsCallback<P extends IAttributes, E extends IWidgetElements> = (context: IContext<P, E>) => string | undefined;
 
-export type IPropsExtensible<P extends IProps, E extends IWidgetElements> = {
+export type IPropsExtensible<P extends IAttributes, E extends IWidgetElements> = {
 
   [K in keyof P]: P[keyof P] | IPropsCallback<P, E>
 
 }
 
-export type IWidgetProps<P extends IProps, E extends IWidgetElements> =
+export type IAttributesScope<P extends IAttributes, E extends IWidgetElements> =
   P
   & IPropsExtensible<P, E>
   & IWidgetPrimitiveProps<P, E>;
 
-export interface IWidget<P extends IProps, E extends IWidgetElements> {
+export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
 
-  props: Readonly<Partial<IWidgetProps<P, E>>>;
+  props: Readonly<Partial<IAttributesScope<P, E>>>;
 
   signal: IWidgetSignalable<P, E>;
 
@@ -102,9 +102,9 @@ export interface IWidget<P extends IProps, E extends IWidgetElements> {
 
   manipulate(callback: IManipulateCallback<P, E>): this;
 
-  data(value?: IPropsExtended): this;
+  data(value?: IExtendedAttributes): this;
 
-  attribution(value?: IPropsExtended): this;
+  attribution(value?: IExtendedAttributes): this;
 
   attrib(name: keyof P, value: P[keyof P] | IDataValue): this;
 
@@ -118,7 +118,7 @@ export interface IWidget<P extends IProps, E extends IWidgetElements> {
 }
 
 
-export type IManipulateCallback<P extends IProps, E extends IWidgetElements> = (context: Partial<IContext<P, E>>) => void;
+export type IManipulateCallback<P extends IAttributes, E extends IWidgetElements> = (context: Partial<IContext<P, E>>) => void;
 
 
 // export type IManipulateMap<P extends IProps, E extends IWidgetElements> = {
@@ -127,27 +127,27 @@ export type IManipulateCallback<P extends IProps, E extends IWidgetElements> = (
 //   options?: boolean | AddEventListenerOptions
 // }
 
-export type IWidgetListenerMap<P extends IProps, E extends IWidgetElements> = {
+export type IWidgetListenerMap<P extends IAttributes, E extends IWidgetElements> = {
   type: keyof HTMLElementEventMap,
   listener: IChildCallback<P, E>,
   options?: boolean | AddEventListenerOptions
 }
 
-export type IWidgetEventMap<P extends IProps, E extends IWidgetElements> = {
+export type IWidgetEventMap<P extends IAttributes, E extends IWidgetElements> = {
   type: keyof HTMLElementEventMap,
   listener: IChildCallback<P, E>
 }
 
-export type IWidgetAttributesMap<P extends IProps> = {
+export type IWidgetAttributesMap<P extends IAttributes> = {
   name: keyof P,
   value: P[keyof P] | IDataValue
 }
 
 
-export type IWidgetSignalable<P extends IProps, E extends IWidgetElements> = ISignalables<Readonly<Partial<IWidgetProps<P, E>>>, IWidgetSignalables<P, E>>
+export type IWidgetSignalable<P extends IAttributes, E extends IWidgetElements> = ISignalables<Readonly<Partial<IAttributesScope<P, E>>>, IWidgetSignalables<P, E>>
 
 
-export type IWidgetSignalableDispatcher<T, P extends IProps, E extends IWidgetElements> = {
+export type IWidgetSignalableDispatcher<T, P extends IAttributes, E extends IWidgetElements> = {
 
   context: Partial<IContext<P, E>>;
 
@@ -157,12 +157,12 @@ export type IWidgetSignalableDispatcher<T, P extends IProps, E extends IWidgetEl
 
 export type IWidgetSignalableListener<
   T,
-  P extends IProps,
+  P extends IAttributes,
   E extends IWidgetElements
 > = (payload: IWidgetSignalableDispatcher<T, P, E>) => void
 
 
-export interface IWidgetSignalableMap<P extends IProps, E extends IWidgetElements> {
+export interface IWidgetSignalableMap<P extends IAttributes, E extends IWidgetElements> {
 
   initialize: IWidget<P, E>;
 
@@ -194,9 +194,9 @@ export interface IWidgetSignalableMap<P extends IProps, E extends IWidgetElement
 
   manipulate: IManipulateCallback<P, E>;
 
-  data: IPropsExtended;
+  data: IExtendedAttributes;
 
-  ns: IPropsExtended;
+  ns: IExtendedAttributes;
 
   attributes: IWidgetAttributesMap<P>;
 
@@ -205,13 +205,13 @@ export interface IWidgetSignalableMap<P extends IProps, E extends IWidgetElement
 }
 
 
-export type IWidgetSignalables<P extends IProps, E extends IWidgetElements> = {
+export type IWidgetSignalables<P extends IAttributes, E extends IWidgetElements> = {
 
   [K in keyof IWidgetSignalableMap<P, E>]: IWidgetSignalableDispatcher<IWidgetSignalableMap<P, E>[ K ], P, E>
 
 }
 
-export type IWidgetSignalableListeners<P extends IProps, E extends IWidgetElements> = {
+export type IWidgetSignalableListeners<P extends IAttributes, E extends IWidgetElements> = {
 
   [K in keyof IWidgetSignalableMap<P, E>]: IWidgetSignalableListener<IWidgetSignalableMap<P, E>[ K ], P, E>
 

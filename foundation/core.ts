@@ -7,7 +7,7 @@ import type {
   IEventStaticListenerPayload,
   IEventStaticListeners,
   IPointer,
-  IProps, IPropsExtended,
+  IAttributes, IExtendedAttributes,
   IStyle,
   IWidget,
   IWidgetAttributesMap,
@@ -27,9 +27,9 @@ import {WIDGET_NATIVE_PROPS} from './constants';
 
 export class WidgetCore {
 
-  static setChildren<P extends IProps, E extends IWidgetElements>(
+  static setChildren<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
-    value?: IChildren<IProps, IWidgetElements>,
+    value?: IChildren<IAttributes, IWidgetElements>,
   ): IWidget<P, E> {
 
     if (value) {
@@ -46,7 +46,7 @@ export class WidgetCore {
 
       } else if (typeof value == 'function') {
 
-        widget.child(value(createContext<IProps, IWidgetElements>({
+        widget.child(value(createContext<IAttributes, IWidgetElements>({
           widget: widget as IWidget<any, any>,
           component: widget.component,
         })));
@@ -74,7 +74,7 @@ export class WidgetCore {
 
       widget.signal.dispatch(
         'child',
-        createWidgetSignalableDispatcher<IChildren<IProps, IWidgetElements>, P, E>(widget, value),
+        createWidgetSignalableDispatcher<IChildren<IAttributes, IWidgetElements>, P, E>(widget, value),
       );
 
     }
@@ -84,7 +84,7 @@ export class WidgetCore {
   }
 
 
-  static setListen<P extends IProps, E extends IWidgetElements>(
+  static setListen<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     type: keyof HTMLElementEventMap,
     listener: IChildCallback<P, E>,
@@ -116,7 +116,7 @@ export class WidgetCore {
   }
 
 
-  static setListens<P extends IProps, E extends IWidgetElements>(
+  static setListens<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     listeners: IEventListeners<P, E>,
   ): IWidget<P, E> {
@@ -135,7 +135,7 @@ export class WidgetCore {
     return widget;
   }
 
-  static setOns<P extends IProps, E extends IWidgetElements>(
+  static setOns<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     listeners: IEventStaticListeners<P, E>,
   ): IWidget<P, E> {
@@ -152,7 +152,7 @@ export class WidgetCore {
     return widget;
   }
 
-  static setOn<P extends IProps, E extends IWidgetElements, V extends keyof IEventStaticListeners<P, E>>(
+  static setOn<P extends IAttributes, E extends IWidgetElements, V extends keyof IEventStaticListeners<P, E>>(
     widget: IWidget<P, E>,
     type: V,
     listener: IEventStaticListeners<P, E>[V],
@@ -195,9 +195,9 @@ export class WidgetCore {
   }
 
 
-  static setData<P extends IProps, E extends IWidgetElements>(
+  static setData<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
-    data?: IPropsExtended,
+    data?: IExtendedAttributes,
   ): IWidget<P, E> {
 
     if (data && widget.element instanceof HTMLElement) {
@@ -210,7 +210,7 @@ export class WidgetCore {
 
       widget.signal.dispatch(
         'data',
-        createWidgetSignalableDispatcher<IPropsExtended, P, E>(widget, data),
+        createWidgetSignalableDispatcher<IExtendedAttributes, P, E>(widget, data),
       );
 
     }
@@ -218,9 +218,9 @@ export class WidgetCore {
     return widget;
   }
 
-  static attribution<P extends IProps, E extends IWidgetElements>(
+  static attribution<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
-    ns?: IPropsExtended,
+    ns?: IExtendedAttributes,
   ): IWidget<P, E> {
 
     if (ns && widget.element instanceof HTMLElement) {
@@ -233,7 +233,7 @@ export class WidgetCore {
 
       widget.signal.dispatch(
         'ns',
-        createWidgetSignalableDispatcher<IPropsExtended, P, E>(widget, ns),
+        createWidgetSignalableDispatcher<IExtendedAttributes, P, E>(widget, ns),
       );
 
     }
@@ -241,7 +241,7 @@ export class WidgetCore {
     return widget;
   }
 
-  static setStyle<P extends IProps, E extends IWidgetElements>(
+  static setStyle<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     value?: IStyle<P, E>,
   ): IWidget<P, E> {
@@ -279,7 +279,7 @@ export class WidgetCore {
   }
 
 
-  static setClassName<P extends IProps, E extends IWidgetElements>(
+  static setClassName<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     values?: IClassNames<P, E>,
   ): IWidget<P, E> {
@@ -323,7 +323,7 @@ export class WidgetCore {
   }
 
 
-  static setValue<P extends IProps, E extends IWidgetElements>(
+  static setValue<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     value?: string,
   ) {
@@ -348,7 +348,7 @@ export class WidgetCore {
   }
 
 
-  static setHtml<P extends IProps, E extends IWidgetElements>(
+  static setHtml<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     value?: string,
   ): IWidget<P, E> {
@@ -366,7 +366,7 @@ export class WidgetCore {
   }
 
 
-  static setTrigger<P extends IProps, E extends IWidgetElements>(
+  static setTrigger<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     type ?: keyof HTMLElementEventMap,
   ): IWidget<P, E> {
@@ -389,7 +389,7 @@ export class WidgetCore {
   }
 
 
-  static setAttribute<P extends IProps, E extends IWidgetElements, A extends keyof P>(
+  static setAttribute<P extends IAttributes, E extends IWidgetElements, A extends keyof P>(
     widget: IWidget<P, E>,
     name: A,
     value: P[A] | IDataValue,
@@ -440,7 +440,7 @@ export class WidgetCore {
   }
 
 
-  static setAttribuable<P extends IProps, E extends IWidgetElements>(
+  static setAttribuable<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     name: string,
     value: IDataValue,
@@ -462,7 +462,7 @@ export class WidgetCore {
   }
 
 
-  static parseValue<P extends IProps, E extends IWidgetElements, V>(
+  static parseValue<P extends IAttributes, E extends IWidgetElements, V>(
     widget: IWidget<P, E>,
     value: IDataValue,
   ): V {

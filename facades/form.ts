@@ -1,8 +1,8 @@
 import type {
-  IWidgetProps,
-  IFormProps,
-  IInputProps,
-  ILabelProps
+  IAttributesScope,
+  IFormAttributes,
+  IInputAttributes,
+  ILabelAttributes
 } from '../types';
 import {
   WidgetForm,
@@ -10,14 +10,14 @@ import {
   WidgetLabel
 } from '../supports';
 
-export function Form(props: IWidgetProps<IFormProps, HTMLFormElement>) {
+export function Form(props: IAttributesScope<IFormAttributes, HTMLFormElement>) {
   return (new WidgetForm(props));
 }
 
-export function Input(props: IWidgetProps<IInputProps, HTMLInputElement>) {
-  return (new WidgetInput(props as IWidgetProps<IInputProps, HTMLInputElement>));
+export function Input(props: IAttributesScope<IInputAttributes, HTMLInputElement>) {
+  return (new WidgetInput(props as IAttributesScope<IInputAttributes, HTMLInputElement>));
 }
 
-export function Label(props: IWidgetProps<ILabelProps, HTMLLabelElement>) {
-  return (new WidgetLabel(props as IWidgetProps<ILabelProps, HTMLLabelElement>));
+export function Label(props: IAttributesScope<ILabelAttributes, HTMLLabelElement>) {
+  return (new WidgetLabel(props as IAttributesScope<ILabelAttributes, HTMLLabelElement>));
 }

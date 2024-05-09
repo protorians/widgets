@@ -1,14 +1,14 @@
 import type {
-  IProgressProps,
+  IProgressAttributes,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetProgress
 
-  extends WidgetNode<IProgressProps, HTMLProgressElement>
+  extends WidgetNode<IProgressAttributes, HTMLProgressElement>
 
-  implements IWidget<IProgressProps, HTMLProgressElement> {
+  implements IWidget<IProgressAttributes, HTMLProgressElement> {
 
   get tag(): string {
     return 'progress';

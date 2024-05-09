@@ -7,7 +7,7 @@ import type {
   IPointerCollectionChildren,
   IPointerMarker,
   IPointerSignals,
-  IProps,
+  IAttributes,
   IWidget,
   IWidgetElements, IPointerMarkerElement,
 } from '../types';
@@ -106,9 +106,9 @@ export class PointerWidgetMarker implements IPointerMarker {
 }
 
 
-export class PointerWidget<P extends IProps, E extends IWidgetElements> implements IPointer<P, E> {
+export class PointerWidget<P extends IAttributes, E extends IWidgetElements> implements IPointer<P, E> {
 
-  #parent: IWidget<IProps, IWidgetElements> | undefined;
+  #parent: IWidget<IAttributes, IWidgetElements> | undefined;
 
   #signal: Readonly<ISignalables<IChildCallback<P, E> | undefined, IPointerSignals<P, E>>>;
 
@@ -124,7 +124,7 @@ export class PointerWidget<P extends IProps, E extends IWidgetElements> implemen
 
   }
 
-  get parent(): IWidget<IProps, IWidgetElements> | undefined {
+  get parent(): IWidget<IAttributes, IWidgetElements> | undefined {
     return this.#parent;
   }
 

@@ -1,4 +1,4 @@
-import {IProps} from './props';
+import {IAttributes} from './attributes';
 import {IWidget, IWidgetElements} from './widget';
 import {IObject} from './values';
 
@@ -11,6 +11,6 @@ export interface IComponent<Props extends IObject> {
 
   set widget(widget: IWidget<any, any>);
 
-  get widget(): (IWidget<IProps, IWidgetElements>) | undefined;
+  get widget(): (IWidget<IAttributes, IWidgetElements>) | undefined;
 
 }

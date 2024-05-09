@@ -1,12 +1,12 @@
-import {IIFrameProps, IWidget} from '../types';
+import {IIFrameAttributes, IWidget} from '../types';
 import {WidgetNode} from './widget';
 
 
 export class WidgetEmbedFrame
 
-  extends WidgetNode<IIFrameProps, HTMLIFrameElement>
+  extends WidgetNode<IIFrameAttributes, HTMLIFrameElement>
 
-  implements IWidget<IIFrameProps, HTMLIFrameElement> {
+  implements IWidget<IIFrameAttributes, HTMLIFrameElement> {
 
   get tag(): string {
     return 'iframe';

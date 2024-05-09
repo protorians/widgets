@@ -1,6 +1,6 @@
-import type {IWidgetProps, ISourceProps} from '../types';
+import type {IAttributesScope, ISourceProps} from '../types';
 import {WidgetSource} from '../supports';
 
-export function Source(props: IWidgetProps<ISourceProps, HTMLSourceElement>) {
+export function Source(props: IAttributesScope<ISourceProps, HTMLSourceElement>) {
   return (new WidgetSource(props));
 }

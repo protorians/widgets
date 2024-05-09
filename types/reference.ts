@@ -1,9 +1,9 @@
-import type { IProps } from "./props";
+import type { IAttributes } from "./attributes";
 import type {IWidget, IWidgetElements} from "./widget"
 import type {IElementMetrics} from './element';
 
 
-export interface IReference<P extends IProps, E extends IWidgetElements> {
+export interface IReference<P extends IAttributes, E extends IWidgetElements> {
 
     get widget(): IWidget<P, E> | undefined;
 
@@ -13,4 +13,4 @@ export interface IReference<P extends IProps, E extends IWidgetElements> {
 
 }
 
-export type IReferenceCallback<P extends IProps, E extends IWidgetElements> = (widget: IWidget<P, E>) => IReference<P, E>
+export type IReferenceCallback<P extends IAttributes, E extends IWidgetElements> = (widget: IWidget<P, E>) => IReference<P, E>

@@ -2,7 +2,7 @@ import type {
   IState,
   ISupportableValue,
   IChildCallback,
-  IProps,
+  IAttributes,
   IWidgetElements, IStateSignals, IPointer,
 } from '../types';
 import {PointerWidget} from './pointer';
@@ -78,7 +78,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   }
 
-  widget<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): PointerWidget<P, E> {
+  widget<P extends IAttributes, E extends IWidgetElements>(callback: IChildCallback<P, E>): PointerWidget<P, E> {
 
     const pointer = new PointerWidget(callback);
 

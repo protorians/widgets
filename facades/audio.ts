@@ -1,7 +1,7 @@
-import type {IWidgetProps, IAudioProps} from '../types';
+import type {IAttributesScope, IAudioAttributes} from '../types';
 import {WidgetAudio} from '../supports';
 
-export function Audio(props: IWidgetProps<IAudioProps, HTMLAudioElement>) {
+export function Audio(props: IAttributesScope<IAudioAttributes, HTMLAudioElement>) {
   return (new WidgetAudio(props));
 }
 

@@ -4,7 +4,7 @@ import {
   IElementMetrics,
   IElementSignal,
   IObject,
-  IProps,
+  IAttributes,
   IWidget,
   IWidgetElements,
 } from '../types';
@@ -108,7 +108,7 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
 }
 
 
-export class WidgetElementMetrics<P extends IProps, E extends IWidgetElements> implements IElementMetrics<P, E> {
+export class WidgetElementMetrics<P extends IAttributes, E extends IWidgetElements> implements IElementMetrics<P, E> {
 
   width?: Readonly<number>;
 

@@ -1,7 +1,7 @@
 import type {ISupportableValue} from './values';
 import {ISignalables} from '@protorians/signalable/types';
 import {IPointer} from './pointer';
-import {IProps} from './props';
+import {IAttributes} from './attributes';
 import {IWidgetElements} from './widget';
 import {IChildCallback} from './children';
 
@@ -31,6 +31,6 @@ export interface IState<V extends ISupportableValue> {
 
   unset(): this;
 
-  widget<P extends IProps, E extends IWidgetElements>(callback: IChildCallback<P, E>): IPointer<P, E>;
+  widget<P extends IAttributes, E extends IWidgetElements>(callback: IChildCallback<P, E>): IPointer<P, E>;
 
 }

@@ -1,14 +1,14 @@
 import type {
-  IFrameProps,
+  IFrameAttributes,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetFrame
 
-  extends WidgetNode<IFrameProps, HTMLElement>
+  extends WidgetNode<IFrameAttributes, HTMLElement>
 
-  implements IWidget<IFrameProps, HTMLElement> {
+  implements IWidget<IFrameAttributes, HTMLElement> {
 
   get tag(): string {
     return 'main';

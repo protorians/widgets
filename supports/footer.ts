@@ -1,14 +1,14 @@
 import type {
-  IFooterProps,
+  IFooterAttributes,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetFooter
 
-  extends WidgetNode<IFooterProps, HTMLElement>
+  extends WidgetNode<IFooterAttributes, HTMLElement>
 
-  implements IWidget<IFooterProps, HTMLElement> {
+  implements IWidget<IFooterAttributes, HTMLElement> {
 
   get tag(): string {
     return 'footer';

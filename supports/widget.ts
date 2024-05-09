@@ -1,12 +1,12 @@
 import type {
   IChildren,
-  IProps,
+  IAttributes,
   IWidget,
   IWidgetElements,
-  IWidgetProps,
+  IAttributesScope,
   IStyle,
   IClassNames,
-  IPropsExtended,
+  IExtendedAttributes,
   IDataValue,
   IComponent,
   IObject,
@@ -27,7 +27,7 @@ import {
 import {Signalables} from '@protorians/signalable';
 
 
-export class WidgetNode<P extends IProps, E extends IWidgetElements> implements IWidget<P, E> {
+export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implements IWidget<P, E> {
 
   #element: E;
 
@@ -53,7 +53,7 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
     return this.#ready;
   }
 
-  constructor(public props: Readonly<Partial<IWidgetProps<P, E>>>) {
+  constructor(public props: Readonly<Partial<IAttributesScope<P, E>>>) {
 
     this.#element = document.createElement(this.tag) as E;
 
@@ -98,7 +98,7 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
 
   }
 
-  child(value?: IChildren<IProps, IWidgetElements>): this {
+  child(value?: IChildren<IAttributes, IWidgetElements>): this {
 
     return WidgetCore.setChildren<P, E>(this, value) as typeof this;
 
@@ -172,13 +172,13 @@ export class WidgetNode<P extends IProps, E extends IWidgetElements> implements 
     return this;
   }
 
-  data(data?: IPropsExtended): this {
+  data(data?: IExtendedAttributes): this {
 
     return WidgetCore.setData<P,E>(this, data) as typeof this;
 
   }
 
-  attribution(ns?: IPropsExtended): this {
+  attribution(ns?: IExtendedAttributes): this {
 
     return WidgetCore.attribution<P,E>(this, ns) as typeof this;
 

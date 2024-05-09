@@ -1,6 +1,6 @@
-import type {IWidgetProps, IStackProps} from '../types';
+import type {IAttributesScope, IStackAttributes} from '../types';
 import {WidgetStack} from '../supports';
 
-export function Stack(props: IWidgetProps<IStackProps, HTMLElement>) {
+export function Stack(props: IAttributesScope<IStackAttributes, HTMLElement>) {
   return (new WidgetStack(props));
 }

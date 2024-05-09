@@ -1,14 +1,14 @@
 import type {
-  IArticleProps,
+  IArticleAttributes,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetArticle
 
-  extends WidgetNode<IArticleProps, HTMLElement>
+  extends WidgetNode<IArticleAttributes, HTMLElement>
 
-  implements IWidget<IArticleProps, HTMLElement> {
+  implements IWidget<IArticleAttributes, HTMLElement> {
 
   get tag(): string {
     return 'article';

@@ -1,5 +1,5 @@
 import {
-  IProps,
+  IAttributes,
   IReference,
   IWidget,
   IWidgetElements
@@ -7,7 +7,7 @@ import {
 import {WidgetElementMetrics} from './elements';
 
 
-export class ReferenceWidget<P extends IProps, E extends IWidgetElements> implements IReference<P, E>{
+export class ReferenceWidget<P extends IAttributes, E extends IWidgetElements> implements IReference<P, E>{
 
   #widget: IWidget<P, E> | undefined;
 

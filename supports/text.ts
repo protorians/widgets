@@ -1,8 +1,8 @@
 import type {
-  IHeadingProps,
-  IParagraphProps,
-  ISpanProps,
-  IStrongProps,
+  IHeadingAttributes,
+  IParagraphAttributes,
+  ISpanAttributes,
+  IStrongAttributes,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
@@ -10,9 +10,9 @@ import {WidgetNode} from './widget';
 
 export class WidgetSpan
 
-  extends WidgetNode<ISpanProps, HTMLSpanElement>
+  extends WidgetNode<ISpanAttributes, HTMLSpanElement>
 
-  implements IWidget<ISpanProps, HTMLSpanElement> {
+  implements IWidget<ISpanAttributes, HTMLSpanElement> {
 
   get tag(): string {
     return 'span';
@@ -23,9 +23,9 @@ export class WidgetSpan
 
 export class WidgetParagraph
 
-  extends WidgetNode<IParagraphProps, HTMLParagraphElement>
+  extends WidgetNode<IParagraphAttributes, HTMLParagraphElement>
 
-  implements IWidget<IParagraphProps, HTMLParagraphElement> {
+  implements IWidget<IParagraphAttributes, HTMLParagraphElement> {
 
   get tag(): string {
     return 'p';
@@ -36,9 +36,9 @@ export class WidgetParagraph
 
 export class WidgetTextStrong
 
-  extends WidgetNode<IStrongProps, HTMLElement>
+  extends WidgetNode<IStrongAttributes, HTMLElement>
 
-  implements IWidget<IStrongProps, HTMLElement> {
+  implements IWidget<IStrongAttributes, HTMLElement> {
 
   get tag(): string {
     return 'strong';
@@ -49,9 +49,9 @@ export class WidgetTextStrong
 
 export class WidgetHeadingLarger
 
-  extends WidgetNode<IHeadingProps, HTMLHeadingElement>
+  extends WidgetNode<IHeadingAttributes, HTMLHeadingElement>
 
-  implements IWidget<IHeadingProps, HTMLHeadingElement> {
+  implements IWidget<IHeadingAttributes, HTMLHeadingElement> {
 
   get tag(): string {
     return 'h1';
@@ -61,9 +61,9 @@ export class WidgetHeadingLarger
 
 export class WidgetHeadingLarge
 
-  extends WidgetNode<IHeadingProps, HTMLHeadingElement>
+  extends WidgetNode<IHeadingAttributes, HTMLHeadingElement>
 
-  implements IWidget<IHeadingProps, HTMLHeadingElement> {
+  implements IWidget<IHeadingAttributes, HTMLHeadingElement> {
 
   get tag(): string {
     return 'h2';
@@ -73,9 +73,9 @@ export class WidgetHeadingLarge
 
 export class WidgetHeadingMedium
 
-  extends WidgetNode<IHeadingProps, HTMLHeadingElement>
+  extends WidgetNode<IHeadingAttributes, HTMLHeadingElement>
 
-  implements IWidget<IHeadingProps, HTMLHeadingElement> {
+  implements IWidget<IHeadingAttributes, HTMLHeadingElement> {
 
   get tag(): string {
     return 'h3';
@@ -85,9 +85,9 @@ export class WidgetHeadingMedium
 
 export class WidgetHeadingSmall
 
-  extends WidgetNode<IHeadingProps, HTMLHeadingElement>
+  extends WidgetNode<IHeadingAttributes, HTMLHeadingElement>
 
-  implements IWidget<IHeadingProps, HTMLHeadingElement> {
+  implements IWidget<IHeadingAttributes, HTMLHeadingElement> {
 
   get tag(): string {
     return 'h4';
@@ -97,9 +97,9 @@ export class WidgetHeadingSmall
 
 export class WidgetHeadingSmaller
 
-  extends WidgetNode<IHeadingProps, HTMLHeadingElement>
+  extends WidgetNode<IHeadingAttributes, HTMLHeadingElement>
 
-  implements IWidget<IHeadingProps, HTMLHeadingElement> {
+  implements IWidget<IHeadingAttributes, HTMLHeadingElement> {
 
   get tag(): string {
     return 'h5';

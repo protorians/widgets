@@ -1,6 +1,6 @@
-import type {IWidgetProps, IHelmetProps} from '../types';
+import type {IAttributesScope, IHelmetAttributes} from '../types';
 import {WidgetHelmet} from '../supports';
 
-export function Helmet(props: IWidgetProps<IHelmetProps, HTMLElement>) {
+export function Helmet(props: IAttributesScope<IHelmetAttributes, HTMLElement>) {
   return (new WidgetHelmet(props));
 }

@@ -1,7 +1,7 @@
-  import type {IWidgetProps, IVideoProps} from '../types';
+  import type {IAttributesScope, IVideoAttributes} from '../types';
   import {WidgetVideo} from '../supports';
 
-  export function Video(props: IWidgetProps<IVideoProps, HTMLVideoElement>) {
+  export function Video(props: IAttributesScope<IVideoAttributes, HTMLVideoElement>) {
     return (new WidgetVideo(props));
   }
 

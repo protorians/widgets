@@ -1,12 +1,12 @@
 import type {
-  IProps,
+  IAttributes,
   IWidget,
   IWidgetElements,
   IWidgetSignalableDispatcher,
 } from '../types';
 import {createContext} from '../foundation';
 
-export function createWidgetSignalableDispatcher<T, P extends IProps, E extends IWidgetElements>(
+export function createWidgetSignalableDispatcher<T, P extends IAttributes, E extends IWidgetElements>(
   widget: IWidget<P, E>,
   payload: T,
 ): IWidgetSignalableDispatcher<T, P, E> {

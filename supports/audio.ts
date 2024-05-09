@@ -1,14 +1,14 @@
 import type {
-  IAudioProps,
+  IAudioAttributes,
   IWidget,
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetAudio
 
-  extends WidgetNode<IAudioProps, HTMLAudioElement>
+  extends WidgetNode<IAudioAttributes, HTMLAudioElement>
 
-  implements IWidget<IAudioProps, HTMLAudioElement> {
+  implements IWidget<IAudioAttributes, HTMLAudioElement> {
 
   get tag(): string {
     return 'audio';

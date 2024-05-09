@@ -1,12 +1,12 @@
-import type {IFormProps, IInputableProps, ILabelProps, IWidget} from '../types';
+import type {IFormAttributes, IInputableAttributes, ILabelAttributes, IWidget} from '../types';
 import {WidgetNode} from './widget';
 
 
 export class WidgetForm
 
-  extends WidgetNode<IFormProps, HTMLFormElement>
+  extends WidgetNode<IFormAttributes, HTMLFormElement>
 
-  implements IWidget<IFormProps, HTMLFormElement> {
+  implements IWidget<IFormAttributes, HTMLFormElement> {
 
   get tag(): string {
     return 'form';
@@ -17,9 +17,9 @@ export class WidgetForm
 
 export class WidgetInput
 
-  extends WidgetNode<IInputableProps, HTMLInputElement>
+  extends WidgetNode<IInputableAttributes, HTMLInputElement>
 
-  implements IWidget<IInputableProps, HTMLInputElement> {
+  implements IWidget<IInputableAttributes, HTMLInputElement> {
 
   get tag(): string {
     return 'input';
@@ -29,9 +29,9 @@ export class WidgetInput
 
 export class WidgetLabel
 
-  extends WidgetNode<ILabelProps, HTMLLabelElement>
+  extends WidgetNode<ILabelAttributes, HTMLLabelElement>
 
-  implements IWidget<ILabelProps, HTMLLabelElement> {
+  implements IWidget<ILabelAttributes, HTMLLabelElement> {
 
   get tag(): string {
     return 'label';
