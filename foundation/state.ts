@@ -119,9 +119,9 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
     return this;
   }
 
-  push<D>(value: D){
-    if(Array.isArray(this.value)){
-      this.value.push(value)
+  push<D extends V[keyof V]>(value: D) {
+    if (Array.isArray(this.value)) {
+      this.set([...this.value || [], value] as V);
     }
     return this;
   }
