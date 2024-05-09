@@ -2,7 +2,10 @@ import type {
   IChildCallback,
   IChildren,
   IClassNames,
-  IDataValue, IEventListeners, IEventStaticListenerPayload, IEventStaticListeners,
+  IDataValue,
+  IEventListeners,
+  IEventStaticListenerPayload,
+  IEventStaticListeners,
   IPointer,
   IProps, IPropsExtended,
   IStyle,
@@ -13,7 +16,12 @@ import type {
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
 import {WidgetNode} from '../supports';
-import {allowEditableElement, attribution, createWidgetSignalableDispatcher, decamelize} from '../utilities';
+import {
+  allowEditableElement,
+  attribution,
+  createWidgetSignalableDispatcher,
+  decamelize
+} from '../utilities';
 import {WIDGET_NATIVE_PROPS} from './constants';
 
 
