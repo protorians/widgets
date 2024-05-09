@@ -4,7 +4,6 @@ export * from './custom';
 export * from './elements';
 export * from './form';
 export * from './iframe';
-export * from './input';
 export * from './option';
 export * from './picture';
 export * from './ref';
