@@ -352,6 +352,16 @@ export interface ISourceProps extends ICommonProps {
 
 }
 
+export interface IProgressProps extends ICommonProps {
+
+  value?: string;
+
+  min?: string;
+
+  max?: string;
+
+}
+
 export interface IPictureProps extends ICommonProps {
 
   source?: ISourceProps | ISourceProps[];
