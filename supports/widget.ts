@@ -1,95 +1,141 @@
 import type {
-  IChildren,
-  IAttributes,
-  IWidget,
-  IWidgetElements,
-  IAttributesScope,
-  IStyle,
-  IClassNames,
-  IExtendedAttributes,
-  IDataValue,
-  IComponent,
-  IObject,
-  IChildCallback,
-  IWidgetSignalable,
-  IManipulateCallback,
-  IWidgetSignalableListeners,
-  IEventStaticListeners,
-  IEventListeners,
+  IChildren ,
+  IAttributes ,
+  IWidget ,
+  IWidgetElements ,
+  IAttributesScope ,
+  IStyle ,
+  IClassNames ,
+  IExtendedAttributes ,
+  IDataValue ,
+  IComponent ,
+  IObject ,
+  IChildCallback ,
+  IWidgetSignalable ,
+  IManipulateCallback ,
+  IWidgetSignalableListeners ,
+  IEventStaticListeners ,
+  IEventListeners ,
 } from '../types';
 import {
-  createWidgetSignalableDispatcher,
+  createWidgetSignalableDispatcher ,
 } from '../utilities';
 import {
-  createContext,
-  WidgetCore,
+  createContext ,
+  Coreable ,
 } from '../foundation';
-import {Signalables} from '@protorians/signalable';
+import { Signalables } from '@protorians/signalable';
+import { Attribution , IAttribution } from '@protorians/attribution';
 
 
-export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implements IWidget<P, E> {
+export class WidgetNode<P extends IAttributes , E extends IWidgetElements> implements IWidget<P , E> {
 
-  #element: E;
+  protected _element : E;
 
-  #component: IComponent<IObject> | undefined;
+  protected _component : IComponent<IObject> | undefined;
 
-  #ready: boolean = false;
+  protected _ready : boolean = false;
 
-  signal: IWidgetSignalable<P, E>;
+  signal : IWidgetSignalable<P , E>;
 
-  get tag(): string {
+  props : Readonly<Partial<IAttributesScope<P , E>>>;
+
+  attribution : IAttribution<Readonly<Partial<IAttributesScope<P , E>>> , IDataValue>;
+
+
+  static style<At extends IAttributes , El extends IWidgetElements> () : Partial<IStyle<At , El>> | undefined {
+    return undefined;
+  }
+
+  static className<At extends IAttributes , El extends IWidgetElements> () : IClassNames<At , El> | undefined {
+    return undefined;
+  }
+
+  static data () : IExtendedAttributes | undefined {
+    return undefined;
+  }
+
+  static ns () : IExtendedAttributes | undefined {
+    return undefined;
+  }
+
+  static event<At extends IAttributes , El extends IWidgetElements> () : IEventStaticListeners<At , El> | undefined {
+    return undefined;
+  }
+
+  static listener<At extends IAttributes , El extends IWidgetElements> () : IEventListeners<At , El> | undefined {
+    return undefined;
+  }
+
+  static child () : IChildren<any , any> | undefined {
+    return undefined;
+  }
+
+  static signal<At extends IAttributes , El extends IWidgetElements> () : Partial<IWidgetSignalableListeners<At , El>> | undefined {
+    return undefined;
+  }
+
+  static transformProperties<P extends IAttributes , E extends IWidgetElements> (props : Partial<IAttributesScope<P , E>>) {
+    return props;
+  }
+
+  get tag () : string {
     return 'div';
   }
 
-  get element() {
-    return this.#element;
+  get element () {
+    return this._element;
   }
 
-  get component(): IComponent<IObject> | undefined {
-    return this.#component;
+  get component () : IComponent<IObject> | undefined {
+    return this._component;
   }
 
-  get ready() {
-    return this.#ready;
+  get ready () {
+    return this._ready;
   }
 
-  constructor(public props: Readonly<Partial<IAttributesScope<P, E>>>) {
+  constructor (props : IAttributesScope<P , E>) {
 
-    this.#element = document.createElement(this.tag) as E;
+    this.props = Coreable.syncProperties<P , E>(this , props) as Readonly<Partial<IAttributesScope<P , E>>>;
 
-    this.signal = new Signalables(props);
+    this._element = document.createElement(this.tag) as E;
+
+    this.signal = new Signalables(this.props);
+
+    this.attribution = new Attribution(this._element as HTMLElement , this.props);
 
   }
 
-  defineElement(element: E): this {
-    this.#element = element;
+  defineElement (element : E) : this {
+    this._element = element;
     this.signal.dispatch(
-      'defineElement',
-      createWidgetSignalableDispatcher<E, P, E>(this, element),
+      'defineElement' ,
+      createWidgetSignalableDispatcher<E , P , E>(this , element) ,
     );
 
     return this;
   }
 
-  defineComponent<C extends IObject>(component: IComponent<C>): this {
-    this.#component = component;
+  defineComponent<C extends IObject> (component : IComponent<C>) : this {
+    this._component = component;
     this.signal.dispatch(
-      'defineComponent',
-      createWidgetSignalableDispatcher<IComponent<C>, P, E>(this, component),
+      'defineComponent' ,
+      createWidgetSignalableDispatcher<IComponent<C> , P , E>(this , component) ,
     );
 
     return this;
   }
 
-  useComponent<Props extends IObject>(component: IComponent<Props> | undefined): this {
+  useComponent<Props extends IObject> (component : IComponent<Props> | undefined) : this {
 
     if (component) {
       component.widget = this;
-      this.#component = component;
+      this._component = component;
 
       this.signal.dispatch(
-        'useComponent',
-        createWidgetSignalableDispatcher<IComponent<Props>, P, E>(this, component),
+        'useComponent' ,
+        createWidgetSignalableDispatcher<IComponent<Props> , P , E>(this , component) ,
       );
 
     }
@@ -98,130 +144,122 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
 
   }
 
-  child(value?: IChildren<IAttributes, IWidgetElements>): this {
+  child (value? : IChildren<IAttributes , IWidgetElements>) : this {
 
-    return WidgetCore.setChildren<P, E>(this, value) as typeof this;
-
-  }
-
-  style(value?: IStyle<P, E>): this {
-
-    return WidgetCore.setStyle<P, E>(this, value) as typeof this;
+    return Coreable.setChildren<P , E>(this , value) as typeof this;
 
   }
 
-  className(values?: IClassNames<P, E>): this {
+  style (value? : IStyle<P , E>) : this {
 
-    return WidgetCore.setClassName<P, E>(this, values) as typeof this;
-
-  }
-
-  value(value?: string): this {
-
-    return WidgetCore.setValue<P, E>(this, value) as typeof this;
+    return Coreable.setStyle<P , E>(this , value) as typeof this;
 
   }
 
-  html(value?: string): this {
+  className (values? : IClassNames<P , E>) : this {
 
-    return WidgetCore.setHtml<P, E>(this, value) as typeof this;
-
-  }
-
-  trigger(type ?: keyof HTMLElementEventMap): this {
-
-    return WidgetCore.setTrigger<P, E>(this, type) as typeof this;
+    return Coreable.setClassName<P , E>(this , values) as typeof this;
 
   }
 
-  listen(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>, options?: boolean | AddEventListenerOptions): this {
+  value (value? : string) : this {
 
-    return WidgetCore.setListen<P, E>(this, type, listener, options) as typeof this;
-
-  }
-
-  listens(listeners: IEventListeners<P, E>): this {
-
-    return WidgetCore.setListens<P, E>(this, listeners) as typeof this;
+    return Coreable.setValue<P , E>(this , value) as typeof this;
 
   }
 
-  ons(listeners: IEventStaticListeners<P, E>): this {
+  html (value? : string) : this {
 
-    return WidgetCore.setOns<P, E>(this, listeners) as typeof this;
-
-  }
-
-  on<V extends keyof IEventStaticListeners<P, E>>(type: V, listener: IEventStaticListeners<P, E>[V]): this {
-
-    return WidgetCore.setOn<P, E, V>(this, type, listener) as typeof this
+    return Coreable.setHtml<P , E>(this , value) as typeof this;
 
   }
 
-  manipulate(callback: IManipulateCallback<P, E>): this {
+  trigger (type ? : keyof HTMLElementEventMap) : this {
+
+    return Coreable.setTrigger<P , E>(this , type) as typeof this;
+
+  }
+
+  listen (type : keyof HTMLElementEventMap , listener : IChildCallback<P , E> , options? : boolean | AddEventListenerOptions) : this {
+
+    return Coreable.setListen<P , E>(this , type , listener , options) as typeof this;
+
+  }
+
+  listens (listeners : IEventListeners<P , E>) : this {
+
+    return Coreable.setListens<P , E>(this , listeners) as typeof this;
+
+  }
+
+  ons (listeners : IEventStaticListeners<P , E>) : this {
+
+    return Coreable.setOns<P , E>(this , listeners) as typeof this;
+
+  }
+
+  on<V extends keyof IEventStaticListeners<P , E>> (type : V , listener : IEventStaticListeners<P , E>[V]) : this {
+
+    return Coreable.setOn<P , E , V>(this , type , listener) as typeof this;
+
+  }
+
+  manipulate (callback : IManipulateCallback<P , E>) : this {
 
     callback(
-      createContext<P, E>({
-        widget: this,
-        component: this.#component,
-      }),
+      createContext<P , E>({
+        widget: this ,
+        component: this._component ,
+      }) ,
     );
 
-    this.signal.dispatch('manipulate', createWidgetSignalableDispatcher<typeof callback, P, E>(this, callback));
+    this.signal.dispatch('manipulate' , createWidgetSignalableDispatcher<typeof callback , P , E>(this , callback));
 
     return this;
   }
 
-  data(data?: IExtendedAttributes): this {
+  data (data? : IExtendedAttributes) : this {
 
-    return WidgetCore.setData<P,E>(this, data) as typeof this;
-
-  }
-
-  attribution(ns?: IExtendedAttributes): this {
-
-    return WidgetCore.attribution<P,E>(this, ns) as typeof this;
+    return Coreable.setData<P , E>(this , data) as typeof this;
 
   }
 
-  attrib<A extends keyof P>(name: A, value: P[A] | IDataValue): this {
+  ns (ns? : IExtendedAttributes) : this {
 
-    return WidgetCore.setAttribute<P, E, A>(this, name, value) as typeof this;
+    return Coreable.attribution<P , E>(this , ns) as typeof this;
 
   }
 
+  attrib<A extends keyof P> (name : A , value : P[A] | IDataValue) : this {
 
-  remove(): this {
-
-    if (this.#element instanceof HTMLElement) this.#element.remove();
-
-    else this.#element.parentElement?.removeChild(this.#element);
-
-    this.signal.dispatch('remove', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
-
-    return this;
+    return Coreable.setAttribute<P , E , A>(this , name , value) as typeof this;
 
   }
 
 
-  onSignal<Si extends keyof IWidgetSignalableListeners<P, E>>(name: Si, callback: IWidgetSignalableListeners<P, E>[Si]) {
+  remove () : this {
+
+    return Coreable.remove<P , E>(this) as typeof this;
+
+  }
+
+
+  onSignal<Si extends keyof IWidgetSignalableListeners<P , E>> (name : Si , callback : IWidgetSignalableListeners<P , E>[Si]) {
     // @ts-ignore
-    this.signal.listen(name, callback);
+    this.signal.listen(name , callback);
     return this;
   }
 
 
-  onSignals(signals: Partial<IWidgetSignalableListeners<P, E>>): this {
-
-    Object.entries(signals).forEach(({0: name, 1: callback}) =>
-      this.onSignal(name as keyof IWidgetSignalableListeners<P, E>, callback));
-
+  onSignals (signals : Partial<IWidgetSignalableListeners<P , E>>) : this {
+    Object.entries(signals).forEach(({0: name , 1: callback}) =>
+      this.onSignal(name as keyof IWidgetSignalableListeners<P , E> , callback));
     return this;
   }
 
-  render(): this {
+  render () : this {
 
-    this.signal.dispatch('initialize', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
+    this.signal.dispatch('initialize' , createWidgetSignalableDispatcher<typeof this , P , E>(this , this));
 
     if (this.props.signal) this.onSignals(this.props.signal);
 
@@ -233,7 +271,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
 
     if (this.props.data) this.data(this.props.data);
 
-    if (this.props.ns) this.attribution(this.props.ns);
+    if (this.props.ns) this.ns(this.props.ns);
 
     if (this.props.child) this.child(this.props.child);
 
@@ -243,13 +281,13 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
 
 
     Object.entries(this.props).forEach(
-      ({0: name, 1: value}) =>
-        WidgetCore.setAttribuable<P, E>(this, name, value),
+      ({0: name , 1: value}) =>
+        Coreable.setAttribuable<P , E>(this , name , value) ,
     );
 
-    this.#ready = true;
+    this._ready = true;
 
-    this.signal.dispatch('ready', createWidgetSignalableDispatcher<typeof this, P, E>(this, this));
+    this.signal.dispatch('ready' , createWidgetSignalableDispatcher<typeof this , P , E>(this , this));
 
     return this;
 

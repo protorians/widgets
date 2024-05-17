@@ -15,6 +15,7 @@ import type {
   IEventStaticListenerPayload,
 } from './index';
 import {ISignalables} from '@protorians/signalable';
+import { IAttribution } from '@protorians/attribution';
 
 
 export type IWidgetElements = HTMLElement | DocumentFragment;
@@ -62,6 +63,8 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
 
   signal: IWidgetSignalable<P, E>;
 
+  attribution: IAttribution<Readonly<Partial<IAttributesScope<P, E>>>, IDataValue>
+
   get tag(): string;
 
   get element(): E;
@@ -104,7 +107,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
 
   data(value?: IExtendedAttributes): this;
 
-  attribution(value?: IExtendedAttributes): this;
+  ns(value?: IExtendedAttributes): this;
 
   attrib(name: keyof P, value: P[keyof P] | IDataValue): this;
 
