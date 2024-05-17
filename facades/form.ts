@@ -14,7 +14,7 @@ export function Form(props: IAttributesScope<IFormAttributes, HTMLFormElement>) 
   return (new WidgetForm(props));
 }
 
-export function Input(props: IAttributesScope<IInputAttributes, HTMLInputElement>) {
+export function Input(props: Omit<IAttributesScope<IInputAttributes, HTMLInputElement>, 'child'>) {
   return (new WidgetInput(props as IAttributesScope<IInputAttributes, HTMLInputElement>));
 }
 
