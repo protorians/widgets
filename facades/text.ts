@@ -16,7 +16,7 @@ import {
 } from '../supports';
 
 
-export function Span(props: string | IAttributesScope<ISpanAttributes, HTMLSpanElement>) {
+export function Text(props: string | IAttributesScope<ISpanAttributes, HTMLSpanElement>) {
 
   if (typeof props == 'string') props = {child: props};
 
