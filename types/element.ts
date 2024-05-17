@@ -23,9 +23,11 @@ export interface IElement<Props extends IObject> extends HTMLElement {
 
   get component(): IComponentConstruct<Props> | undefined;
 
-  get signal(): Readonly<ISignalables<Props, IElementSignal<Props>>>;
+  signal: Readonly<ISignalables<Props, IElementSignal<Props>>>;
 
   use: IComponentConstruct<Props> | undefined;
+
+  widget:  IWidget<any, any> | undefined;
 
   initialize(): this;
 

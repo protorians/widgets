@@ -8,40 +8,37 @@ import {
   IWidget,
   IWidgetElements,
 } from '../types';
-import {ISignalables} from '@protorians/signalable/types';
-import {Signalables} from '@protorians/signalable/supports';
+import {type ISignalables, Signalables} from '@protorians/signalable';
 
 
 export class WidgetElement<Props extends IObject> extends HTMLElement implements IElement<Props> {
 
-  #props: Props = {} as Props;
+  protected _props: Props = {} as Props;
 
-  #signal: Readonly<ISignalables<Props, IElementSignal<Props>>>;
+  protected _component: IComponentConstruct<Props> | undefined;
 
-  #component: IComponentConstruct<Props> | undefined;
+  signal: Readonly<ISignalables<Props, IElementSignal<Props>>>;
 
   use: IComponentConstruct<Props> | undefined;
+
+  widget:  IWidget<any, any> | undefined;
 
   constructor() {
     super();
     this.sync();
-    this.#signal = new Signalables(this.props);
+    this.signal = new Signalables(this.props);
   }
 
   get props() {
-    return this.#props;
+    return this._props;
   }
 
   set props( props ){
-    this.#props = props
+    this._props = props
   }
 
   get component() {
-    return this.#component;
-  }
-
-  get signal() {
-    return this.#signal;
+    return this._component;
   }
 
   bootstrap(): this {
@@ -77,10 +74,11 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
   mount(component?: IComponentConstruct<Props>) {
 
     if (component) {
-      this.#component = component;
+      this._component = component;
       this.initialize();
       this.innerHTML = '';
-      this.append(this.#component(this.props).element);
+      this.widget = this._component(this.props)
+      this.append(this.widget.element);
       this.signal.dispatch('mounted', this);
       this.mounted();
 
