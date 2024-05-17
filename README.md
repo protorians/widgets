@@ -1,2 +1,2 @@
 # widgets
-HTML Widget's Maker
+Widget's Builder
