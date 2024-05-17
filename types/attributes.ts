@@ -1,6 +1,6 @@
-import type {ICallableValue} from './index';
 import type {
   IBoolean,
+  ICallableValue,
   IDataValue,
   IFormRelationship,
   ILoading,
@@ -34,7 +34,7 @@ export type IAttributes = Partial<
   | IFooterAttributes
   | ILinkAttributes
   | ISpanAttributes
-  | IStackAttributes
+  | ISectionAttributes
   | ITableAttributes
   | ITableCellAttributes
   | ITableRowAttributes
@@ -123,7 +123,15 @@ export interface INavbarProps extends ICommonAttributes{
 
 }
 
-export interface IStackAttributes extends ICommonAttributes{
+export interface ISectionAttributes extends ICommonAttributes{
+
+}
+
+export interface IRowAttributes extends ICommonAttributes{
+
+}
+
+export interface IColumnAttributes extends ICommonAttributes{
 
 }
 
