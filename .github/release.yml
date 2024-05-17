@@ -1,0 +1,85 @@
+# .github/release.yml
+
+changelog:
+  categories:
+    - title: Article widget
+      labels:
+        - '*'
+    - title: Audio widget
+      labels:
+        - '*'
+    - title: Button widget
+      labels:
+        - '*'
+    - title: Custom widget
+      labels:
+        - '*'
+    - title: Element widget helpers
+      labels:
+        - '*'
+    - title: Footer widget
+      labels:
+        - '*'
+    - title: Form widget
+      labels:
+        - '*'
+    - title: Frame widget
+      labels:
+        - '*'
+    - title: Helmet widget
+      labels:
+        - '*'
+    - title: iFrame widget
+      labels:
+        - '*'
+    - title: Link widget
+      labels:
+        - '*'
+    - title: Navbar widget
+      labels:
+        - '*'
+    - title: Option widget
+      labels:
+        - '*'
+    - title: Picture widget
+      labels:
+        - '*'
+    - title: Progress widget
+      labels:
+        - '*'
+    - title: Reference widget
+      labels:
+        - '*'
+    - title: Select widget
+      labels:
+        - '*'
+    - title: Source widget
+      labels:
+        - '*'
+    - title: Section widget
+      labels:
+        - '*'
+    - title: Row widget
+      labels:
+        - '*'
+    - title: Column widget
+      labels:
+        - '*'
+    - title: State widget
+      labels:
+        - '*'
+    - title: Table widget
+      labels:
+        - '*'
+    - title: Texts widget
+      labels:
+        - '*'
+    - title: Textarea widget
+      labels:
+        - '*'
+    - title: Video widget
+      labels:
+        - '*'
+    - title: WidgetNode
+      labels:
+        - '*'
