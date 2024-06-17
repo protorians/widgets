@@ -1,14 +1,15 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.2-beta.1",
+  "version": "0.0.2-beta.6",
   "description": "Widget's Builder",
   "main": "index.js",
-  "types": "./global.d.ts",
+  "type": "module",
+  "types": "global.d.ts",
+  "exports": ["./"],
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "typing": "npm-dts generate -o ./global.d.ts -c -L debug",
-    "postinstall": "npm install typescript@5.4.5 && tsc --project tsconfig-postinstall.json"
+    "typing": "npm-dts generate -o ./global.d.ts -c -L debug"
   },
   "keywords": [
     "protorians",
@@ -22,26 +23,11 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.11",
-    "@typescript-eslint/eslint-plugin": "^7.0.1",
-    "@typescript-eslint/parser": "^7.0.1",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-import-resolver-node": "^0.3.7",
-    "eslint-module-utils": "^2.7.4",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-scope": "^7.1.1",
-    "eslint-utils": "^3.0.0",
-    "eslint-visitor-keys": "^3.3.0",
-    "prettier": "^3.2.5",
-    "prettier-eslint": "^15.0.1",
-    "prettier-eslint-cli": "^7.1.0",
-    "prettier-linter-helpers": "^1.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.4.5"
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
-    "@protorians/attribution": "^0.0.2",
-    "@protorians/signalable": "^0.0.6"
+    "@protorians/attribution": "^0.0.3",
+    "@protorians/signalable": "^0.0.6",
+    "typescript": "^5.4.5"
   }
 }

@@ -5,10 +5,10 @@ import type {
   IAttributes ,
   IWidgetElements ,
   IStateSignals ,
-  IPointer ,
+  IPointer , IDataValue ,
 } from '../types';
 import { PointerWidget } from './pointer';
-import { Signalables , type ISignalables } from '@protorians/signalable';
+import { Signalables,  type ISignalables } from '@protorians/signalable';
 
 export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
@@ -16,9 +16,9 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   #initial? : V;
 
-  #signal : Readonly<ISignalables<V , IStateSignals<V>>>;
+  #signal : Readonly<ISignalables<V,  IStateSignals<V>>>;
 
-  #pointers : IPointer<any , any>[] = [];
+  #pointers : IPointer<any,  any>[] = [];
 
   constructor (value : V) {
 
@@ -50,10 +50,10 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
     this.pointers.forEach(pointer => {
       pointer.render();
-      this.signal.dispatch('pointer:updated' , pointer);
+      this.signal.dispatch('pointer:updated',  pointer);
     });
 
-    this.signal.dispatch('pointers:updated' , this.pointers);
+    this.signal.dispatch('pointers:updated',  this.pointers);
 
     return this;
 
@@ -63,7 +63,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
     this.#value = value;
 
-    this.signal.dispatch('updated' , value);
+    this.signal.dispatch('updated',  value);
 
     return this.updatePointers();
 
@@ -74,22 +74,32 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
     // @ts-ignore
     this.#value = undefined;
 
-    this.signal.dispatch('destroy' , this);
+    this.signal.dispatch('destroy',  this);
 
     return this.updatePointers();
 
   }
 
-  widget<P extends IAttributes , E extends IWidgetElements> (callback : IChildCallback<P , E>) : PointerWidget<P , E> {
+  widget<P extends IAttributes,  E extends IWidgetElements> (callback : IChildCallback<P,  E>) : PointerWidget<P,  E> {
 
     const pointer = new PointerWidget(callback);
 
     this.pointers.push(pointer);
 
-    this.signal.dispatch('used' , pointer);
+    this.signal.dispatch('used',  pointer);
 
     return pointer;
 
+  }
+
+  change(callback: () => IDataValue){
+
+    /**
+     * Ajouter le `callback` dans un tableau
+     * a chaque mise à jour re-rendre ce callback
+     */
+
+    return callback();
   }
 
 
@@ -123,7 +133,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   push<D extends V[keyof V]> (value : D) {
     if (Array.isArray(this.value)) {
-      this.set([...this.value || [] , value] as V);
+      this.set([...this.value || [],  value] as V);
     }
     return this;
   }

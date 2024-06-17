@@ -135,6 +135,18 @@ export interface IColumnAttributes extends ICommonAttributes{
 
 }
 
+export interface IGridAttributes extends ICommonAttributes{
+  grid?: string;
+  gridTemplateRows?: string;
+  gridTemplateColumns?: string;
+  gridTemplateAreas?: string;
+  gridAutoRows?: string;
+  gridAutoColumns?: string;
+  gridAutoFlow?: string;
+  gridRowGap?: string;
+  gridColumnGap?: string;
+}
+
 export interface ILinkAttributes extends ICommonAttributes {
 
   href: string;

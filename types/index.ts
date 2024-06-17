@@ -10,3 +10,4 @@ export * from './context';
 export * from './component';
 export * from './pointer';
 export * from './static';
+export * from './coreable';

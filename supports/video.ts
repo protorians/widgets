@@ -1,14 +1,14 @@
 import type {
-  IVideoAttributes ,
-  IWidget ,
+  IVideoAttributes,  IVideoWidget, 
+  IWidget, 
 } from '../types';
 import { WidgetNode } from './widget';
 
 export class WidgetVideo
 
-  extends WidgetNode<IVideoAttributes , HTMLVideoElement>
+  extends WidgetNode<IVideoAttributes,  HTMLVideoElement>
 
-  implements IWidget<IVideoAttributes , HTMLVideoElement> {
+  implements IVideoWidget {
 
   get tag () {
     return 'video';

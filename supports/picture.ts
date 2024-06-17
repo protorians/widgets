@@ -4,9 +4,9 @@ import {WidgetNode} from './widget';
 
 export class WidgetPicture
 
-  extends WidgetNode<IPictureAttributes, HTMLSourceElement>
+  extends WidgetNode<IPictureAttributes, HTMLPictureElement>
 
-  implements IWidget<IPictureAttributes, HTMLSourceElement> {
+  implements IWidget<IPictureAttributes, HTMLPictureElement> {
 
   get tag(): string {
     return 'picture';

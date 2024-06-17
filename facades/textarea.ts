@@ -9,6 +9,6 @@ export function Textarea(props: string | Omit<IAttributesScope<ITextareaAttribut
 
   if (typeof props == 'string') props = {value: props};
 
-  return (new WidgetTextarea(props));
+  return (new WidgetTextarea(props as IAttributesScope<ITextareaAttributes, HTMLTextAreaElement>));
 
 }

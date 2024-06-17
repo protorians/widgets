@@ -1,16 +1,16 @@
 import type {
-  ITextareaAttributes,
-  IWidget,
+  ITextareaAttributes, 
+  ITextareaWidget, 
 } from '../types';
 import {WidgetNode} from './widget';
 
 export class WidgetTextarea
 
-  extends WidgetNode<ITextareaAttributes, HTMLTextAreaElement>
+  extends WidgetNode<ITextareaAttributes,  HTMLTextAreaElement>
 
-  implements IWidget<ITextareaAttributes, HTMLTextAreaElement> {
+  implements ITextareaWidget {
 
-  get tag(): string {
+  get tag () : string {
     return 'textarea';
   }
 
