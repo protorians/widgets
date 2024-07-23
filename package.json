@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.2-beta.6",
+  "version": "0.0.2-beta.7",
   "description": "Widget's Builder",
   "main": "index.js",
   "type": "module",
@@ -8,8 +8,7 @@
   "exports": ["./"],
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc",
-    "typing": "npm-dts generate -o ./global.d.ts -c -L debug"
+    "build": "tsc"
   },
   "keywords": [
     "protorians",
