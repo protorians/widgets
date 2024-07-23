@@ -1,14 +1,13 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.2-beta.7",
+  "version": "0.0.2-beta.8",
   "description": "Widget's Builder",
   "main": "index.js",
   "type": "module",
-  "types": "global.d.ts",
-  "exports": ["./"],
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc",
+    "typing": "npm-dts generate -o ./global.d.ts -f -c -L debug"
   },
   "keywords": [
     "protorians",
