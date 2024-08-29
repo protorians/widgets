@@ -400,7 +400,7 @@ export class Coreable {
 
         case 'string':
 
-          values.split(' ').forEach(value => (widget.element instanceof HTMLElement)
+          values.split(' ').forEach(value => ((widget.element instanceof HTMLElement) && value)
             ? widget.element.classList.add(value)
             : undefined);
 
@@ -419,7 +419,7 @@ export class Coreable {
 
         default:
 
-          if (Array.isArray(values)) values.map(value => this.setClassName(widget , value));
+          if (Array.isArray(values)) values.map(value => value ? this.setClassName(widget , value) : void(0));
 
           break;
 
