@@ -26,7 +26,7 @@ export function Views<Routes extends IRoutesScheme> (
     routes ,
     mode ,
     errors ,
-    signals,
+    signals ,
   } : IRouterSettings<Routes> ,
 ) : IViews<Routes> {
   return Component<IRouterSettings<Routes>>(() => {
@@ -36,7 +36,7 @@ export function Views<Routes extends IRoutesScheme> (
       routes ,
       mode ,
       errors ,
-      signals,
+      signals ,
     });
 
     const state = takeState<IWidget<any , any> | undefined>(undefined);
@@ -57,7 +57,7 @@ export function Views<Routes extends IRoutesScheme> (
                 (route.parameters) ,
                 (route.props) ,
               ) ,
-            ) ,
+            ).nsa({w: {widget: ''}}),
           );
         } else if (errors && '404' in errors) {
           state.set(errors['404']({}));
