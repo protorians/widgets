@@ -1,6 +1,5 @@
 import type {
-  IVideoAttributes,  IVideoWidget, 
-  IWidget, 
+  IVideoAttributes,  IVideoWidget,
 } from '../types';
 import { WidgetNode } from './widget';
 

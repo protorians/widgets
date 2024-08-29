@@ -11,3 +11,6 @@ export * from './component';
 export * from './pointer';
 export * from './static';
 export * from './coreable';
+export * from './router';
+export * from './router-client';
+export * from './view';

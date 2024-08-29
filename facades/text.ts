@@ -18,7 +18,7 @@ import {
 
 export function Text(props: string | IAttributesScope<ISpanAttributes, HTMLSpanElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetSpan(props));
 
@@ -26,7 +26,7 @@ export function Text(props: string | IAttributesScope<ISpanAttributes, HTMLSpanE
 
 export function Paragraph(props: string | IAttributesScope<IParagraphAttributes, HTMLParagraphElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetParagraph(props));
 
@@ -34,7 +34,7 @@ export function Paragraph(props: string | IAttributesScope<IParagraphAttributes,
 
 export function Strong(props: string | IAttributesScope<IStrongAttributes, HTMLElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetTextStrong(props));
 
@@ -42,7 +42,7 @@ export function Strong(props: string | IAttributesScope<IStrongAttributes, HTMLE
 
 export function HeadingLarger(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetHeadingLarger(props));
 
@@ -50,7 +50,7 @@ export function HeadingLarger(props: string | IAttributesScope<IHeadingAttribute
 
 export function HeadingLarge(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetHeadingLarge(props));
 
@@ -58,7 +58,7 @@ export function HeadingLarge(props: string | IAttributesScope<IHeadingAttributes
 
 export function Heading(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetHeadingMedium(props));
 
@@ -66,7 +66,7 @@ export function Heading(props: string | IAttributesScope<IHeadingAttributes, HTM
 
 export function HeadingSmall(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetHeadingSmall(props));
 
@@ -74,7 +74,7 @@ export function HeadingSmall(props: string | IAttributesScope<IHeadingAttributes
 
 export function HeadingSmaller(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
-  if (typeof props == 'string') props = {child: props};
+  if (typeof props == 'string') props = {children: props};
 
   return (new WidgetHeadingSmaller(props));
 

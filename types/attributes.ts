@@ -246,7 +246,7 @@ export interface IInputAttributes extends IInputableAttributes {
 
   type?: IInputType;
 
-  child?: undefined;
+  children?: undefined;
 
 }
 

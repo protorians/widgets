@@ -77,11 +77,10 @@ export class WidgetElement<Props extends IObject> extends HTMLElement implements
       this._component = component;
       this.initialize();
       this.innerHTML = '';
-      this.widget = this._component(this.props)
+      this.widget = this._component(this.props).render()
       this.append(this.widget.element);
       this.signal.dispatch('mounted', this);
       this.mounted();
-
     }
 
     return this;

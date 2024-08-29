@@ -5,7 +5,7 @@ import type {
   IWidgetElements,
 } from './index';
 
-export type IDataValue = string | number | object | boolean | null | undefined;
+export type IDataValue = string | number | object | boolean | null | undefined | Symbol;
 
 export type ICallableValue = (context: Partial<IContext<IAttributes, IWidgetElements>>) => IDataValue;
 

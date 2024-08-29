@@ -1,11 +1,11 @@
 import type {
-  IState ,
-  ISupportableValue ,
-  IChildCallback ,
-  IAttributes ,
-  IWidgetElements ,
-  IStateSignals ,
-  IPointer , IDataValue ,
+  IState,
+  ISupportableValue,
+  IChildCallback,
+  IAttributes,
+  IWidgetElements,
+  IStateSignals,
+  IPointer, IDataValue,
 } from '../types';
 import { PointerWidget } from './pointer';
 import { Signalables,  type ISignalables } from '@protorians/signalable';

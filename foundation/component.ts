@@ -34,6 +34,6 @@ export class WidgetComponent<P extends IParameters> implements IComponent<P>{
 
 export function Component<Parameters extends IParameters>(component: IComponentConstruct<Parameters>) {
 
-  return (props: Parameters) => component(props).useComponent(new WidgetComponent<Parameters>(props)).render();
+  return (props: Parameters) => component(props).useComponent(new WidgetComponent<Parameters>(props));
 
 }

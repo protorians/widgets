@@ -20,7 +20,6 @@ import {
   createContext ,
   Coreable ,
 } from '../foundation';
-import {Attribution , IAttribution} from '@protorians/attribution';
 import {Signalables} from '@protorians/signalable';
 import {ISignalListenOption} from '@protorians/signalable/types';
 
@@ -33,11 +32,11 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
   protected _ready : boolean = false;
 
-  signal : IWidgetSignalable<P,  E>;
+  signal : IWidgetSignalable<P , E>;
 
   props : Readonly<Partial<IAttributesScope<P , E>>>;
 
-  attributions : IAttribution<Partial<IAttributesScope<P , E>> , IDataValue>;
+  // attributions : IAttribution<Partial<IAttributesScope<P, E>>, IDataValue>;
 
 
   constructor (props : IAttributesScope<P , E>) {
@@ -46,9 +45,9 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
     this.props = (new Coreable.Properties<P , E>(this)).sync(props) as Readonly<Partial<IAttributesScope<P , E>>>;
 
-    this.signal = new Signalables(this.props) as IWidgetSignalable<P,  E>;
+    this.signal = new Signalables(this.props) as IWidgetSignalable<P , E>;
 
-    this.attributions = new Attribution(this._element as HTMLElement , this.props);
+    // this.attributions = new Attribution(this._element as HTMLElement, this.props);
 
   }
 
@@ -111,13 +110,13 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
   defineElement (element : E) : this {
     this._element = element;
-    this.signal.dispatch('defineElement', element);
+    this.signal.dispatch('defineElement' , element);
     return this;
   }
 
   defineComponent<C extends IObject> (component : IComponent<C>) : this {
     this._component = component;
-    this.signal.dispatch('defineComponent', this._component as IComponent<C>,);
+    this.signal.dispatch('defineComponent' , this._component as IComponent<C>);
     return this;
   }
 
@@ -125,13 +124,17 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     if (component) {
       component.widget = this;
       this._component = component;
-      this.signal.dispatch('useComponent', this._component);
+      this.signal.dispatch('useComponent' , this._component);
     }
     return this;
 
   }
 
-  child (value? : IChildren<IAttributes , IWidgetElements>) : this {
+  clear () : this {
+    return Coreable.Clear<P , E>(this) as typeof this;
+  }
+
+  children (value? : IChildren<IAttributes , IWidgetElements>) : this {
     return Coreable.setChildren<P , E>(this , value) as typeof this;
   }
 
@@ -172,8 +175,8 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
   manipulate (callback : IManipulateCallback<P , E>) : this {
-    callback(createContext<P , E>({widget: this , component: this._component }) );
-    this.signal.dispatch('manipulate', callback);
+    callback(createContext<P , E>({widget: this , component: this._component}));
+    this.signal.dispatch('manipulate' , callback);
     return this;
   }
 
@@ -181,15 +184,15 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     return Coreable.setData<P , E>(this , data) as typeof this;
   }
 
-  attribution (attribution? : IExtendedAttributes) : this {
-    return Coreable.attribution<P , E>(this , attribution) as typeof this;
-  }
+  // attribution (attribution? : IExtendedAttributes) : this {
+  //   return Coreable.attribution<P, E>(this, attribution) as typeof this;
+  // }
 
   attrib<A extends keyof P> (name : A , value : P[A] | IDataValue) : this {
     return Coreable.setAttribute<P , E , A>(this , name , value) as typeof this;
   }
 
-  attribs(attributes: Partial<P>) : this {
+  attribs (attributes : Partial<P>) : this {
     return Coreable.setAttributes<P , E>(this , attributes) as typeof this;
   }
 
@@ -203,17 +206,32 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
 
-  onSignal<Si extends keyof IWidgetSignalableMap<P , E>> (name : Si , callback : ISignalListenOption<Readonly<Partial<IAttributesScope<P, E>>>, IWidgetSignalableMap<P, E>[Si]>) {
-    this.signal.listen(name, callback);
+  onSignal<Si extends keyof IWidgetSignalableMap<P , E>> (name : Si , callback : ISignalListenOption<Readonly<Partial<IAttributesScope<P , E>>> , IWidgetSignalableMap<P , E>[Si]>) {
+    this.signal.listen(name , callback);
     return this;
   }
 
 
-  onSignals (signals : Partial<IWidgetSignalableMaps<P, E>>) : this {
+  onSignals (signals : Partial<IWidgetSignalableMaps<P , E>>) : this {
     Object.entries(signals).forEach(({0: name , 1: callback}) =>
-      this.onSignal(name as keyof IWidgetSignalableMap<P , E>, callback as ISignalListenOption<Readonly<Partial<IAttributesScope<P, E>>>, IDataValue> ));
+      this.onSignal(name as keyof IWidgetSignalableMap<P , E> , callback as ISignalListenOption<Readonly<Partial<IAttributesScope<P , E>>> , IDataValue>));
     return this;
   }
+
+
+  nsa (nsa : IObject) {
+
+    if (this.element instanceof HTMLElement) {
+      const e = this.element;
+      Object.entries(Coreable.nsa(nsa , undefined , ':'))
+        .forEach(([key , value]) => {
+          e.setAttribute(key , `${value}`);
+        });
+    }
+
+    return this;
+  }
+
 
   render () : this {
 
@@ -229,9 +247,11 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
     if (this.props.data) this.data(this.props.data);
 
-    if (this.props.attribution) this.attribution(this.props.attribution);
+    if (this.props.nsa) this.nsa(this.props.nsa);
 
-    if (this.props.child) this.child(this.props.child);
+    // if (this.props.attribution) this.attribution(this.props.attribution);
+
+    if (this.props.children) this.children(this.props.children);
 
     if (this.props.on) this.ons(this.props.on);
 
@@ -246,7 +266,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
     this._ready = true;
 
-    this.signal.dispatch('ready', this);
+    this.signal.dispatch('ready' , this);
 
     return this;
 

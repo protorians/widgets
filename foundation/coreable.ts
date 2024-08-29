@@ -17,7 +17,7 @@ import type {
   ICoreableCompound ,
   ICoreableProperties ,
   ICoreablePropertyOptions ,
-  ICoreableProperty ,
+  ICoreableProperty , IObject ,
 } from '../types';
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
@@ -26,8 +26,7 @@ import {
   allowEditableElement ,
   decamelize ,
 } from '../utilities';
-import {WIDGET_NATIVE_PROPS} from './constants';
-import {resolveAttrib} from '@protorians/attribution';
+import {WIDGET_NATIVE_PROPS} from '../constants';
 
 
 export class CoreableCompound<P extends IAttributes , E extends IWidgetElements>
@@ -96,9 +95,9 @@ export class CoreableProperties<P extends IAttributes , E extends IWidgetElement
 
     return {
       ...props ,
-      child: this.construct.child() || props.child ,
+      children: this.construct.child() || props.children ,
       // signal: {...this.construct.signal(),  ...props.signal},
-      attribution: {...this.construct.ns() , ...props.attribution} ,
+      // attribution: {...this.construct.ns() , ...props.attribution} ,
       data: {...this.construct.data() , ...props.data} ,
       on: {...this.construct.event() , ...props.on} ,
       listen: {...this.construct.listener() , ...props.listen} ,
@@ -118,6 +117,15 @@ export class Coreable {
 
   static Properties = CoreableProperties;
 
+  static Clear<P extends IAttributes , E extends IWidgetElements> (
+    widget : IWidget<P , E> ,
+  ) : IWidget<P , E> {
+    if (widget.element instanceof HTMLElement) {
+      widget.element.innerHTML = '';
+    }
+    return widget;
+  }
+
   static setChildren<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     value? : IChildren<IAttributes , IWidgetElements> ,
@@ -133,18 +141,18 @@ export class Coreable {
 
       } else if (typeof value == 'object' && Array.isArray(value)) {
 
-        value.forEach(c => widget.child(c));
+        value.forEach(c => widget.children(c));
 
       } else if (typeof value == 'function') {
 
-        widget.child(value(createContext<IAttributes , IWidgetElements>({
+        widget.children(value(createContext<IAttributes , IWidgetElements>({
           widget: widget as IWidget<any , any> ,
           component: widget.component ,
         })));
 
       } else if (value instanceof Promise) {
 
-        value.then(c => widget.child(c));
+        value.then(c => widget.children(c));
 
       } else if (value instanceof WidgetNode) {
 
@@ -309,28 +317,32 @@ export class Coreable {
     return widget;
   }
 
-  static attribution<P extends IAttributes , E extends IWidgetElements> (
-    widget : IWidget<P , E> ,
-    ns? : IExtendedAttributes ,
-  ) : IWidget<P , E> {
-
-    if (ns && widget.element instanceof HTMLElement) {
-      Object.entries(resolveAttrib<typeof ns>(ns)).forEach(
-        ({0: name , 1: value}) =>
-          (widget.element instanceof HTMLElement)
-            ? widget.element.setAttribute(`${name}` , `${value}`)
-            : undefined ,
-      );
-
-      // widget.signal.dispatch(
-      //   'ns',
-      //   createWidgetSignalableDispatcher<IExtendedAttributes,  P,  E>(widget,  ns),
-      // );
-
-    }
-
-    return widget;
-  }
+  // static attribution<P extends IAttributes , E extends IWidgetElements> (
+  //   widget : IWidget<P , E> ,
+  //   ns? : IExtendedAttributes ,
+  // ) : IWidget<P , E> {
+  //
+  //   if (ns && widget.element instanceof HTMLElement) {
+  //
+  //     Object.entries(resolveAttrib<typeof ns>(ns)).forEach(
+  //       ({0: name , 1: value}) => {
+  //         if (widget.element instanceof HTMLElement) {
+  //
+  //           console.log('Attribution' , widget.attributions.slot(name , value) , value , ns);
+  //
+  //         }
+  //         // ? widget.element.setAttribute(`${name}` , `${value}`)
+  //         // : undefined
+  //       });
+  //
+  //     // widget.signal.dispatch(
+  //     //   'ns',
+  //     //   createWidgetSignalableDispatcher<IExtendedAttributes,  P,  E>(widget,  ns),
+  //     // );
+  //   }
+  //
+  //   return widget;
+  // }
 
   static construct<P extends IAttributes , E extends IWidgetElements> (widget : IWidget<P , E>) : IStaticWidgetNode<P , E> {
 
@@ -510,10 +522,34 @@ export class Coreable {
     return (() => widget)();
   }
 
+  static nsa(nsa : IObject , ns? : string, separator?: string) : IObject {
+
+    const prefix = (typeof ns != 'undefined' ? `${ns}${separator || '-'}` : '');
+
+    let build: IObject = {} as IObject;
+
+    Object.entries(nsa).forEach(([key , value]) => {
+      const index = `${prefix}${key}`;
+
+      if(Array.isArray(value)){
+        build[index] = JSON.stringify(value);
+      }
+      else if(typeof value == 'object' && value){
+        build = {...build, ...this.nsa(({...value}), index, separator)}
+      }
+      else if(typeof value != 'undefined'){
+        build[index] = `${ String(value).toString() }`;
+      }
+
+    });
+
+    return build;
+  }
+
 
   static setAttributes<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
-    attributes : Partial<P>,
+    attributes : Partial<P> ,
   ) : IWidget<P , E> {
 
     Object.entries(attributes).forEach(([key , value]) => {
