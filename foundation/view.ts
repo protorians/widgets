@@ -57,7 +57,7 @@ export function Views<Routes extends IRoutesScheme> (
                 (route.parameters) ,
                 (route.props) ,
               ) ,
-            ).nsa({w: {view: ''}}),
+            ).nsa({w: {view: ''}}) ,
           );
         } else if (errors && '404' in errors) {
           state.set(errors['404']({}));

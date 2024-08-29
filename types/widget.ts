@@ -1,23 +1,23 @@
 import type {
-  IStyle,
-  IChildren,
-  IExtendedAttributes,
-  IAttributes,
-  IClassNames,
-  IDataValue,
-  IComponent,
-  IReference,
-  IObject,
-  IChildCallback,
-  IContext,
-  IEventStaticListeners,
-  IEventListeners,
-  IEventStaticListenerPayload,
-  IVideoAttributes,
-  ITextareaAttributes,
-  ISpanAttributes,
-  IParagraphAttributes,
-  IStrongAttributes, IHeadingAttributes,
+  IStyle ,
+  IChildren ,
+  IExtendedAttributes ,
+  IAttributes ,
+  IClassNames ,
+  IDataValue ,
+  IComponent ,
+  IReference ,
+  IObject ,
+  IChildCallback ,
+  IContext ,
+  IEventStaticListeners ,
+  IEventListeners ,
+  IEventStaticListenerPayload ,
+  IVideoAttributes ,
+  ITextareaAttributes ,
+  ISpanAttributes ,
+  IParagraphAttributes ,
+  IStrongAttributes , IHeadingAttributes , IItalicAttributes ,
 } from './index';
 import type {ISignalables} from '@protorians/signalable';
 import {ISignalListenOption} from '@protorians/signalable/types';
@@ -408,6 +408,11 @@ export type ITextareaWidget = IWidget<ITextareaAttributes, HTMLTextAreaElement>;
  * Widget Text
  */
 export type ITextWidget = IWidget<ISpanAttributes, HTMLSpanElement>;
+
+/**
+ * Widget Text
+ */
+export type IItalicWidget = IWidget<IItalicAttributes, HTMLElement>;
 
 /**
  * Widget Text Paragraph
