@@ -91,6 +91,10 @@ export interface ISpanAttributes extends ICommonAttributes{
 
 }
 
+export interface IItalicAttributes extends ICommonAttributes{
+
+}
+
 export interface IParagraphAttributes extends ICommonAttributes{
 
 }
