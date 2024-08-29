@@ -1,18 +1,18 @@
 import type {
-  IHeadingAttributes,
-  IParagraphAttributes,
-  ISpanAttributes,
-  IStrongAttributes,
-  IAttributesScope,
+  IHeadingAttributes ,
+  IParagraphAttributes ,
+  ISpanAttributes ,
+  IStrongAttributes ,
+  IAttributesScope , IItalicAttributes ,
 } from '../types';
 import {
-  WidgetHeadingLarge,
-  WidgetHeadingLarger,
-  WidgetHeadingMedium,
-  WidgetHeadingSmall,
-  WidgetHeadingSmaller,
-  WidgetParagraph,
-  WidgetSpan, WidgetTextStrong,
+  WidgetHeadingLarge ,
+  WidgetHeadingLarger ,
+  WidgetHeadingMedium ,
+  WidgetHeadingSmall ,
+  WidgetHeadingSmaller , WidgetItalic ,
+  WidgetParagraph ,
+  WidgetSpan , WidgetTextStrong ,
 } from '../supports';
 
 
@@ -21,6 +21,15 @@ export function Text(props: string | IAttributesScope<ISpanAttributes, HTMLSpanE
   if (typeof props == 'string') props = {children: props};
 
   return (new WidgetSpan(props));
+
+}
+
+
+export function Italic(props: string | IAttributesScope<IItalicAttributes, HTMLElement>) {
+
+  if (typeof props == 'string') props = {children: props};
+
+  return (new WidgetItalic(props));
 
 }
 

@@ -1,16 +1,16 @@
 import type {
-  IHeadingAttributes,
-  IParagraphAttributes,
-  IParagraphWidget,
-  ISpanAttributes,
-  ITextWidget,
-  IStrongAttributes,
-  ITextStrongWidget,
-  IHeadingLargerWidget,
-  IHeadingLargeWidget,
-  IHeadingMediumWidget,
-  IHeadingSmallWidget,
-  IHeadingSmallerWidget,
+  IHeadingAttributes ,
+  IParagraphAttributes ,
+  IParagraphWidget ,
+  ISpanAttributes ,
+  ITextWidget ,
+  IStrongAttributes ,
+  ITextStrongWidget ,
+  IHeadingLargerWidget ,
+  IHeadingLargeWidget ,
+  IHeadingMediumWidget ,
+  IHeadingSmallWidget ,
+  IHeadingSmallerWidget , IItalicAttributes , IItalicWidget ,
 } from '../types';
 import {WidgetNode} from './widget';
 
@@ -23,6 +23,18 @@ export class WidgetSpan
 
   get tag () : string {
     return 'span';
+  }
+
+}
+
+export class WidgetItalic
+
+  extends WidgetNode<IItalicAttributes, HTMLElement>
+
+  implements IItalicWidget {
+
+  get tag () : string {
+    return 'i';
   }
 
 }
