@@ -18,7 +18,7 @@ import {setMarkerOnPointer} from '../utilities';
 
 
 
-export class PointerWidgetMarkerElement extends HTMLTemplateElement implements IPointerMarkerElement {
+export class PointerWidgetMarkerElement extends HTMLSlotElement implements IPointerMarkerElement {
 
   #queues: IPointerCollectionChild[] = [];
 
@@ -216,7 +216,7 @@ if (!customElements.get(PointerWidgetMarker.tagName)) {
   customElements.define(
     PointerWidgetMarker.tagName,
     PointerWidgetMarkerElement, {
-      extends: 'template',
+      extends: 'slot',
     },
   );
 
