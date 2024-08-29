@@ -272,6 +272,12 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   destroy () : void;
 
   /**
+   * Namespace Attributes
+   * @param nsa
+   */
+  nsa (nsa : IObject): this;
+
+  /**
    * Render Widget
    */
   render () : this;

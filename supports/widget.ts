@@ -219,7 +219,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
 
-  nsa (nsa : IObject) {
+  nsa (nsa : IObject): this {
 
     if (this.element instanceof HTMLElement) {
       const e = this.element;
@@ -248,8 +248,6 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     if (this.props.data) this.data(this.props.data);
 
     if (this.props.nsa) this.nsa(this.props.nsa);
-
-    // if (this.props.attribution) this.attribution(this.props.attribution);
 
     if (this.props.children) this.children(this.props.children);
 
