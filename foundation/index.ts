@@ -1,6 +1,6 @@
 export * from './context';
 export * from './component';
-export * from './bind-component';
+export * from './bind';
 export * from './state';
 export * from './pointer';
 export * from './elements';
