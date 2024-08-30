@@ -14,3 +14,4 @@ export * from './coreable';
 export * from './router';
 export * from './router-client';
 export * from './view';
+export * from './composite';

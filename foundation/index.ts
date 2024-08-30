@@ -10,3 +10,4 @@ export * from './exception';
 export * from './configurator';
 export * from './router-client';
 export * from './view';
+export * from './composite';
