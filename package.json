@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.4-beta.1",
+  "version": "0.0.4-beta.2",
   "description": "Widget's Builder",
   "main": "index.js",
   "type": "module",
