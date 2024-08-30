@@ -1,4 +1,4 @@
-import {IObject} from './values';
+import {IParameters} from './values';
 import {IView , IViewsRoutes} from './view';
 import {RouterMode} from '../constants';
 import {IComponentConstruct} from './component';
@@ -7,13 +7,13 @@ import {ISignalListenOption} from '@protorians/signalable/types';
 
 
 export type IRoutesScheme = {
-  [K : string] : IObject
+  [K : string] : IParameters
 }
 
 
 export type IRouterErrors = {
-  404 : IComponentConstruct<IObject>;
-  500 : IComponentConstruct<IObject>;
+  404 : IComponentConstruct<IParameters>;
+  500 : IComponentConstruct<IParameters>;
 }
 
 export type IRouterSettings<Routes extends IRoutesScheme> = {
@@ -35,17 +35,17 @@ export type IRouterPathPattern = {
 export type IRoute = {
   name : string;
   uri : string;
-  query : IObject;
-  view : IView<IObject>;
-  parameters : IObject;
-  props? : IObject;
+  query : IParameters;
+  view : IView<IParameters>;
+  parameters : IParameters;
+  props? : IParameters;
 }
 
 export type IRouterListen = (route? : IRoute) => void;
 
 export type IRouterLinkPayload = {
   path : string;
-  props? : IObject;
+  props? : IParameters;
 };
 
 export interface IRouter<Routes extends IRoutesScheme> {
@@ -54,7 +54,7 @@ export interface IRouter<Routes extends IRoutesScheme> {
 
   get params () : Routes[keyof Routes];
 
-  get query () : IObject;
+  get query () : IParameters;
 
   get routeName () : keyof Routes;
 

@@ -1,4 +1,4 @@
-import {IObject} from './values';
+import {IParameters} from './values';
 import {IComponentConstruct} from './component';
 import {ISignalables} from '@protorians/signalable/types';
 import {IAttributes} from './attributes';
@@ -7,7 +7,7 @@ import {IContext} from './context';
 import {IChildCallback} from './children';
 
 
-export type IElementSignal<Props extends IObject> = {
+export type IElementSignal<Props extends IParameters> = {
   connected : IElement<Props>;
   disconnected : IElement<Props>;
   adopted : IElement<Props>;
@@ -17,7 +17,7 @@ export type IElementSignal<Props extends IObject> = {
 
 export type IEditableElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
-export interface IElement<Props extends IObject> extends HTMLElement {
+export interface IElement<Props extends IParameters> extends HTMLElement {
 
   get props () : Props;
 

@@ -1,5 +1,5 @@
 import {
-  IObject ,
+  IParameters ,
   IRoute ,
   IRouter ,
   IRouterListen ,
@@ -33,8 +33,8 @@ export class Router<Routes extends IRoutesScheme> implements IRouter<Routes> {
     return (this._route?.parameters || {}) as Routes[keyof Routes];
   }
 
-  get query () : IObject {
-    return (this._route?.query || {}) as IObject;
+  get query () : IParameters {
+    return (this._route?.query || {}) as IParameters;
   }
 
   get route () : IRoute | undefined {
@@ -78,7 +78,7 @@ export class Router<Routes extends IRoutesScheme> implements IRouter<Routes> {
     return Object.entries(this.settings.routes).map(([name , view]) => {
       const rex = this.pathPattern(name);
       const match = uri.match(rex.pattern);
-      const parameters : IObject = {};
+      const parameters : IParameters = {};
 
       if (match) {
         if (rex.params) {

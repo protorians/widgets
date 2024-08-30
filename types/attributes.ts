@@ -1,7 +1,7 @@
 import type {
   IBoolean,
   ICallableValue,
-  IDataValue,
+  IParameterValue,
   IFormRelationship,
   ILoading,
   IOnOff,
@@ -14,7 +14,7 @@ import type {
 
 export type IExtendedAttributes = {
 
-  [K: string]: IDataValue;
+  [K: string]: IParameterValue;
 
 }
 

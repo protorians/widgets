@@ -1,6 +1,6 @@
 import type {IAttributes} from './attributes';
 import type {IWidget, IWidgetElements} from './widget';
-import {IObject} from './values';
+import {IParameters} from './values';
 import {IComponent} from './component';
 
 
@@ -10,7 +10,7 @@ export type IContext<P extends IAttributes, E extends IWidgetElements> = {
 
   event?: Event;
 
-  component?: IComponent<IObject>
+  component?: IComponent<IParameters>
 
 }
 

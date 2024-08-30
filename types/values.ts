@@ -5,17 +5,17 @@ import type {
   IWidgetElements,
 } from './index';
 
-export type IDataValue = string | number | object | boolean | null | undefined | Symbol;
+export type IParameterValue = string | number | object | boolean | null | undefined | Symbol;
 
-export type ICallableValue = (context: Partial<IContext<IAttributes, IWidgetElements>>) => IDataValue;
+export type ICallableValue = (context: Partial<IContext<IAttributes, IWidgetElements>>) => IParameterValue;
 
-export type IObject = {
+export type IParameters = {
 
-  [A: string]: IDataValue
+  [A: string]: IParameterValue
 
 }
 
-export type ISupportableValue = IDataValue | IWidget<IAttributes, IWidgetElements>
+export type ISupportableValue = IParameterValue | IWidget<IAttributes, IWidgetElements>
 
 export type IOnOff = 'on' | 'off';
 

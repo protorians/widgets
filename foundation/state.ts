@@ -5,7 +5,7 @@ import type {
   IAttributes,
   IWidgetElements,
   IStateSignals,
-  IPointer, IDataValue,
+  IPointer, IParameterValue,
 } from '../types';
 import { PointerWidget } from './pointer';
 import { Signalables,  type ISignalables } from '@protorians/signalable';
@@ -92,7 +92,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   }
 
-  change(callback: () => IDataValue){
+  change(callback: () => IParameterValue){
 
     /**
      * Ajouter le `callback` dans un tableau

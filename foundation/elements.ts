@@ -3,7 +3,7 @@ import {
   IElement,
   IElementMetrics,
   IElementSignal,
-  IObject,
+  IParameters,
   IAttributes,
   IWidget,
   IWidgetElements,
@@ -11,7 +11,7 @@ import {
 import {type ISignalables, Signalables} from '@protorians/signalable';
 
 
-export class WidgetElement<Props extends IObject> extends HTMLElement implements IElement<Props> {
+export class WidgetElement<Props extends IParameters> extends HTMLElement implements IElement<Props> {
 
   protected _props: Props = {} as Props;
 

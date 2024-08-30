@@ -1,7 +1,7 @@
 import {Component} from './component';
 import {
   IComponentConstruct ,
-  IObject ,
+  IParameters ,
   IRouterSettings ,
   IRoutesScheme , IView , IViewOptions , IViews , IWidget ,
 } from '../types';
@@ -10,7 +10,7 @@ import {RouterRequest} from './router-request';
 import {defineClientRouter} from './router-client';
 
 
-export function View<Props extends IObject> (
+export function View<Props extends IParameters> (
   component : IComponentConstruct<Props> ,
   options ? : IViewOptions ,
 ) : IView<Props> {

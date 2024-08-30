@@ -1,16 +1,16 @@
-import {IObject} from '../types';
+import {IParameters} from '../types';
 
 
   export class RouterRequest {
 
-  static merge (...properties : (IObject | undefined)[]) : IObject {
-    let merge : IObject = {};
+  static merge (...properties : (IParameters | undefined)[]) : IParameters {
+    let merge : IParameters = {};
     properties.forEach(property => property ? merge = {...property} : undefined);
     return merge;
   }
 
   static query (query? : string) {
-    const queries : IObject = {} as IObject;
+    const queries : IParameters = {} as IParameters;
 
     (query || '').split('&')
       .forEach(q => {

@@ -1,9 +1,9 @@
-import type {IComponentConstruct , IObject} from '../types';
+import type {IComponentConstruct , IParameters} from '../types';
 import {decamelize} from '../utilities';
 import {WidgetElement} from './elements';
 
 
-export function registryComponent<Props extends IObject> (name : string , component : IComponentConstruct<Props>) {
+export function registryComponent<Props extends IParameters> (name : string , component : IComponentConstruct<Props>) {
   name = decamelize(name , '-');
 
   if (!customElements.get('name')) {

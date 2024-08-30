@@ -2,7 +2,7 @@ import type {
   IChildCallback ,
   IChildren ,
   IClassNames ,
-  IDataValue ,
+  IParameterValue ,
   IEventListeners ,
   IEventStaticListeners ,
   IPointer ,
@@ -17,7 +17,7 @@ import type {
   ICoreableCompound ,
   ICoreableProperties ,
   ICoreablePropertyOptions ,
-  ICoreableProperty , IObject ,
+  ICoreableProperty , IParameters ,
 } from '../types';
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
@@ -50,7 +50,7 @@ export class CoreableProperty<P extends IAttributes , E extends IWidgetElements>
 
   constructor (
     public name : Readonly<string> ,
-    public value : IDataValue ,
+    public value : IParameterValue ,
     public options : Readonly<ICoreablePropertyOptions> = {} as ICoreablePropertyOptions ,
   ) {
   }
@@ -522,11 +522,11 @@ export class Coreable {
     return (() => widget)();
   }
 
-  static nsa(nsa : IObject , ns? : string, separator?: string) : IObject {
+  static nsa(nsa : IParameters , ns? : string, separator?: string) : IParameters {
 
     const prefix = (typeof ns != 'undefined' ? `${ns}${separator || '-'}` : '');
 
-    let build: IObject = {} as IObject;
+    let build: IParameters = {} as IParameters;
 
     Object.entries(nsa).forEach(([key , value]) => {
       const index = `${prefix}${key}`;
@@ -563,7 +563,7 @@ export class Coreable {
   static setAttribute<P extends IAttributes , E extends IWidgetElements , A extends keyof P> (
     widget : IWidget<P , E> ,
     name : A ,
-    value : P[A] | IDataValue ,
+    value : P[A] | IParameterValue ,
   ) : IWidget<P , E> {
 
     if (widget.element instanceof HTMLElement) {
@@ -614,7 +614,7 @@ export class Coreable {
   static setAttribuable<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     name : string ,
-    value : IDataValue ,
+    value : IParameterValue ,
   ) : IWidget<P , E> {
 
     if (!WIDGET_NATIVE_PROPS.includes(name)) {
@@ -635,7 +635,7 @@ export class Coreable {
 
   static parseValue<P extends IAttributes , E extends IWidgetElements , V> (
     widget : IWidget<P , E> ,
-    value : IDataValue ,
+    value : IParameterValue ,
   ) : V {
 
     switch (typeof value) {

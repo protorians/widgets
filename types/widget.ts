@@ -4,10 +4,10 @@ import type {
   IExtendedAttributes ,
   IAttributes ,
   IClassNames ,
-  IDataValue ,
+  IParameterValue ,
   IComponent ,
   IReference ,
-  IObject ,
+  IParameters ,
   IChildCallback ,
   IContext ,
   IEventStaticListeners ,
@@ -67,7 +67,7 @@ export type IWidgetPrimitiveProps<P extends IAttributes, E extends IWidgetElemen
   /**
    * Namespace Attributes
    */
-  nsa?: IObject;
+  nsa?: IParameters;
 
   // attribution? : IExtendedAttributes;
 
@@ -143,7 +143,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   /**
    * Widget Component instance
    */
-  get component () : IComponent<IObject> | undefined;
+  get component () : IComponent<IParameters> | undefined;
 
   /**
    * Widget Ready state
@@ -153,7 +153,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   /**
    * Get widget's component to use
    */
-  useComponent<Props extends IObject> (component : IComponent<Props> | undefined) : this;
+  useComponent<Props extends IParameters> (component : IComponent<Props> | undefined) : this;
 
   /**
    * Widget widget's element
@@ -163,7 +163,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   /**
    * Define widget component
    */
-  defineComponent<C extends IObject> (component : IComponent<C>) : this;
+  defineComponent<C extends IParameters> (component : IComponent<C>) : this;
 
   /**
    * Erase all children
@@ -253,7 +253,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
    * @param name
    * @param value
    */
-  attrib (name : keyof P, value : P[keyof P] | IDataValue) : this;
+  attrib (name : keyof P, value : P[keyof P] | IParameterValue) : this;
 
   /**
    * Set many Widget Attributes
@@ -275,7 +275,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
    * Namespace Attributes
    * @param nsa
    */
-  nsa (nsa : IObject): this;
+  nsa (nsa : IParameters): this;
 
   /**
    * Render Widget
@@ -320,7 +320,7 @@ export type IWidgetEventMap<P extends IAttributes, E extends IWidgetElements> = 
  */
 export type IWidgetAttributesMap<P extends IAttributes> = {
   name : keyof P,
-  value : P[keyof P] | IDataValue
+  value : P[keyof P] | IParameterValue
 }
 
 
@@ -353,9 +353,9 @@ export interface IWidgetSignalableMap<P extends IAttributes, E extends IWidgetEl
 
   defineElement : E;
 
-  defineComponent : IComponent<IObject> | undefined;
+  defineComponent : IComponent<IParameters> | undefined;
 
-  useComponent : IComponent<IObject> | undefined;
+  useComponent : IComponent<IParameters> | undefined;
 
   child : IChildren<P, E>;
 

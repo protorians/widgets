@@ -1,10 +1,10 @@
 import type {
-  IComponent,
-  IComponentConstruct,
-  IAttributes,
-  IWidget,
-  IWidgetElements,
-  IParameters,
+  IComponent ,
+  IComponentConstruct ,
+  IAttributes ,
+  IWidget ,
+  IWidgetElements ,
+  IParameters ,
 } from '../types';
 
 
@@ -32,8 +32,8 @@ export class WidgetComponent<P extends IParameters> implements IComponent<P>{
 
 }
 
-export function Component<Parameters extends IParameters>(component: IComponentConstruct<Parameters>) {
+export function Component<Props extends IParameters>(component: IComponentConstruct<Props>) {
 
-  return (props: Parameters) => component(props).useComponent(new WidgetComponent<Parameters>(props));
+  return (props: Props) => component(props).useComponent(new WidgetComponent<Props>(props));
 
 }

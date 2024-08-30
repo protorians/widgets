@@ -1,9 +1,7 @@
 import {IAttributes} from './attributes';
 import {IWidget, IWidgetElements} from './widget';
-import {IObject} from './values';
+import {IParameters} from './values';
 
-
-export type IParameters = IObject;
 
 export type IComponentConstruct<Parameters extends IParameters> = (props: Parameters) => IWidget<any, any>
 

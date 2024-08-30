@@ -7,9 +7,9 @@ import type {
   IStyle ,
   IClassNames ,
   IExtendedAttributes ,
-  IDataValue ,
+  IParameterValue ,
   IComponent ,
-  IObject ,
+  IParameters ,
   IChildCallback ,
   IManipulateCallback ,
   IEventStaticListeners ,
@@ -28,7 +28,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
   protected _element : E;
 
-  protected _component : IComponent<IObject> | undefined;
+  protected _component : IComponent<IParameters> | undefined;
 
   protected _ready : boolean = false;
 
@@ -100,7 +100,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     return this._element;
   }
 
-  get component () : IComponent<IObject> | undefined {
+  get component () : IComponent<IParameters> | undefined {
     return this._component;
   }
 
@@ -114,13 +114,13 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     return this;
   }
 
-  defineComponent<C extends IObject> (component : IComponent<C>) : this {
+  defineComponent<C extends IParameters> (component : IComponent<C>) : this {
     this._component = component;
     this.signal.dispatch('defineComponent' , this._component as IComponent<C>);
     return this;
   }
 
-  useComponent<Props extends IObject> (component : IComponent<Props> | undefined) : this {
+  useComponent<Props extends IParameters> (component : IComponent<Props> | undefined) : this {
     if (component) {
       component.widget = this;
       this._component = component;
@@ -188,7 +188,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   //   return Coreable.attribution<P, E>(this, attribution) as typeof this;
   // }
 
-  attrib<A extends keyof P> (name : A , value : P[A] | IDataValue) : this {
+  attrib<A extends keyof P> (name : A , value : P[A] | IParameterValue) : this {
     return Coreable.setAttribute<P , E , A>(this , name , value) as typeof this;
   }
 
@@ -214,12 +214,12 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
   onSignals (signals : Partial<IWidgetSignalableMaps<P , E>>) : this {
     Object.entries(signals).forEach(({0: name , 1: callback}) =>
-      this.onSignal(name as keyof IWidgetSignalableMap<P , E> , callback as ISignalListenOption<Readonly<Partial<IAttributesScope<P , E>>> , IDataValue>));
+      this.onSignal(name as keyof IWidgetSignalableMap<P , E> , callback as ISignalListenOption<Readonly<Partial<IAttributesScope<P , E>>> , IParameterValue>));
     return this;
   }
 
 
-  nsa (nsa : IObject): this {
+  nsa (nsa : IParameters): this {
 
     if (this.element instanceof HTMLElement) {
       const e = this.element;
