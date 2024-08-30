@@ -3,7 +3,7 @@ import {decamelize} from '../utilities';
 import {WidgetElement} from './elements';
 
 
-export function BindComponent<Props extends IParameters> (name : string , component : IComponentConstruct<Props>) {
+export function Bind<Props extends IParameters> (name : string , component : IComponentConstruct<Props>) {
   name = decamelize(name , '-');
 
   if (!customElements.get(name)) {
