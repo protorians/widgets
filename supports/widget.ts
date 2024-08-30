@@ -175,7 +175,11 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
   manipulate (callback : IManipulateCallback<P , E>) : this {
-    callback(createContext<P , E>({widget: this , component: this._component}));
+    callback(createContext<IManipulateCallback<P , E> , P , E>({
+      widget: this ,
+      component: this._component ,
+      payload: callback,
+    }));
     this.signal.dispatch('manipulate' , callback);
     return this;
   }
@@ -219,7 +223,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
 
-  nsa (nsa : IParameters): this {
+  nsa (nsa : IParameters) : this {
 
     if (this.element instanceof HTMLElement) {
       const e = this.element;

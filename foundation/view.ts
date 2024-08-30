@@ -5,7 +5,7 @@ import {
   IRouterSettings ,
   IRoutesScheme , IView , IViewOptions , IViews , IWidget ,
 } from '../types';
-import {takeState , Widget} from '../facades';
+import {State , Widget} from '../facades';
 import {RouterRequest} from './router-request';
 import {defineClientRouter} from './router-client';
 
@@ -39,7 +39,7 @@ export function Views<Routes extends IRoutesScheme> (
       signals ,
     });
 
-    const state = takeState<IWidget<any , any> | undefined>(undefined);
+    const state = State<IWidget<any , any> | undefined>(undefined);
 
     const canvas = Widget({
       nsa: {w: {views: 'exchanger'}} ,

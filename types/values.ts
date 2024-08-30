@@ -7,7 +7,7 @@ import type {
 
 export type IParameterValue = string | number | object | boolean | null | undefined | Symbol;
 
-export type ICallableValue = (context: Partial<IContext<IAttributes, IWidgetElements>>) => IParameterValue;
+export type ICallableValue = (context: Partial<IContext<any, IAttributes, IWidgetElements>>) => IParameterValue;
 
 export type IParameters = {
 

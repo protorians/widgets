@@ -6,13 +6,14 @@ import type {
 
 
 
-export function createContext<P extends IAttributes, E extends IWidgetElements>(context: IContextuable<P, E>): Partial<IContext<P, E>>{
+export function createContext<Payload, P extends IAttributes, E extends IWidgetElements>(context: IContextuable<Payload, P, E>): Partial<IContext<Payload, P, E>>{
 
   return {
     widget: context.widget,
     event: context.event || undefined,
     component: context.component || undefined,
-  } as IContext<P, E>
+    payload: context.payload || undefined,
+  } as IContext<Payload, P, E>
 
 }
 

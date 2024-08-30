@@ -91,7 +91,7 @@ export type IWidgetPrimitiveProps<P extends IAttributes, E extends IWidgetElemen
 /**
  * Widget Props Callback
  */
-export type IPropsCallback<P extends IAttributes, E extends IWidgetElements> = (context : IContext<P, E>) => string | undefined;
+export type IPropsCallback<P extends IAttributes, E extends IWidgetElements> = (context : IContext<any, P, E>) => string | undefined;
 
 /**
  * Widget Extensible Props
@@ -289,7 +289,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
 /**
  * Widget Manipulate Callback
  */
-export type IManipulateCallback<P extends IAttributes, E extends IWidgetElements> = (context : Partial<IContext<P, E>>) => void;
+export type IManipulateCallback<P extends IAttributes, E extends IWidgetElements> = (context : Partial<IContext<any, P, E>>) => void;
 
 
 // export type IManipulateMap<P extends IProps, E extends IWidgetElements> = {

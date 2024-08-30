@@ -106,17 +106,19 @@ export class PointerWidgetMarker implements IPointerMarker {
 }
 
 
-export class PointerWidget<P extends IAttributes, E extends IWidgetElements> implements IPointer<P, E> {
+export class PointerWidget<Payload, P extends IAttributes, E extends IWidgetElements> implements IPointer<Payload, P, E> {
 
   #parent: IWidget<IAttributes, IWidgetElements> | undefined;
 
   #signal: Readonly<ISignalables<IChildCallback<P, E> | undefined, IPointerSignals<P, E>>>;
 
-
   marker: Readonly<IPointerMarker>;
 
 
-  constructor(public callback: IChildCallback<P, E> | undefined) {
+  constructor(
+    public callback: IChildCallback<P, E> | undefined,
+    protected initial: Payload,
+  ) {
 
     this.#signal = new Signalables(callback);
 
@@ -132,12 +134,13 @@ export class PointerWidget<P extends IAttributes, E extends IWidgetElements> imp
     return this.#signal;
   }
 
-  call() {
+  call(payload: Payload) {
     return (this.#parent && this.callback) ? this.callback(
-      createContext<P, E>({
+      createContext<Payload, P, E>({
         widget: this.#parent as IWidget<any, any>,
         component: this.#parent?.component,
-      }) as IContext<P, E>,
+        payload,
+      }) as IContext<Payload, P, E>,
     ) || undefined
       : undefined;
   }
@@ -185,10 +188,8 @@ export class PointerWidget<P extends IAttributes, E extends IWidgetElements> imp
     return child;
   }
 
-  render(): this {
-
-    const children = this.clear().renderChild(this.call());
-
+  render(payload?: Payload): this {
+    const children = this.clear().renderChild(this.call(payload || this.initial));
     (Array.isArray(children) ? children : [children])
       .map(child => this.appendChild(child));
 

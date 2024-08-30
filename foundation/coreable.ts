@@ -17,7 +17,8 @@ import type {
   ICoreableCompound ,
   ICoreableProperties ,
   ICoreablePropertyOptions ,
-  ICoreableProperty , IParameters ,
+  ICoreableProperty ,
+  IParameters , IClassNameCallback ,
 } from '../types';
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
@@ -135,7 +136,7 @@ export class Coreable {
 
       if (value instanceof PointerWidget) {
 
-        const r = (value as IPointer<P , E>).bind(widget).render().marker;
+        const r = (value as IPointer<IChildren<IAttributes , IWidgetElements> , P , E>).bind(widget).render().marker;
 
         if (r && r.current) widget.element.append(r.current);
 
@@ -145,9 +146,10 @@ export class Coreable {
 
       } else if (typeof value == 'function') {
 
-        widget.children(value(createContext<IAttributes , IWidgetElements>({
+        widget.children(value(createContext<IChildren<IAttributes , IWidgetElements> , IAttributes , IWidgetElements>({
           widget: widget as IWidget<any , any> ,
           component: widget.component ,
+          payload: value ,
         })));
 
       } else if (value instanceof Promise) {
@@ -193,10 +195,11 @@ export class Coreable {
     if (widget.element instanceof HTMLElement) {
 
       widget.element.addEventListener(type , event => listener(
-        createContext<P , E>({
+        createContext<keyof HTMLElementEventMap, P , E>({
           widget: widget ,
           component: widget.component ,
           event ,
+          payload: type,
         }) ,
       ) , options);
 
@@ -270,10 +273,11 @@ export class Coreable {
           return listener;
         } else if (typeof listener == 'function') {
           return listener(
-            createContext<P , E>({
+            createContext<V, P , E>({
               widget: widget ,
               event: e ,
               component: widget.component ,
+              payload: type
             }) ,
           );
         }
@@ -372,6 +376,7 @@ export class Coreable {
                 createContext({
                   widget: widget ,
                   component: widget.component ,
+                  payload: value,
                 }) || '' ,
               )
               : ''
@@ -409,9 +414,10 @@ export class Coreable {
         case 'function':
 
           this.setClassName(widget , values(
-            createContext({
+            createContext<IClassNameCallback<P, E>, P, E>({
               widget: widget ,
               component: widget.component ,
+              payload: values,
             })) ,
           );
 
@@ -419,7 +425,7 @@ export class Coreable {
 
         default:
 
-          if (Array.isArray(values)) values.map(value => value ? this.setClassName(widget , value) : void(0));
+          if (Array.isArray(values)) values.map(value => value ? this.setClassName(widget , value) : void (0));
 
           break;
 
@@ -522,23 +528,21 @@ export class Coreable {
     return (() => widget)();
   }
 
-  static nsa(nsa : IParameters , ns? : string, separator?: string) : IParameters {
+  static nsa (nsa : IParameters , ns? : string , separator? : string) : IParameters {
 
     const prefix = (typeof ns != 'undefined' ? `${ns}${separator || '-'}` : '');
 
-    let build: IParameters = {} as IParameters;
+    let build : IParameters = {} as IParameters;
 
     Object.entries(nsa).forEach(([key , value]) => {
       const index = `${prefix}${key}`;
 
-      if(Array.isArray(value)){
+      if (Array.isArray(value)) {
         build[index] = JSON.stringify(value);
-      }
-      else if(typeof value == 'object' && value){
-        build = {...build, ...this.nsa(({...value}), index, separator)}
-      }
-      else if(typeof value != 'undefined'){
-        build[index] = `${ String(value).toString() }`;
+      } else if (typeof value == 'object' && value) {
+        build = {...build , ...this.nsa(({...value}) , index , separator)};
+      } else if (typeof value != 'undefined') {
+        build[index] = `${String(value).toString()}`;
       }
 
     });
@@ -642,9 +646,10 @@ export class Coreable {
 
       case 'function':
         return value(
-          createContext<P , E>({
+          createContext<IParameterValue, P , E>({
             widget: widget ,
             component: widget.component ,
+            payload: value,
           }) ,
         ) as V;
 

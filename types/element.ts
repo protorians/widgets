@@ -90,7 +90,7 @@ export type IStyleExtended = {
 }
 
 
-export type IStyleCallback<P extends IAttributes,  E extends IWidgetElements> = (context : Partial<IContext<P,  E>>) => CSSStyleDeclaration[ keyof CSSStyleDeclaration ];
+export type IStyleCallback<P extends IAttributes,  E extends IWidgetElements> = (context : Partial<IContext<any, P,  E>>) => CSSStyleDeclaration[ keyof CSSStyleDeclaration ];
 
 export type IStyle<P extends IAttributes,  E extends IWidgetElements> = IStyleExtended | {
 
@@ -107,7 +107,7 @@ export type IClassName<P extends IAttributes,  E extends IWidgetElements> =
 
 export type IClassNames<P extends IAttributes,  E extends IWidgetElements> = IClassName<P,  E> | IClassName<P,  E>[];
 
-export type IClassNameCallback<P extends IAttributes,  E extends IWidgetElements> = (context : Partial<IContext<P,  E>>) => string | undefined;
+export type IClassNameCallback<P extends IAttributes,  E extends IWidgetElements> = (context : Partial<IContext<any, P,  E>>) => string | undefined;
 
 
 export type IEventStaticListener<P extends IAttributes,  E extends IWidgetElements> =

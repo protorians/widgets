@@ -51,7 +51,7 @@ export interface IPointerMarker {
 
 }
 
-export interface IPointer<P extends IAttributes, E extends IWidgetElements> {
+export interface IPointer<Payload, P extends IAttributes, E extends IWidgetElements> {
 
   marker: Readonly<IPointerMarker>;
 
@@ -61,11 +61,11 @@ export interface IPointer<P extends IAttributes, E extends IWidgetElements> {
 
   callback: IChildCallback<P, E> | undefined;
 
-  call(): IChildOnly<P, E> | undefined;
+  call(payload: Payload): IChildOnly<P, E> | undefined;
 
   use(callback: IChildCallback<P, E>): this;
 
-  render(): this;
+  render(payload?: Payload): this;
 
   bind(widget: IWidget<P, E>): this;
 
