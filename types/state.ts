@@ -3,34 +3,111 @@ import {ISignalables} from '@protorians/signalable/types';
 import {IPointer} from './pointer';
 import {IAttributes} from './attributes';
 import {IWidgetElements} from './widget';
-import {IChildCallback} from './children';
+import {IContextualChildCallback} from './children';
 
 export type IStateSignals<V extends ISupportableValue> = {
 
-  'pointer:updated': IPointer<any, any>;
+  'pointer:updated' : IPointer<V , any , any>;
 
-  'pointers:updated': IPointer<any, any>[];
+  'pointers:updated' : IPointer<V , any , any>[];
 
-  updated: V;
+  updated : V;
 
-  destroy: IState<V>;
+  destroy : IState<V>;
 
-  used: IPointer<any, any>;
+  used : IPointer<V , any , any>;
 
 }
 
 export interface IState<V extends ISupportableValue> {
 
-  get value(): V | undefined;
+  /**
+   * Get State value
+   */
+  get value () : V;
 
-  get initial(): V | undefined;
+  /**
+   * Get initial State value
+   */
+  get initial () : V | undefined;
 
-  get signal(): Readonly<ISignalables<V, IStateSignals<V>>>;
+  /**
+   * Get State signals for events
+   */
+  get signals () : Readonly<ISignalables<V , IStateSignals<V>>>;
 
-  set(value: V): this;
+  /**
+   * Change State value
+   * @param value
+   */
+  set (value : V) : this;
 
-  unset(): this;
+  /**
+   * Destroy state
+   */
+  unset () : this;
 
-  widget<P extends IAttributes, E extends IWidgetElements>(callback: IChildCallback<P, E>): IPointer<P, E>;
+  /**
+   *
+   * @param callback
+   */
+  widget<P extends IAttributes , E extends IWidgetElements> (callback : IContextualChildCallback<V , P , E>) : IPointer<V , P , E>;
+
+  /**
+   * Trigger pointer's update
+   */
+  updatePointers () : this;
+
+  /**
+   * If `value` is `number`
+   * @param value
+   */
+  increment (value? : number) : this;
+
+  /**
+   * If `value` is `number`
+   * @param value
+   */
+  decrement (value? : number) : this;
+
+  /**
+   * If `value` is `number`
+   * @param value
+   */
+  multiply (value? : number) : this;
+
+  /**
+   * If `value` is `number`
+   * @param value
+   */
+  divide (value? : number) : this;
+
+  /**
+   * If `value` is `boolean`
+   * Set `value` to `true`
+   */
+  activate () : this;
+
+  /**
+   * If `value` is `boolean`
+   * Set `value` to `false`
+   */
+  deactivate () : this;
+
+  /**
+   * Set `value` to `null`
+   */
+  cancel () : this;
+
+  /**
+   * If `value` as `boolean`
+   */
+  toggle () : this;
+
+  /**
+   * Add value in State value if value is `array`
+   * @param value
+   */
+  push<D extends V[keyof V]> (value : D) : this;
 
 }

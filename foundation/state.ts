@@ -1,14 +1,13 @@
 import type {
-  IState,
-  ISupportableValue,
-  IChildCallback,
-  IAttributes,
-  IWidgetElements,
-  IStateSignals,
-  IPointer, IParameterValue,
+  IState ,
+  ISupportableValue ,
+  IAttributes ,
+  IWidgetElements ,
+  IStateSignals ,
+  IPointer , IContextualChildCallback ,
 } from '../types';
-import { PointerWidget } from './pointer';
-import { Signalables,  type ISignalables } from '@protorians/signalable';
+import {PointerWidget} from './pointer';
+import {Signalables , type ISignalables} from '@protorians/signalable';
 
 export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
@@ -16,9 +15,9 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
 
   #initial? : V;
 
-  #signal : Readonly<ISignalables<V,  IStateSignals<V>>>;
+  #signal : Readonly<ISignalables<V , IStateSignals<V>>>;
 
-  #pointers : IPointer<any,  any>[] = [];
+  #pointers : IPointer<V , any , any>[] = [];
 
   constructor (value : V) {
 
@@ -38,7 +37,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
     return this.#initial;
   }
 
-  get signal () {
+  get signals () {
     return this.#signal;
   }
 
@@ -46,94 +45,93 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
     return this.#pointers;
   }
 
-  updatePointers () {
-
+  updatePointers () : this {
     this.pointers.forEach(pointer => {
-      pointer.render();
-      this.signal.dispatch('pointer:updated',  pointer);
+      pointer.render(this.#value);
+      this.signals.dispatch('pointer:updated' , pointer);
     });
 
-    this.signal.dispatch('pointers:updated',  this.pointers);
-
+    this.signals.dispatch('pointers:updated' , this.pointers);
     return this;
 
   }
 
   set (value : V) : this {
-
     this.#value = value;
-
-    this.signal.dispatch('updated',  value);
-
+    this.signals.dispatch('updated' , value);
     return this.updatePointers();
-
   }
 
   unset () : this {
-
-    // @ts-ignore
-    this.#value = undefined;
-
-    this.signal.dispatch('destroy',  this);
-
+    this.set(undefined as V);
+    this.signals.dispatch('destroy' , this);
     return this.updatePointers();
-
   }
 
-  widget<P extends IAttributes,  E extends IWidgetElements> (callback : IChildCallback<P,  E>) : PointerWidget<P,  E> {
-
-    const pointer = new PointerWidget(callback);
-
+  widget<P extends IAttributes , E extends IWidgetElements> (callback : IContextualChildCallback<V , P , E>) : PointerWidget<V , P , E> {
+    const pointer = new PointerWidget<V , P , E>(callback , this.#value);
     this.pointers.push(pointer);
-
-    this.signal.dispatch('used',  pointer);
-
+    this.signals.dispatch('used' , pointer);
     return pointer;
-
   }
 
-  change(callback: () => IParameterValue){
-
-    /**
-     * Ajouter le `callback` dans un tableau
-     * a chaque mise à jour re-rendre ce callback
-     */
-
-    return callback();
-  }
-
-
-  increment (value? : number) {
+  increment (value? : number) : this {
     if (typeof this.#value == 'number') {
       this.set((this.#value + (value || 1)) as V);
     }
     return this;
   }
 
-  decrement (value? : number) {
+  decrement (value? : number) : this {
     if (typeof this.#value == 'number') {
       this.set((this.#value - (value || 1)) as V);
     }
     return this;
   }
 
-  multiply (value? : number) {
+  multiply (value? : number) : this {
     if (typeof this.#value == 'number') {
       this.set((this.#value * (value || 1)) as V);
     }
     return this;
   }
 
-  divide (value? : number) {
+  divide (value? : number) : this {
     if (typeof this.#value == 'number') {
       this.set((this.#value / (value || 1)) as V);
     }
     return this;
   }
 
-  push<D extends V[keyof V]> (value : D) {
+  activate () : this {
+    if (typeof this.#value == 'boolean') {
+      this.set(true as V);
+    }
+    return this;
+  }
+
+  deactivate () : this {
+    if (typeof this.#value == 'boolean') {
+      this.set(false as V);
+    }
+    return this;
+  }
+
+  cancel () : this {
+    this.set(null as V);
+    return this;
+  }
+
+  toggle () : this {
+    if (typeof this.#value == 'boolean') {
+      this.set(!this.#value as V);
+    }
+    return this;
+  }
+
+  push<D extends V[keyof V]> (value : D) : this {
     if (Array.isArray(this.value)) {
-      this.set([...this.value || [],  value] as V);
+      this.set([...this.value || [] , value] as V);
     }
     return this;
   }
