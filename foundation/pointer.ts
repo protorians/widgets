@@ -212,13 +212,13 @@ export class PointerWidget<Payload, P extends IAttributes, E extends IWidgetElem
 }
 
 
-if (!customElements.get(PointerWidgetMarker.tagName)) {
-
-  customElements.define(
-    PointerWidgetMarker.tagName,
-    PointerWidgetMarkerElement, {
-      extends: 'slot',
-    },
-  );
-
-}
+// if (!customElements.get(PointerWidgetMarker.tagName)) {
+//
+//   customElements.define(
+//     PointerWidgetMarker.tagName,
+//     PointerWidgetMarkerElement, {
+//       extends: 'slot',
+//     },
+//   );
+//
+// }
