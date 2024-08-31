@@ -24,7 +24,7 @@ export type IPointerCollectionChild = Text | HTMLElement | DocumentFragment | un
 export type IPointerCollectionChildren = IPointerCollectionChild | IPointerCollectionChild[];
 
 
-export interface IPointerMarkerElement extends HTMLSlotElement {
+export interface IPointerMarkerElement extends HTMLTemplateElement {
 
   queue(child: IPointerCollectionChild): this;
 
