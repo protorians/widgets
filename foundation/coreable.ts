@@ -147,7 +147,7 @@ export class Coreable {
       } else if (typeof value == 'function') {
 
         widget.children(value(createContext<IChildren<IAttributes , IWidgetElements> , IAttributes , IWidgetElements>({
-          widget: widget as IWidget<any , any> ,
+          widget: widget as IWidget<any , any>,
           component: widget.component ,
           payload: value ,
         })));

@@ -1,9 +1,10 @@
 import {Component} from './component';
 import {
+  IAttributes ,
   IComponentConstruct ,
   IParameters ,
   IRouterSettings ,
-  IRoutesScheme , IView , IViewOptions , IViews , IWidget ,
+  IRoutesScheme , IView , IViewOptions , IViews , IWidget , IWidgetElements ,
 } from '../types';
 import {State , Widget} from '../facades';
 import {RouterRequest} from './router-request';
@@ -39,7 +40,7 @@ export function Views<Routes extends IRoutesScheme> (
       signals ,
     });
 
-    const state = State<IWidget<any , any> | undefined>(undefined);
+    const state = State<IWidget<IAttributes , IWidgetElements> | undefined>(undefined);
 
     const canvas = Widget({
       nsa: {w: {views: 'exchanger'}} ,
