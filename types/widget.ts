@@ -123,12 +123,13 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   /**
    * Widget Signalable
    */
-  // signal : IWidgetSignalable<P, E>;
+  signal : IWidgetSignalable<P , E>
 
   /**
-   * Widget Attribution : Get attribution handler
+   * Widget's Parent
    */
-  // attributions : IAttribution<Partial<IAttributesScope<P, E>>, IDataValue>;
+  get parent(): IWidget<IAttributes , IWidgetElements> | undefined
+
 
   /**
    * Widget HTMLElement tag name
@@ -164,6 +165,12 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
    * Define widget component
    */
   defineComponent<C extends IParameters> (component : IComponent<C>) : this;
+
+  /**
+   * Define Widget's current parent
+   * @param widget
+   */
+  defineParent(widget: IWidget<IAttributes , IWidgetElements>): this;
 
   /**
    * Erase all children

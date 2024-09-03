@@ -32,11 +32,12 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
   protected _ready : boolean = false;
 
+  protected _parent : IWidget<IAttributes , IWidgetElements> | undefined;
+
+
   signal : IWidgetSignalable<P , E>;
 
   props : Readonly<Partial<IAttributesScope<P , E>>>;
-
-  // attributions : IAttribution<Partial<IAttributesScope<P, E>>, IDataValue>;
 
 
   constructor (props : IAttributesScope<P , E>) {
@@ -104,6 +105,10 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     return this._component;
   }
 
+  get parent () {
+    return this._parent;
+  }
+
   get ready () {
     return this._ready;
   }
@@ -127,7 +132,15 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
       this.signal.dispatch('useComponent' , this._component);
     }
     return this;
+  }
 
+  defineParent (widget : IWidget<IAttributes , IWidgetElements>) : this {
+    if (!this.element.contains(widget.element)) {
+      this._parent = widget;
+    } else {
+      throw new Error('This parent is contains in current widget');
+    }
+    return this;
   }
 
   clear () : this {
@@ -178,7 +191,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     callback(createContext<IManipulateCallback<P , E> , P , E>({
       widget: this ,
       component: this._component ,
-      payload: callback,
+      payload: callback ,
     }));
     this.signal.dispatch('manipulate' , callback);
     return this;

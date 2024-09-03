@@ -158,7 +158,11 @@ export class Coreable {
 
       } else if (value instanceof WidgetNode) {
 
-        widget.element.append(value.useComponent(widget.component).render().element);
+        const child = value.useComponent(widget.component).render();
+
+        widget.element.append(child.element);
+
+        child.defineParent(widget as IWidget<any , any>)
 
       } else if (value instanceof HTMLElement || value instanceof DocumentFragment) {
 
