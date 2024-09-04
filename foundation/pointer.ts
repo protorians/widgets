@@ -65,12 +65,12 @@ export class PointerWidgetMarkerElement extends HTMLElement implements IPointerM
 }
 
 
-export class PointerWidgetMarker implements IPointerMarker {
+export class WidgetPointerSlot implements IPointerMarker {
 
   #current: IPointerMarkerElement | undefined;
 
 
-  static tagName: string = 'pointer-widget-marker';
+  static tagName: string = 'widget-pointer-slot';
 
   get current() {
     return this.#current;
@@ -122,7 +122,7 @@ export class PointerWidget<Payload, P extends IAttributes, E extends IWidgetElem
 
     this.#signal = new Signalables(callback);
 
-    this.marker = (new PointerWidgetMarker).hydrate();
+    this.marker = (new WidgetPointerSlot).hydrate();
 
   }
 
@@ -212,10 +212,10 @@ export class PointerWidget<Payload, P extends IAttributes, E extends IWidgetElem
 }
 
 
-if (!customElements.get(PointerWidgetMarker.tagName)) {
+if (!customElements.get(WidgetPointerSlot.tagName)) {
 
   customElements.define(
-    PointerWidgetMarker.tagName,
+    WidgetPointerSlot.tagName,
     PointerWidgetMarkerElement, {
       // extends: 'template',
     },
