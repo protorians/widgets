@@ -147,7 +147,7 @@ export class Coreable {
       } else if (typeof value == 'function') {
 
         widget.children(value(createContext<IChildren<IAttributes , IWidgetElements> , IAttributes , IWidgetElements>({
-          widget: widget as IWidget<any , any>,
+          widget: widget as IWidget<any , any> ,
           component: widget.component ,
           payload: value ,
         })));
@@ -162,7 +162,7 @@ export class Coreable {
 
         widget.element.append(child.element);
 
-        child.defineParent(widget as IWidget<any , any>)
+        child.defineParent(widget as IWidget<any , any>);
 
       } else if (value instanceof HTMLElement || value instanceof DocumentFragment) {
 
@@ -199,11 +199,11 @@ export class Coreable {
     if (widget.element instanceof HTMLElement) {
 
       widget.element.addEventListener(type , event => listener(
-        createContext<keyof HTMLElementEventMap, P , E>({
+        createContext<keyof HTMLElementEventMap , P , E>({
           widget: widget ,
           component: widget.component ,
           event ,
-          payload: type,
+          payload: type ,
         }) ,
       ) , options);
 
@@ -277,11 +277,11 @@ export class Coreable {
           return listener;
         } else if (typeof listener == 'function') {
           return listener(
-            createContext<V, P , E>({
+            createContext<V , P , E>({
               widget: widget ,
               event: e ,
               component: widget.component ,
-              payload: type
+              payload: type ,
             }) ,
           );
         }
@@ -380,7 +380,7 @@ export class Coreable {
                 createContext({
                   widget: widget ,
                   component: widget.component ,
-                  payload: value,
+                  payload: value ,
                 }) || '' ,
               )
               : ''
@@ -418,10 +418,10 @@ export class Coreable {
         case 'function':
 
           this.setClassName(widget , values(
-            createContext<IClassNameCallback<P, E>, P, E>({
+            createContext<IClassNameCallback<P , E> , P , E>({
               widget: widget ,
               component: widget.component ,
-              payload: values,
+              payload: values ,
             })) ,
           );
 
@@ -491,12 +491,23 @@ export class Coreable {
     type ? : keyof HTMLElementEventMap ,
   ) : IWidget<P , E> {
 
-    type = type || 'click';
+    const eventName = (type || 'click') as keyof IWidgetElements;
 
-    /* @ts-ignore */
-    if (widget.element instanceof HTMLElement && type in widget.element && typeof widget.element[type] == 'function') {
-      /* @ts-ignore */
-      widget.element[type || 'click']();
+    if (type && widget.element instanceof HTMLElement && type in widget.element && typeof widget.element[eventName] == 'function') {
+
+      (widget.element[eventName] as Function)();
+
+      // const event = new CustomEvent(`widget:${type}`);
+      //
+      // (widget.element[eventName] as Function)
+      //   .apply(widget , [createContext({
+      //     widget ,
+      //     event,
+      //     component: widget.component ,
+      //     payload: undefined ,
+      //   })]);
+
+      // widget.element.dispatchEvent(event);
 
       // widget.signal.dispatch(
       //   'trigger',
@@ -650,10 +661,10 @@ export class Coreable {
 
       case 'function':
         return value(
-          createContext<IParameterValue, P , E>({
+          createContext<IParameterValue , P , E>({
             widget: widget ,
             component: widget.component ,
-            payload: value,
+            payload: value ,
           }) ,
         ) as V;
 
