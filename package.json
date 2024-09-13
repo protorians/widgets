@@ -1,12 +1,21 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.4-beta.10",
+  "version": "0.0.4-beta.13",
   "description": "Widget's Builder",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "pnpm run build:esm && pnpm run build:cjs",
+    "build:esm": "tsc -p esm.tsconfig.json",
+    "build:cjs": "tsc -p cjs.tsconfig.json",
+    "build:types": "npm-dts generate -o ./globals.d.ts -c",
+    "postinstall": "npx tsc -p esm.tsconfig.json && npx tsc -p cjs.tsconfig.json"
+  },
+  "exports": {
+    "require": "./~cjs/index.js",
+    "import": "./~esm/index.js",
+    "default": "./index.ts"
   },
   "keywords": [
     "protorians",
@@ -18,12 +27,8 @@
     "url": "https://github.com/protorians/widgets.git"
   },
   "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^20.12.11",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.4.5"
-  },
   "dependencies": {
-    "@protorians/signalable": "^0.0.6"
+    "@protorians/signalable": "^0.0.8",
+    "typescript": "^5.4.5"
   }
 }
