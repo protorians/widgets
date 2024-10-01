@@ -1,108 +1,103 @@
-import {
-  IComponentConstruct,
-  IElement,
+import type {
   IElementMetrics,
-  IElementSignal,
-  IParameters,
   IAttributes,
   IWidget,
   IWidgetElements,
 } from '../types';
-import {type ISignalables, Signalables} from '@protorians/signalable';
 
 
-export class WidgetElement<Props extends IParameters> extends HTMLElement implements IElement<Props> {
-
-  protected _props: Props = {} as Props;
-
-  protected _component: IComponentConstruct<Props> | undefined;
-
-  signal: Readonly<ISignalables<Props, IElementSignal<Props>>>;
-
-  use: IComponentConstruct<Props> | undefined;
-
-  widget:  IWidget<any, any> | undefined;
-
-  constructor() {
-    super();
-    this.sync();
-    this.signal = new Signalables(this.props);
-  }
-
-  get props() {
-    return this._props;
-  }
-
-  set props( props ){
-    this._props = props
-  }
-
-  get component() {
-    return this._component;
-  }
-
-  bootstrap(): this {
-    return this;
-  }
-
-  mounted() {
-  }
-
-  unmounted() {
-  }
-
-  adopted() {
-  }
-
-  initialize() {
-
-    return this.sync();
-
-  }
-
-  sync() {
-
-    Object.values(this.attributes).forEach(attribute =>
-      this.props[attribute.name as keyof Props] = attribute.value as Props[ keyof Props]);
-
-    if (this.signal) this.signal.dispatch('synchronized', this.props);
-
-    return this;
-
-  }
-
-  mount(component?: IComponentConstruct<Props>) {
-
-    if (component) {
-      this._component = component;
-      this.initialize();
-      this.innerHTML = '';
-      this.widget = this._component(this.props).render()
-      this.append(this.widget.element);
-      this.signal.dispatch('mounted', this);
-      this.mounted();
-    }
-
-    return this;
-
-  }
-
-  connectedCallback(): void {
-    this.bootstrap().mount(this.use);
-    this.signal.dispatch('connected', this);
-  }
-
-  disconnectedCallback() {
-    this.signal.dispatch('disconnected', this);
-    this.unmounted();
-  }
-
-  adoptedCallback() {
-    this.signal.dispatch('adopted', this);
-    this.adopted();
-  }
-
-}
+// export class WidgetElement<Props extends IParameters> extends HTMLElement implements IElement<Props> {
+//
+//   protected _props: Props = {} as Props;
+//
+//   protected _component: IComponentConstruct<Props> | undefined;
+//
+//   signal: Readonly<ISignalables<Props, IElementSignal<Props>>>;
+//
+//   use: IComponentConstruct<Props> | undefined;
+//
+//   widget:  IWidget<any, any> | undefined;
+//
+//   constructor() {
+//     super();
+//     this.sync();
+//     this.signal = new Signalables(this.props);
+//   }
+//
+//   get props() {
+//     return this._props;
+//   }
+//
+//   set props( props ){
+//     this._props = props
+//   }
+//
+//   get component() {
+//     return this._component;
+//   }
+//
+//   bootstrap(): this {
+//     return this;
+//   }
+//
+//   mounted() {
+//   }
+//
+//   unmounted() {
+//   }
+//
+//   adopted() {
+//   }
+//
+//   initialize() {
+//
+//     return this.sync();
+//
+//   }
+//
+//   sync() {
+//
+//     Object.values(this.attributes).forEach(attribute =>
+//       this.props[attribute.name as keyof Props] = attribute.value as Props[ keyof Props]);
+//
+//     if (this.signal) this.signal.dispatch('synchronized', this.props);
+//
+//     return this;
+//
+//   }
+//
+//   mount(component?: IComponentConstruct<Props>) {
+//
+//     if (component) {
+//       this._component = component;
+//       this.initialize();
+//       this.innerHTML = '';
+//       this.widget = this._component(this.props).render()
+//       this.append(this.widget.element);
+//       this.signal.dispatch('mounted', this);
+//       this.mounted();
+//     }
+//
+//     return this;
+//
+//   }
+//
+//   connectedCallback(): void {
+//     this.bootstrap().mount(this.use);
+//     this.signal.dispatch('connected', this);
+//   }
+//
+//   disconnectedCallback() {
+//     this.signal.dispatch('disconnected', this);
+//     this.unmounted();
+//   }
+//
+//   adoptedCallback() {
+//     this.signal.dispatch('adopted', this);
+//     this.adopted();
+//   }
+//
+// }
 
 
 export class WidgetElementMetrics<P extends IAttributes, E extends IWidgetElements> implements IElementMetrics<P, E> {

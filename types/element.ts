@@ -1,10 +1,10 @@
-import {IParameters} from './values';
-import {IComponentConstruct} from './component';
-import {ISignalables} from '@protorians/signalable/types';
-import {IAttributes} from './attributes';
-import {IWidget,  IWidgetElements} from './widget';
-import {IContext} from './context';
-import {IChildCallback} from './children';
+import type {IParameters} from './values';
+import type {IComponentConstruct} from './component';
+import type {ISignalables} from '@protorians/signalable';
+import type {IAttributes} from './attributes';
+import type {IWidget,  IWidgetElements} from './widget';
+import type {IContext} from './context';
+import type {IChildCallback} from './children';
 
 
 export type IElementSignal<Props extends IParameters> = {
@@ -98,6 +98,12 @@ export type IStyle<P extends IAttributes,  E extends IWidgetElements> = IStyleEx
 
 }
 
+export type IStyleOnly = IStyleExtended | {
+
+  [K in keyof CSSStyleDeclaration]? : CSSStyleDeclaration[K];
+
+}
+
 // export type IStyles = IStyle<IProps, IWidgetElements>[]
 
 export type IClassName<P extends IAttributes,  E extends IWidgetElements> =
@@ -106,6 +112,10 @@ export type IClassName<P extends IAttributes,  E extends IWidgetElements> =
   | undefined;
 
 export type IClassNames<P extends IAttributes,  E extends IWidgetElements> = IClassName<P,  E> | IClassName<P,  E>[];
+
+export type IPrimitiveClassName = {
+  [K: string]: string;
+}
 
 export type IClassNameCallback<P extends IAttributes,  E extends IWidgetElements> = (context : Partial<IContext<any, P,  E>>) => string | undefined;
 
@@ -144,4 +154,16 @@ export type IEventListeners<P extends IAttributes,  E extends IWidgetElements> =
   [K in keyof HTMLElementEventMap] : IEventListener<P,  E>
 }>
 
+
+
+export interface ICoreElement extends HTMLElement{
+
+  // get attributes (): object;
+
+  // get innerHTML () : string | null;
+  //
+  // set innerHTML (html : string | null);
+  //
+  // append (value : Element) : void;
+}
 
