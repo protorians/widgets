@@ -1,19 +1,24 @@
-import {Component} from './component';
 import {
   IAttributes ,
   IComponentConstruct ,
   IParameters ,
   IRouterSettings ,
-  IRoutesScheme , IView , IViewOptions , IViews , IWidget , IWidgetElements ,
+  IRoutesScheme ,
+  IView ,
+  IViewOptions ,
+  IViews ,
+  IWidget ,
+  IWidgetElements ,
 } from '../types';
 import {State , Widget} from '../facades';
 import {RouterRequest} from './router-request';
 import {defineClientRouter} from './router-client';
+import {Component} from './component';
 
 
 export function View<Props extends IParameters> (
   component : IComponentConstruct<Props> ,
-  options ? : IViewOptions ,
+  options ? : IViewOptions<Props> ,
 ) : IView<Props> {
   return {
     component ,
@@ -30,7 +35,7 @@ export function Views<Routes extends IRoutesScheme> (
     signals ,
   } : IRouterSettings<Routes> ,
 ) : IViews<Routes> {
-  return Component<IRouterSettings<Routes>>(() => {
+  return Component<IRouterSettings<Routes>>('RouterViews' , () => {
 
     const router = defineClientRouter({
       index ,
@@ -39,11 +44,9 @@ export function Views<Routes extends IRoutesScheme> (
       errors ,
       signals ,
     });
-
     const state = State<IWidget<IAttributes , IWidgetElements> | undefined>(undefined);
-
     const canvas = Widget({
-      nsa: {w: {views: 'exchanger'}} ,
+      nsa: {w: {views: ''}} ,
       children: state.widget(() => {
         return state.value;
       }) ,
