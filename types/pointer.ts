@@ -1,7 +1,7 @@
-import {IChildCallback, IChildOnly} from './children';
-import {IAttributes} from './attributes';
-import {IWidget, IWidgetElements} from './widget';
-import {ISignalables} from '@protorians/signalable/types';
+import type {IChildCallback, IChildOnly} from './children';
+import type {IAttributes} from './attributes';
+import type {IWidget, IWidgetElements} from './widget';
+import type {ISignalables} from '@protorians/signalable';
 
 
 export type IPointerSignals<P extends IAttributes, E extends IWidgetElements> = {

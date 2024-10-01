@@ -4,7 +4,7 @@ import type {
   IAttributes ,
   IWidgetElements ,
   IStateSignals ,
-  IPointer , IContextualChildCallback ,
+  IPointer , IContextualChildCallback , IWidget ,
 } from '../types';
 import {PointerWidget} from './pointer';
 import {Signalables , type ISignalables} from '@protorians/signalable';
@@ -68,7 +68,7 @@ export class WidgetState<V extends ISupportableValue> implements IState<V> {
     return this.updatePointers();
   }
 
-  widget<P extends IAttributes , E extends IWidgetElements> (callback : IContextualChildCallback<V , P , E>) : PointerWidget<V , P , E> {
+  widget<P extends IAttributes , E extends IWidgetElements> (callback : IContextualChildCallback<V , P , E>) : PointerWidget<V , P , E> | IWidget<any , IWidgetElements> {
     const pointer = new PointerWidget<V , P , E>(callback , this.#value);
     this.pointers.push(pointer);
     this.signals.dispatch('used' , pointer);

@@ -15,3 +15,6 @@ export * from './router';
 export * from './router-client';
 export * from './view';
 export * from './composite';
+export * from './dom';
+export * from './directive';
+export * from './parameter-bag';

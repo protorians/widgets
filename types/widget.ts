@@ -17,16 +17,18 @@ import type {
   ITextareaAttributes ,
   ISpanAttributes ,
   IParagraphAttributes ,
-  IStrongAttributes , IHeadingAttributes , IItalicAttributes ,
+  IStrongAttributes ,
+  IHeadingAttributes ,
+  IItalicAttributes ,
+  IPassiveWidgetElement ,
 } from './index';
-import type {ISignalables} from '@protorians/signalable';
-import {ISignalListenOption} from '@protorians/signalable/types';
+import type {ISignalables, ISignalListenOption} from '@protorians/signalable';
 
 
 /**
  * Widget Element
  */
-export type IWidgetElements = HTMLElement | DocumentFragment;
+export type IWidgetElements = HTMLElement | DocumentFragment | IPassiveWidgetElement;
 
 
 /**
@@ -144,7 +146,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   /**
    * Widget Component instance
    */
-  get component () : IComponent<IParameters> | undefined;
+  get composite () : IComponent<IParameters> | undefined;
 
   /**
    * Widget Ready state
@@ -152,9 +154,9 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
   get ready () : boolean;
 
   /**
-   * Get widget's component to use
+   * Get widget's composite to use
    */
-  useComponent<Props extends IParameters> (component : IComponent<Props> | undefined) : this;
+  useComposite<Props extends IParameters> (composite : IComponent<Props> | undefined) : this;
 
   /**
    * Widget widget's element

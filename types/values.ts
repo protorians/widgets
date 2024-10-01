@@ -5,14 +5,18 @@ import type {
   IWidgetElements,
 } from './index';
 
-export type IParameterValue = string | number | object | boolean | null | undefined | Symbol;
+export type IPrimitiveValue = string | number | boolean | null | undefined | Symbol | BigInt;
+
+export type IParameterValue = IPrimitiveValue | object;
 
 export type ICallableValue = (context: Partial<IContext<any, IAttributes, IWidgetElements>>) => IParameterValue;
 
 export type IParameters = {
-
   [A: string]: IParameterValue
+}
 
+export type IPrimitiveParameters = {
+  [A: string]: IPrimitiveValue
 }
 
 export type ISupportableValue = IParameterValue | IWidget<IAttributes, IWidgetElements>

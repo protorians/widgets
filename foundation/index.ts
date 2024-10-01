@@ -1,5 +1,5 @@
 export * from './context';
-export * from './component';
+// export * from './component';
 export * from './bind';
 export * from './state';
 export * from './pointer';
@@ -10,4 +10,9 @@ export * from './exception';
 export * from './configurator';
 export * from './router-client';
 export * from './view';
+export * from './compose';
+export * from './widget-passive';
+export * from './component';
 export * from './composite';
+export * from './directive';
+export * from './parameter-bag';

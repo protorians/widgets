@@ -1,9 +1,9 @@
 import type {ISupportableValue} from './values';
-import {ISignalables} from '@protorians/signalable/types';
-import {IPointer} from './pointer';
-import {IAttributes} from './attributes';
-import {IWidgetElements} from './widget';
-import {IContextualChildCallback} from './children';
+import type {ISignalables} from '@protorians/signalable';
+import type {IPointer} from './pointer';
+import type {IAttributes} from './attributes';
+import type {IWidget , IWidgetElements} from './widget';
+import type {IContextualChildCallback} from './children';
 
 export type IStateSignals<V extends ISupportableValue> = {
 
@@ -51,7 +51,7 @@ export interface IState<V extends ISupportableValue> {
    *
    * @param callback
    */
-  widget<P extends IAttributes , E extends IWidgetElements> (callback : IContextualChildCallback<V , P , E>) : IPointer<V , P , E>;
+  widget<P extends IAttributes , E extends IWidgetElements> (callback : IContextualChildCallback<V , P , E>) : IPointer<V , P , E> | IWidget<any , IWidgetElements>;
 
   /**
    * Trigger pointer's update

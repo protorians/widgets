@@ -1,12 +1,39 @@
-import {IAttributes , IParameters , IWidgetElements , ICompositeConstruct , IWidget , IComposite} from '../types';
-import {Component} from './component';
+import type {
+  IComponent ,
+  IComponentConstruct ,
+  IAttributes ,
+  IWidget ,
+  IWidgetElements ,
+  IParameters ,
+} from '../types';
 
 
-export function Composite<Parameters extends IParameters , P extends IAttributes , E extends IWidgetElements> (
-  construct : ICompositeConstruct<Parameters , P , E> ,
-  initials : Parameters ,
-): IComposite<Parameters, P, E> {
+export class WidgetComposite<P extends IParameters> implements IComponent<P>{
 
-  return Component((props : Parameters): IWidget<P , E> => construct({...initials , ...props}));
+  #parameters: P | undefined;
+
+  #widget: IWidget<IAttributes, IWidgetElements> | undefined;
+
+  constructor(props: P) {
+    this.#parameters = props;
+  }
+
+  get parameters() {
+    return this.#parameters;
+  }
+
+  set widget(widget: IWidget<IAttributes, IWidgetElements>){
+    this.#widget = this.#widget || widget || undefined;
+  }
+
+  get widget(): (IWidget<IAttributes, IWidgetElements>) | undefined{
+    return this.#widget || undefined;
+  }
+
+}
+
+export function Composite<Props extends IParameters>(component: IComponentConstruct<Props>) {
+
+  return (props: Props) => component(props).useComposite(new WidgetComposite<Props>(props));
 
 }

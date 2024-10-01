@@ -12,4 +12,5 @@ export const WIDGET_NATIVE_PROPS = [
   'className',
   'on',
   'listen',
+  'attributes',
 ];

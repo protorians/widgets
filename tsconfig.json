@@ -3,11 +3,12 @@
 
     "module": "ESNext",
     "target": "es2020",
-    "declaration": true,
     "moduleResolution": "node",
+    
+    "declaration": true,
 
     "noImplicitAny": false,
-    "allowJs": false,
+    "allowJs": true,
     "removeComments": false,
     "declarationMap": true,
     "inlineSources": true,
@@ -18,13 +19,13 @@
     "noImplicitReturns": true,
     "noEmit": true,
     "experimentalDecorators": true,
-
-    "outDir": "./",
     "esModuleInterop": true,
     "strict": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "~cjs",
+    "~esm",
   ],
   "include": [
     "./"
