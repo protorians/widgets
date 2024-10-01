@@ -18,16 +18,18 @@ import type {
   ICoreableProperties ,
   ICoreablePropertyOptions ,
   ICoreableProperty ,
-  IParameters , IClassNameCallback ,
+  IParameters , IClassNameCallback , IPrimitiveParameters ,
 } from '../types';
 import {PointerWidget} from './pointer';
 import {createContext} from './context';
 import {WidgetNode} from '../supports';
 import {
-  allowEditableElement ,
+  allowEditableElement , camelize ,
   decamelize ,
 } from '../utilities';
 import {WIDGET_NATIVE_PROPS} from '../constants';
+import {WidgetPassiveElement} from './widget-passive';
+import {Directives} from './directive';
 
 
 export class CoreableCompound<P extends IAttributes , E extends IWidgetElements>
@@ -73,14 +75,12 @@ export class CoreableProperties<P extends IAttributes , E extends IWidgetElement
         .forEach(({0: name , 1: value}) => {
           if (value instanceof CoreableProperty) {
             const parsedValue = value.parse(this.widget);
-
             if (value.options.remove) {
             } else if (value.options.replace) {
               properties[value.name] = parsedValue;
             } else if (!value.options.replace) {
               properties[name] = parsedValue;
             }
-
           } else {
             properties[name] = value;
           }
@@ -91,14 +91,12 @@ export class CoreableProperties<P extends IAttributes , E extends IWidgetElement
   }
 
   sync (props : Partial<IAttributesScope<P , E>>) : Partial<IAttributesScope<P , E>> {
-
     props = this.parse(props) || ({} as Partial<IAttributesScope<P , E>>);
-
     return {
       ...props ,
       children: this.construct.child() || props.children ,
-      // signal: {...this.construct.signal(),  ...props.signal},
-      // attribution: {...this.construct.ns() , ...props.attribution} ,
+      signal: {...this.construct.signal() , ...props.signal} ,
+      nsa: {...this.construct.ns() , ...props.nsa} ,
       data: {...this.construct.data() , ...props.data} ,
       on: {...this.construct.event() , ...props.on} ,
       listen: {...this.construct.listener() , ...props.listen} ,
@@ -106,9 +104,8 @@ export class CoreableProperties<P extends IAttributes , E extends IWidgetElement
       className: [
         ...(Array.isArray(this.construct.className()) ? this.construct.className() : [this.construct.className()]) as IClassName<P , E>[] ,
         ...(Array.isArray(props.className) ? props.className : [props.className]) as IClassName<P , E>[] ,
-      ] ,
+      ].filter(v => typeof v !== 'undefined') ,
     };
-
   }
 
 }
@@ -118,27 +115,37 @@ export class Coreable {
 
   static Properties = CoreableProperties;
 
-  static Clear<P extends IAttributes , E extends IWidgetElements> (
+  static clear<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
   ) : IWidget<P , E> {
-    if (widget.element instanceof HTMLElement) {
+    if ('innerHTML' in widget.element) {
       widget.element.innerHTML = '';
     }
     return widget;
   }
 
-  static setChildren<P extends IAttributes , E extends IWidgetElements> (
+  static children<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     value? : IChildren<IAttributes , IWidgetElements> ,
   ) : IWidget<P , E> {
 
     if (value) {
 
+      value = Directives.parse('children' , {widget , payload: value});
+
       if (value instanceof PointerWidget) {
 
         const r = (value as IPointer<IChildren<IAttributes , IWidgetElements> , P , E>).bind(widget).render().marker;
 
-        if (r && r.current) widget.element.append(r.current);
+        if (r && r.current) {
+          if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
+            widget.element.append(
+              Directives.parse('children.pointer' , {widget , payload: r.current}) ,
+            );
+          } else if (widget.element instanceof WidgetPassiveElement) {
+            // widget.element.append(r.current)
+          }
+        }
 
       } else if (typeof value == 'object' && Array.isArray(value)) {
 
@@ -148,7 +155,7 @@ export class Coreable {
 
         widget.children(value(createContext<IChildren<IAttributes , IWidgetElements> , IAttributes , IWidgetElements>({
           widget: widget as IWidget<any , any> ,
-          component: widget.component ,
+          component: widget.composite ,
           payload: value ,
         })));
 
@@ -158,23 +165,38 @@ export class Coreable {
 
       } else if (value instanceof WidgetNode) {
 
-        const child = value.useComponent(widget.component).render();
+        const child = value.useComposite(widget.composite).render();
 
-        widget.element.append(child.element);
+        if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
+          widget.element.append(child.element);
+        } else if (widget.element instanceof WidgetPassiveElement) {
+          widget.element.append(child.element);
+        }
 
         child.defineParent(widget as IWidget<any , any>);
 
-      } else if (value instanceof HTMLElement || value instanceof DocumentFragment) {
-
-        widget.element.append(value);
-
+      } else if (typeof HTMLElement !== 'undefined' && (value instanceof HTMLElement || value instanceof DocumentFragment)) {
+        if (widget.element instanceof HTMLElement) {
+          widget.element.append(value);
+        }
+      } else if (value instanceof WidgetPassiveElement) {
+        this.children(widget , value.toString());
       } else if (typeof value == 'string') {
 
-        widget.element.append(document.createTextNode(value));
+        if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
+          widget.element.append(document.createTextNode(value));
+        } else if (widget.element instanceof WidgetPassiveElement) {
+          widget.element.append(value);
+        }
 
       } else {
 
-        widget.element.append(document.createTextNode(`${value}`));
+        if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
+          widget.element.append(document.createTextNode(`${value}`));
+        } else if (widget.element instanceof WidgetPassiveElement && (value instanceof WidgetPassiveElement)) {
+          widget.element.append(value);
+        }
+
       }
 
       // widget.signal.dispatch(
@@ -189,19 +211,19 @@ export class Coreable {
   }
 
 
-  static setListen<P extends IAttributes , E extends IWidgetElements> (
+  static listen<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     type : keyof HTMLElementEventMap ,
     listener : IChildCallback<P , E> ,
     options? : boolean | AddEventListenerOptions ,
   ) : IWidget<P , E> {
 
-    if (widget.element instanceof HTMLElement) {
+    if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
 
       widget.element.addEventListener(type , event => listener(
         createContext<keyof HTMLElementEventMap , P , E>({
           widget: widget ,
-          component: widget.component ,
+          component: widget.composite ,
           event ,
           payload: type ,
         }) ,
@@ -216,13 +238,14 @@ export class Coreable {
       //   }),
       // );
 
+    } else if (widget.element instanceof WidgetPassiveElement) {
     }
 
     return widget;
   }
 
 
-  static setListens<P extends IAttributes , E extends IWidgetElements> (
+  static listens<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     listeners : IEventListeners<P , E> ,
   ) : IWidget<P , E> {
@@ -241,14 +264,14 @@ export class Coreable {
     return widget;
   }
 
-  static setOns<P extends IAttributes , E extends IWidgetElements> (
+  static ons<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     listeners : IEventStaticListeners<P , E> ,
   ) : IWidget<P , E> {
 
     Object.entries(listeners)
       .forEach(({0: type , 1: callback}) =>
-        this.setOn(
+        this.on(
           widget ,
           type as keyof IEventStaticListeners<P , E> ,
           callback as IEventStaticListeners<P , E>[ keyof IEventStaticListeners<P , E> ] ,
@@ -258,13 +281,13 @@ export class Coreable {
     return widget;
   }
 
-  static setOn<P extends IAttributes , E extends IWidgetElements , V extends keyof IEventStaticListeners<P , E>> (
+  static on<P extends IAttributes , E extends IWidgetElements , V extends keyof IEventStaticListeners<P , E>> (
     widget : IWidget<P , E> ,
     type : V ,
     listener : IEventStaticListeners<P , E>[V] ,
   ) : IWidget<P , E> {
 
-    if (widget.element instanceof HTMLElement) {
+    if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
       // @ts-ignore
       widget.element[`on${type.toLowerCase()}`] = (e : Event) => {
 
@@ -280,7 +303,7 @@ export class Coreable {
             createContext<V , P , E>({
               widget: widget ,
               event: e ,
-              component: widget.component ,
+              component: widget.composite ,
               payload: type ,
             }) ,
           );
@@ -296,18 +319,18 @@ export class Coreable {
       //   }),
       // );
 
+    } else if (widget.element instanceof WidgetPassiveElement) {
     }
-
     return widget;
   }
 
 
-  static setData<P extends IAttributes , E extends IWidgetElements> (
+  static data<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     data? : IExtendedAttributes ,
   ) : IWidget<P , E> {
 
-    if (data && widget.element instanceof HTMLElement) {
+    if (typeof HTMLElement !== 'undefined' && data && widget.element instanceof HTMLElement) {
       Object.entries(data).forEach(
         ({0: name , 1: value}) =>
           (widget.element instanceof HTMLElement)
@@ -320,143 +343,131 @@ export class Coreable {
       //   createWidgetSignalableDispatcher<IExtendedAttributes,  P,  E>(widget,  data),
       // );
 
+    } else if (data) {
+      Object.entries(data)
+        .forEach(([key , value]) => {
+          if (widget.element instanceof WidgetPassiveElement)
+            widget.element.dataset[camelize(key)] = value as IPrimitiveParameters[keyof IPrimitiveParameters];
+        });
     }
 
     return widget;
   }
 
-  // static attribution<P extends IAttributes , E extends IWidgetElements> (
-  //   widget : IWidget<P , E> ,
-  //   ns? : IExtendedAttributes ,
-  // ) : IWidget<P , E> {
-  //
-  //   if (ns && widget.element instanceof HTMLElement) {
-  //
-  //     Object.entries(resolveAttrib<typeof ns>(ns)).forEach(
-  //       ({0: name , 1: value}) => {
-  //         if (widget.element instanceof HTMLElement) {
-  //
-  //           console.log('Attribution' , widget.attributions.slot(name , value) , value , ns);
-  //
-  //         }
-  //         // ? widget.element.setAttribute(`${name}` , `${value}`)
-  //         // : undefined
-  //       });
-  //
-  //     // widget.signal.dispatch(
-  //     //   'ns',
-  //     //   createWidgetSignalableDispatcher<IExtendedAttributes,  P,  E>(widget,  ns),
-  //     // );
-  //   }
-  //
-  //   return widget;
-  // }
-
   static construct<P extends IAttributes , E extends IWidgetElements> (widget : IWidget<P , E>) : IStaticWidgetNode<P , E> {
-
     return (widget.constructor as IStaticWidgetNode<P , E>);
-
   }
 
-  static setStyle<P extends IAttributes , E extends IWidgetElements> (
+  static style<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     value? : IStyle<P , E> ,
   ) : IWidget<P , E> {
 
-    if (value && widget.element instanceof HTMLElement) {
+    Object.entries(value as IStyle<P , E>)
+      .forEach(({0: property , 1: value}) => {
 
-      Object.entries(value as IStyle<P , E>).forEach(({0: property , 1: value}) =>
+        if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
+          // @ts-ignore
+          widget.element.style[property] = (typeof value == 'string')
+            ? value as CSSStyleDeclaration[ keyof CSSStyleDeclaration ]
+            : (
+              typeof value == 'function'
+                // @ts-ignore
+                ? value<P , E>(
+                  createContext({
+                    widget: widget ,
+                    component: widget.composite ,
+                    payload: value ,
+                  }) || '' ,
+                )
+                : ''
+            );
+        } else if (widget.element instanceof WidgetPassiveElement) {
+          if (typeof value != 'function') {
+            widget.element.style[property] = value;
+          }
+        }
 
-        // @ts-ignore
-        widget.element.style[property] = (typeof value == 'string')
+      });
 
-          ? value as CSSStyleDeclaration[ keyof CSSStyleDeclaration ]
-
-          : (
-            typeof value == 'function'
-
-              // @ts-ignore
-              ? value<P , E>(
-                createContext({
-                  widget: widget ,
-                  component: widget.component ,
-                  payload: value ,
-                }) || '' ,
-              )
-              : ''
-          ) ,
-      );
-
-      // widget.signal.dispatch(
-      //   'style',
-      //   createWidgetSignalableDispatcher<IStyle<P,  E>,  P,  E>(widget,  value),
-      // );
-
-    }
+    // widget.signal.dispatch(
+    //   'style',
+    //   createWidgetSignalableDispatcher<IStyle<P,  E>,  P,  E>(widget,  value),
+    // );
 
     return widget;
   }
 
 
-  static setClassName<P extends IAttributes , E extends IWidgetElements> (
+  static className<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     values? : IClassNames<P , E> ,
   ) : IWidget<P , E> {
 
-    if (values && widget.element instanceof HTMLElement) {
 
-      switch (typeof values) {
+    switch (typeof values) {
 
-        case 'string':
+      case 'string':
 
-          values.split(' ').forEach(value => ((widget.element instanceof HTMLElement) && value)
+        if (typeof HTMLElement !== 'undefined' && values && widget.element instanceof HTMLElement) {
+          values.split(' ').forEach(value => ((widget.element instanceof HTMLElement) && value.trim().length)
             ? widget.element.classList.add(value)
             : undefined);
 
-          break;
+        } else if (widget.element instanceof WidgetPassiveElement) {
+          widget.element.classList.add(values);
+        }
 
-        case 'function':
+        break;
 
-          this.setClassName(widget , values(
+      case 'function':
+
+        if (typeof HTMLElement !== 'undefined' && values && widget.element instanceof HTMLElement) {
+          this.className(widget , values(
             createContext<IClassNameCallback<P , E> , P , E>({
               widget: widget ,
-              component: widget.component ,
+              component: widget.composite ,
               payload: values ,
             })) ,
           );
+        } else if (widget.element instanceof WidgetPassiveElement) {
+          const clasName = values(
+            createContext<IClassNameCallback<P , E> , P , E>({
+              widget: widget ,
+              component: widget.composite ,
+              payload: values ,
+            }));
+          if (clasName) widget.element.classList.add(clasName);
+        }
 
-          break;
+        break;
 
-        default:
-
-          if (Array.isArray(values)) values.map(value => value ? this.setClassName(widget , value) : void (0));
-
-          break;
-
-      }
-
-      // widget.signal.dispatch('className',  createWidgetSignalableDispatcher<IClassNames<P,  E>,  P,  E>(widget,  values));
+      default:
+        if (Array.isArray(values)) values.map(value => value ? this.className(widget , value) : void (0));
+        break;
 
     }
+
+    // widget.signal.dispatch('className',  createWidgetSignalableDispatcher<IClassNames<P,  E>,  P,  E>(widget,  values));
 
     return widget;
   }
 
 
-  static setValue<P extends IAttributes , E extends IWidgetElements> (
+  static value<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     value? : string ,
   ) {
 
-    const element = allowEditableElement(widget.element);
+    const editableElement = allowEditableElement(widget.element);
 
     value = value || '';
 
-    if (element) element.value = value;
+    if (editableElement) editableElement.value = value;
 
-    else if (widget.element instanceof HTMLElement) widget.element.innerHTML = value;
-
-    else widget.element.append(document.createTextNode(value));
+    else if ('innerHTML' in widget.element) {
+      widget.element.innerHTML = value;
+    }
 
     // widget.signal.dispatch(
     //   'value',
@@ -468,14 +479,14 @@ export class Coreable {
   }
 
 
-  static setHtml<P extends IAttributes , E extends IWidgetElements> (
+  static html<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     value? : string ,
   ) : IWidget<P , E> {
 
-    if (widget.element instanceof HTMLElement) widget.element.innerHTML = `${value}`;
+    if ('innerHTML' in widget.element) widget.element.innerHTML = `${value}`;
 
-    else if (widget.element instanceof DocumentFragment) widget.element.textContent = `${value}`;
+    else if ('textContent' in widget.element) widget.element.textContent = `${value}`;
 
     // widget.signal.dispatch(
     //   'html',
@@ -486,7 +497,7 @@ export class Coreable {
   }
 
 
-  static setTrigger<P extends IAttributes , E extends IWidgetElements> (
+  static trigger<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     type ? : keyof HTMLElementEventMap ,
   ) : IWidget<P , E> {
@@ -514,6 +525,7 @@ export class Coreable {
       //   createWidgetSignalableDispatcher<keyof HTMLElementEventMap,  P,  E>(widget,  type),
       // );
 
+    } else if (widget.element instanceof WidgetPassiveElement) {
     }
 
     return widget;
@@ -527,7 +539,7 @@ export class Coreable {
 
     if (widget.element instanceof HTMLElement) widget.element.remove();
 
-    else widget.element.parentElement?.removeChild(widget.element);
+    else if (widget.element instanceof WidgetPassiveElement) widget.element.remove();
 
     // widget.signal.dispatch('remove',  createWidgetSignalableDispatcher<typeof widget,  P,  E>(widget,  widget));
 
@@ -546,11 +558,10 @@ export class Coreable {
   static nsa (nsa : IParameters , ns? : string , separator? : string) : IParameters {
 
     const prefix = (typeof ns != 'undefined' ? `${ns}${separator || '-'}` : '');
-
     let build : IParameters = {} as IParameters;
 
     Object.entries(nsa).forEach(([key , value]) => {
-      const index = `${prefix}${key}`;
+      const index = `${prefix}${decamelize(key , '-')}`;
 
       if (Array.isArray(value)) {
         build[index] = JSON.stringify(value);
@@ -559,14 +570,13 @@ export class Coreable {
       } else if (typeof value != 'undefined') {
         build[index] = `${String(value).toString()}`;
       }
-
     });
 
     return build;
   }
 
 
-  static setAttributes<P extends IAttributes , E extends IWidgetElements> (
+  static attributes<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     attributes : Partial<P> ,
   ) : IWidget<P , E> {
@@ -579,58 +589,43 @@ export class Coreable {
   }
 
 
-  static setAttribute<P extends IAttributes , E extends IWidgetElements , A extends keyof P> (
+  static attribute<P extends IAttributes , E extends IWidgetElements , A extends keyof P> (
     widget : IWidget<P , E> ,
     name : A ,
     value : P[A] | IParameterValue ,
   ) : IWidget<P , E> {
 
-    if (widget.element instanceof HTMLElement) {
+    if (value === null && 'setAttribute' in widget.element) {
 
-      if (value === null) {
+      widget.element.setAttribute(`${name as string}` , '');
 
-        widget.element.setAttribute(`${name as string}` , '');
+    } else if (value === undefined && 'setAttribute' in widget.element) {
 
-      } else if (value === undefined) {
+      widget.element.removeAttribute(`${name as string}`);
 
-        widget.element.removeAttribute(`${name as string}`);
+    } else if ((typeof value == 'string' || typeof value == 'number') && 'setAttribute' in widget.element) {
 
-      } else if (typeof value == 'string' || typeof value == 'number') {
+      widget.element.setAttribute(`${name as string}` , `${value}`);
 
-        widget.element.setAttribute(`${name as string}` , `${value}`);
+    } else if (typeof value == 'boolean' && 'setAttribute' in widget.element && 'removeAttribute' in widget.element) {
 
-      } else if (typeof value == 'boolean') {
+      if (value) widget.element.setAttribute(`${name as string}` , `${name as string}`);
 
-        if (value) widget.element.setAttribute(`${name as string}` , `${name as string}`);
+      else widget.element.removeAttribute(`${name as string}`);
 
-        else widget.element.removeAttribute(`${name as string}`);
+    } else if (typeof value == 'object' && 'setAttribute' in widget.element) {
 
-      } else if (typeof value == 'object') {
+      widget.element.setAttribute(`${name as string}` , `${JSON.stringify(value)}`);
 
-        widget.element.setAttribute(`${name as string}` , `${JSON.stringify(value)}`);
-
-      } else {
-
-        console.error('Attribute of' , name , value);
-
-        throw 'unsupported attribute';
-
-      }
-
-      // widget.signal.dispatch(
-      //   'attributes',
-      //   createWidgetSignalableDispatcher<IWidgetAttributesMap<P>,  P,  E>(widget,  {
-      //     name,  value,
-      //   }),
-      // );
-
+    } else {
+      throw 'Widget ERR : unsupported attribute';
     }
 
     return widget;
   }
 
 
-  static setAttribuable<P extends IAttributes , E extends IWidgetElements> (
+  static attribuable<P extends IAttributes , E extends IWidgetElements> (
     widget : IWidget<P , E> ,
     name : string ,
     value : IParameterValue ,
@@ -651,7 +646,6 @@ export class Coreable {
     return widget;
   }
 
-
   static parseValue<P extends IAttributes , E extends IWidgetElements , V> (
     widget : IWidget<P , E> ,
     value : IParameterValue ,
@@ -663,7 +657,7 @@ export class Coreable {
         return value(
           createContext<IParameterValue , P , E>({
             widget: widget ,
-            component: widget.component ,
+            component: widget.composite ,
             payload: value ,
           }) ,
         ) as V;
