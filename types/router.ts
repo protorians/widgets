@@ -1,9 +1,8 @@
-import {IParameters} from './values';
-import {IView , IViewsRoutes} from './view';
-import {RouterMode} from '../constants';
-import {IComponentConstruct} from './component';
-import {ISignalables} from '@protorians/signalable';
-import {ISignalListenOption} from '@protorians/signalable/types';
+import type {IParameters} from './values';
+import type {IView , IViewsRoutes} from './view';
+import type {RouterMode} from '../constants';
+import type {IComponentConstruct} from './component';
+import type {ISignalables, ISignalListenOption} from '@protorians/signalable';
 
 
 export type IRoutesScheme = {
