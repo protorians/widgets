@@ -14,14 +14,17 @@ import type {
   IManipulateCallback ,
   IEventStaticListeners ,
   IEventListeners ,
-  IWidgetSignalable , IWidgetSignalableMap , IWidgetSignalableMaps ,
+  IWidgetSignalable ,
+  IWidgetSignalableMap ,
+  IWidgetSignalableMaps ,
 } from '../types';
 import {
   createContext ,
   Coreable ,
+  WidgetPassiveElement ,
 } from '../foundation';
-import {Signalables} from '@protorians/signalable';
-import {ISignalListenOption} from '@protorians/signalable/types';
+import {Signalables , type ISignalListenOption} from '@protorians/signalable';
+
 
 
 export class WidgetNode<P extends IAttributes , E extends IWidgetElements> implements IWidget<P , E> {
@@ -42,13 +45,13 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
   constructor (props : IAttributesScope<P , E>) {
 
-    this._element = document.createElement(this.tag) as E;
+    this._element = (typeof HTMLElement !== 'undefined' ? document.createElement(this.tag) : new WidgetPassiveElement()) as E;
+
+    if (this._element instanceof WidgetPassiveElement) this._element.tagName = this.tag;
 
     this.props = (new Coreable.Properties<P , E>(this)).sync(props) as Readonly<Partial<IAttributesScope<P , E>>>;
 
     this.signal = new Signalables(this.props) as IWidgetSignalable<P , E>;
-
-    // this.attributions = new Attribution(this._element as HTMLElement, this.props);
 
   }
 
@@ -101,7 +104,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     return this._element;
   }
 
-  get component () : IComponent<IParameters> | undefined {
+  get composite () : IComponent<IParameters> | undefined {
     return this._component;
   }
 
@@ -125,18 +128,20 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
     return this;
   }
 
-  useComponent<Props extends IParameters> (component : IComponent<Props> | undefined) : this {
-    if (component) {
-      component.widget = this;
-      this._component = component;
+  useComposite<Props extends IParameters> (composite : IComponent<Props> | undefined) : this {
+    if (composite) {
+      composite.widget = this;
+      this._component = composite;
       this.signal.dispatch('useComponent' , this._component);
     }
     return this;
   }
 
   defineParent (widget : IWidget<IAttributes , IWidgetElements>) : this {
-    if (!this.element.contains(widget.element)) {
+    if (typeof HTMLElement !== 'undefined' && this.element instanceof HTMLElement && !this.element.contains(widget.element as Node)) {
       this._parent = widget;
+    } else if (this.element instanceof WidgetPassiveElement) {
+      // console.warn('defineParent width WidgetDOM' , this);
     } else {
       throw new Error('This parent is contains in current widget');
     }
@@ -144,47 +149,47 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
   clear () : this {
-    return Coreable.Clear<P , E>(this) as typeof this;
+    return Coreable.clear<P , E>(this) as typeof this;
   }
 
   children (value? : IChildren<IAttributes , IWidgetElements>) : this {
-    return Coreable.setChildren<P , E>(this , value) as typeof this;
+    return Coreable.children<P , E>(this , value) as typeof this;
   }
 
   style (value? : IStyle<P , E>) : this {
-    return Coreable.setStyle<P , E>(this , value) as typeof this;
+    return Coreable.style<P , E>(this , value) as typeof this;
   }
 
   className (values? : IClassNames<P , E>) : this {
-    return Coreable.setClassName<P , E>(this , values) as typeof this;
+    return Coreable.className<P , E>(this , values) as typeof this;
   }
 
   value (value? : string) : this {
-    return Coreable.setValue<P , E>(this , value) as typeof this;
+    return Coreable.value<P , E>(this , value) as typeof this;
   }
 
   html (value? : string) : this {
-    return Coreable.setHtml<P , E>(this , value) as typeof this;
+    return Coreable.html<P , E>(this , value) as typeof this;
   }
 
   trigger (type ? : keyof HTMLElementEventMap) : this {
-    return Coreable.setTrigger<P , E>(this , type) as typeof this;
+    return Coreable.trigger<P , E>(this , type) as typeof this;
   }
 
   listen (type : keyof HTMLElementEventMap , listener : IChildCallback<P , E> , options? : boolean | AddEventListenerOptions) : this {
-    return Coreable.setListen<P , E>(this , type , listener , options) as typeof this;
+    return Coreable.listen<P , E>(this , type , listener , options) as typeof this;
   }
 
   listens (listeners : IEventListeners<P , E>) : this {
-    return Coreable.setListens<P , E>(this , listeners) as typeof this;
+    return Coreable.listens<P , E>(this , listeners) as typeof this;
   }
 
   ons (listeners : IEventStaticListeners<P , E>) : this {
-    return Coreable.setOns<P , E>(this , listeners) as typeof this;
+    return Coreable.ons<P , E>(this , listeners) as typeof this;
   }
 
   on<V extends keyof IEventStaticListeners<P , E>> (type : V , listener : IEventStaticListeners<P , E>[V]) : this {
-    return Coreable.setOn<P , E , V>(this , type , listener) as typeof this;
+    return Coreable.on<P , E , V>(this , type , listener) as typeof this;
   }
 
   manipulate (callback : IManipulateCallback<P , E>) : this {
@@ -198,7 +203,7 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   }
 
   data (data? : IExtendedAttributes) : this {
-    return Coreable.setData<P , E>(this , data) as typeof this;
+    return Coreable.data<P , E>(this , data) as typeof this;
   }
 
   // attribution (attribution? : IExtendedAttributes) : this {
@@ -206,11 +211,11 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
   // }
 
   attrib<A extends keyof P> (name : A , value : P[A] | IParameterValue) : this {
-    return Coreable.setAttribute<P , E , A>(this , name , value) as typeof this;
+    return Coreable.attribute<P , E , A>(this , name , value) as typeof this;
   }
 
   attribs (attributes : Partial<P>) : this {
-    return Coreable.setAttributes<P , E>(this , attributes) as typeof this;
+    return Coreable.attributes<P , E>(this , attributes) as typeof this;
   }
 
 
@@ -237,15 +242,13 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
 
   nsa (nsa : IParameters) : this {
-
-    if (this.element instanceof HTMLElement) {
-      const e = this.element;
-      Object.entries(Coreable.nsa(nsa , undefined , ':'))
-        .forEach(([key , value]) => {
-          e.setAttribute(key , `${value}`);
-        });
-    }
-
+    const entries = Coreable.nsa(nsa , undefined , ':');
+    Object.entries(entries)
+      .forEach(([key , value]) => {
+        if ('setAttribute' in this.element) {
+          this.element.setAttribute(key as string , `${value}`);
+        }
+      });
     return this;
   }
 
@@ -276,15 +279,24 @@ export class WidgetNode<P extends IAttributes , E extends IWidgetElements> imple
 
     Object.entries(this.props).forEach(
       ({0: name , 1: value}) =>
-        Coreable.setAttribuable<P , E>(this , name , value) ,
+        Coreable.attribuable<P , E>(this , name , value) ,
     );
 
     this._ready = true;
-
     this.signal.dispatch('ready' , this);
-
     return this;
 
+  }
+
+  toString () {
+    if (!this._ready) this.render();
+    if (typeof HTMLElement !== 'undefined' && this.element instanceof HTMLElement) {
+      return `${this.element.outerHTML}`;
+    }
+    if (this.element instanceof WidgetPassiveElement) {
+      return `${this._element}`;
+    }
+    return ``;
   }
 
 }
