@@ -1,11 +1,11 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.4-beta.13",
+  "version": "0.0.4-beta.14",
   "description": "Widget's Builder",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsc --watch",
+    "dev": "tsc --watch -p esm.tsconfig.json",
     "build": "pnpm run build:esm && pnpm run build:cjs",
     "build:esm": "tsc -p esm.tsconfig.json",
     "build:cjs": "tsc -p cjs.tsconfig.json",
@@ -28,7 +28,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@protorians/signalable": "^0.0.8",
+    "@protorians/signalable": "^0.0.10",
     "typescript": "^5.4.5"
   }
 }
