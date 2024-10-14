@@ -130,7 +130,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     this.signal.dispatch('defineElement', createContext({
       payload: element,
       widget: this as IWidget<any, any>,
-      composite: this.composite,
+      composite: this._component,
       event: undefined
     }));
     return this;
@@ -141,7 +141,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     this.signal.dispatch('defineComponent', createContext({
       payload: this._component as IComponent<any>,
       widget: this as IWidget<any, any>,
-      composite: this.composite,
+      composite: this._component,
       event: undefined
     }));
     return this;
@@ -154,7 +154,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
       this.signal.dispatch('useComponent', createContext({
         payload: this._component as IComponent<any>,
         widget: this as IWidget<any, any>,
-        composite: this.composite,
+        composite: this._component,
         event: undefined
       }));
     }
@@ -225,7 +225,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     this.signal.dispatch('manipulate', createContext({
       payload: callback,
       widget: this as IWidget<any, any>,
-      composite: this.composite,
+      composite: this._component,
       event: undefined
     }));
 
@@ -315,7 +315,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     this.signal.dispatch('render', createContext({
       payload: this,
       widget: this as IWidget<any, any>,
-      composite: this.composite,
+      composite: this._component,
       event: undefined
     }));
 
@@ -325,11 +325,15 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
   replaceWith(widget: IWidget<any, any>): this {
 
     if ('replaceWith' in this.element) {
+
+      if(this._component) widget.defineComponent(this._component)
+      if(this._parent) widget.defineParent(this._parent)
+
       this.element.replaceWith(widget.element)
       widget.signal.dispatch('mount', createContext({
-        payload: widget.parent as IWidget<any, any>,
+        payload: widget,
         widget,
-        composite: widget.composite,
+        composite: this._component,
         event: undefined
       }));
     }
