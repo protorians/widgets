@@ -49,7 +49,7 @@ export function Strong(props: string | IAttributesScope<IStrongAttributes, HTMLE
 
 }
 
-export function HeadingLarger(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
+export function H1(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
   if (typeof props == 'string') props = {children: props};
 
@@ -57,7 +57,7 @@ export function HeadingLarger(props: string | IAttributesScope<IHeadingAttribute
 
 }
 
-export function HeadingLarge(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
+export function H2(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
   if (typeof props == 'string') props = {children: props};
 
@@ -65,7 +65,7 @@ export function HeadingLarge(props: string | IAttributesScope<IHeadingAttributes
 
 }
 
-export function Heading(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
+export function H3(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
   if (typeof props == 'string') props = {children: props};
 
@@ -73,7 +73,7 @@ export function Heading(props: string | IAttributesScope<IHeadingAttributes, HTM
 
 }
 
-export function HeadingSmall(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
+export function H4(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
   if (typeof props == 'string') props = {children: props};
 
@@ -81,7 +81,7 @@ export function HeadingSmall(props: string | IAttributesScope<IHeadingAttributes
 
 }
 
-export function HeadingSmaller(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
+export function H5(props: string | IAttributesScope<IHeadingAttributes, HTMLHeadingElement>) {
 
   if (typeof props == 'string') props = {children: props};
 
