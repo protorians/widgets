@@ -30,7 +30,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
 
   protected _element: E;
 
-  protected _component: IComponent<IParameters> | undefined;
+  protected _composite: IComponent<IParameters> | undefined;
 
   protected _ready: boolean = false;
 
@@ -111,7 +111,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
   }
 
   get composite(): IComponent<IParameters> | undefined {
-    return this._component;
+    return this._composite;
   }
 
   get parent() {
@@ -130,18 +130,18 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     this.signal.dispatch('defineElement', createContext({
       payload: element,
       widget: this as IWidget<any, any>,
-      composite: this._component,
+      composite: this._composite,
       event: undefined
     }));
     return this;
   }
 
-  defineComponent<C extends IParameters>(component: IComponent<C>): this {
-    this._component = component;
+  defineComposite<C extends IParameters>(component: IComponent<C>): this {
+    this._composite = component;
     this.signal.dispatch('defineComponent', createContext({
-      payload: this._component as IComponent<any>,
+      payload: this._composite as IComponent<any>,
       widget: this as IWidget<any, any>,
-      composite: this._component,
+      composite: this._composite,
       event: undefined
     }));
     return this;
@@ -150,11 +150,11 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
   useComposite<Props extends IParameters>(composite: IComponent<Props> | undefined): this {
     if (composite) {
       composite.widget = this;
-      this._component = composite;
+      this._composite = composite;
       this.signal.dispatch('useComponent', createContext({
-        payload: this._component as IComponent<any>,
+        payload: this._composite as IComponent<any>,
         widget: this as IWidget<any, any>,
-        composite: this._component,
+        composite: this._composite,
         event: undefined
       }));
     }
@@ -219,13 +219,13 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
   manipulate(callback: IManipulateCallback<P, E>): this {
     callback(createContext<IManipulateCallback<P, E>, P, E>({
       widget: this,
-      composite: this._component,
+      composite: this._composite,
       payload: callback,
     }));
     this.signal.dispatch('manipulate', createContext({
       payload: callback,
       widget: this as IWidget<any, any>,
-      composite: this._component,
+      composite: this._composite,
       event: undefined
     }));
 
@@ -315,7 +315,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     this.signal.dispatch('render', createContext({
       payload: this,
       widget: this as IWidget<any, any>,
-      composite: this._component,
+      composite: this._composite,
       event: undefined
     }));
 
@@ -326,14 +326,14 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
 
     if ('replaceWith' in this.element) {
 
-      if(this._component) widget.defineComponent(this._component)
+      if(this._composite) widget.defineComposite(this._composite)
       if(this._parent) widget.defineParent(this._parent)
 
       this.element.replaceWith(widget.element)
       widget.signal.dispatch('mount', createContext({
         payload: widget,
         widget,
-        composite: this._component,
+        composite: this._composite,
         event: undefined
       }));
     }

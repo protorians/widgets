@@ -15,7 +15,7 @@ export function Bind<Props extends IParameters> (name : string , component : ICo
 
       protected _props : Props = {} as Props;
 
-      protected _component : IComponentConstruct<Props> | undefined;
+      protected _composite : IComponentConstruct<Props> | undefined;
 
       signal : Readonly<ISignalables<Props , IElementSignal<Props>>>;
 
@@ -36,7 +36,7 @@ export function Bind<Props extends IParameters> (name : string , component : ICo
       }
 
       get component () {
-        return this._component;
+        return this._composite;
       }
 
       bootstrap () : this {
@@ -72,10 +72,10 @@ export function Bind<Props extends IParameters> (name : string , component : ICo
       mount (component? : IComponentConstruct<Props>) {
 
         if (component) {
-          this._component = component;
+          this._composite = component;
           this.initialize();
           this.innerHTML = '';
-          this.widget = this._component(this.props).render();
+          this.widget = this._composite(this.props).render();
           this.append(this.widget.element);
           this.signal.dispatch('mounted' , this);
           this.mounted();
