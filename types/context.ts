@@ -7,7 +7,7 @@ import {IComponent} from './component';
 export type IContext<Payload, P extends IAttributes, E extends IWidgetElements> = {
   widget: IWidget<P, E>;
   event?: Event;
-  component?: IComponent<IParameters>;
+  composite?: IComponent<IParameters>;
   payload: Payload;
 }
 
