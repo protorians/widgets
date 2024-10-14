@@ -6,14 +6,13 @@
   "type": "module",
   "scripts": {
     "dev": "tsc --watch -p esm.tsconfig.json",
-    "build": "pnpm run build:esm && pnpm run build:cjs",
+    "build": "pnpm run build:esm",
     "build:esm": "tsc -p esm.tsconfig.json",
     "build:cjs": "tsc -p cjs.tsconfig.json",
-    "build:types": "npm-dts generate -o ./globals.d.ts -c",
-    "postinstall": "npx tsc -p esm.tsconfig.json && npx tsc -p cjs.tsconfig.json"
+    "build:types": "npm-dts generate -o ./globals.d.ts -c"
   },
   "exports": {
-    "require": "./~cjs/index.js",
+    "require": "./~esm/index.js",
     "import": "./~esm/index.js",
     "default": "./index.ts"
   },
