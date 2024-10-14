@@ -306,10 +306,21 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
     nsa(nsa: IParameters): this;
 
     /**
+     * Replace Widget with another widget
+     * @param widget
+     */
+    replaceWith(widget: IWidget<any, any>): this
+
+    /**
      * Render Widget
      */
     render(): this;
 
+
+    /**
+     * To string
+     */
+    toString(): string;
 
 }
 
