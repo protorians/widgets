@@ -4,7 +4,6 @@ export function decamelize(value: string, separator = '-'): string {
     .toLowerCase();
 }
 
-
 export function camelize(value: string) {
   return value.replace(/(?:^\w|[A-Z]|\b\w)/g, (text, index) =>
     index === 0 ? text.toLowerCase() : text.toUpperCase(),

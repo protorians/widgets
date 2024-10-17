@@ -171,7 +171,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
     /**
      * Define widget component
      */
-    defineComponent<C extends IParameters>(component: IComponent<C>): this;
+    defineComposite<C extends IParameters>(component: IComponent<C>): this;
 
     /**
      * Define Widget's current parent
@@ -306,10 +306,21 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
     nsa(nsa: IParameters): this;
 
     /**
+     * Replace Widget with another widget
+     * @param widget
+     */
+    replaceWith(widget: IWidget<any, any>): this
+
+    /**
      * Render Widget
      */
     render(): this;
 
+
+    /**
+     * To string
+     */
+    toString(): string;
 
 }
 

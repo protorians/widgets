@@ -1,18 +1,18 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.4-beta.14",
-  "description": "Widget's Builder",
-  "main": "index.js",
+  "version": "0.0.4",
+  "description": "Create your web user interfaces with widgets",
+  "main": "./~esm/index.js",
   "type": "module",
   "scripts": {
     "dev": "tsc --watch -p esm.tsconfig.json",
     "build": "pnpm run build:esm",
     "build:esm": "tsc -p esm.tsconfig.json",
     "build:cjs": "tsc -p cjs.tsconfig.json",
-    "build:types": "npm-dts generate -o ./globals.d.ts -c"
+    "build:types": "npm-dts generate -o ./globals.d.ts -c",
+    "postinstall": "tsc -p esm.tsconfig.json"
   },
   "exports": {
-    "require": "./~esm/index.js",
     "import": "./~esm/index.js",
     "default": "./index.ts"
   },
