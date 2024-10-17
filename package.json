@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Create your web user interfaces with widgets",
   "main": "./~esm/index.js",
   "type": "module",
@@ -8,9 +8,7 @@
     "dev": "tsc --watch -p esm.tsconfig.json",
     "build": "pnpm run build:esm",
     "build:esm": "tsc -p esm.tsconfig.json",
-    "build:cjs": "tsc -p cjs.tsconfig.json",
-    "build:types": "npm-dts generate -o ./globals.d.ts -c",
-    "postinstall": "tsc -p esm.tsconfig.json"
+    "build:cjs": "tsc -p cjs.tsconfig.json"
   },
   "exports": {
     "import": "./~esm/index.js",
@@ -27,7 +25,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@protorians/signalable": "^0.0.10",
+    "@protorians/signalable": "^0.0.12",
     "typescript": "^5.4.5"
   }
 }
