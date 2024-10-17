@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Create your web user interfaces with widgets",
   "main": "./~esm/index.js",
   "type": "module",
@@ -14,7 +14,7 @@
   },
   "exports": {
     "import": "./~esm/index.js",
-    "default": "./index.ts"
+    "default": "./source/index.ts"
   },
   "keywords": [
     "protorians",
