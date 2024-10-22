@@ -6,13 +6,14 @@
   "type": "module",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "pnpm run build:esm",
+    "build": "pnpm run build:esm && pnpm run build:cjs",
     "build:esm": "tsc -p esm.tsconfig.json",
     "build:cjs": "tsc -p cjs.tsconfig.json"
   },
   "exports": {
     "import": "./~esm/index.js",
-    "default": "./source/index.ts"
+    "require": "./~cjs/index.js",
+    "default": "./~esm/index.ts"
   },
   "keywords": [
     "protorians",
