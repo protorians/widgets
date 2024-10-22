@@ -1,8 +1,9 @@
 node_modules
-source
-.github
 .vscode
 .idea/*
+~cjs
+~esm
 *-lock.*
 *.lock
 pnpm-lock.yaml
+source
