@@ -1,5 +1,5 @@
 node_modules
-./source
+source
 .github
 .vscode
 .idea/*
