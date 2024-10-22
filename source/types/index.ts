@@ -1,4 +1,5 @@
 export * from './children';
+export * from './core';
 export * from './attributes';
 export * from './reference';
 export * from './state';

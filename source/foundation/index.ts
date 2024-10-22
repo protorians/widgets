@@ -1,3 +1,5 @@
+export * from './core';
+export * from './coreable';
 export * from './context';
 // export * from './component';
 export * from './bind';
@@ -5,7 +7,7 @@ export * from './state';
 export * from './pointer';
 export * from './elements';
 export * from './refs';
-export * from './coreable';
+export * from './manticore';
 export * from './exception';
 export * from './configurator';
 export * from './router-client';
