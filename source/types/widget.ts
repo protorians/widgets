@@ -154,6 +154,11 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
     get isReady(): boolean;
 
     /**
+     * Create Widget element
+     */
+    createElement(): E;
+
+    /**
      * Call when widget's constructor
      */
     construct(): void
@@ -215,7 +220,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
     /**
      * Trigger events listened to on a widget
      */
-    trigger(fn ?: keyof HTMLElementEventMap): this;
+    trigger(fn : keyof HTMLElementEventMap): this;
 
     /**
      * Listen to an event on a widget
@@ -254,7 +259,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
      * Set dataset
      * @param value
      */
-    data(value?: IExtendedAttributes): this;
+    data(value: IExtendedAttributes): this;
 
     /**
      * Set namespace attributes
@@ -396,7 +401,11 @@ export interface IWidgetSignalableMap<P extends IAttributes, E extends IWidgetEl
 
     defineComponent: IContext<IComponent<IParameters>, P, E>;
 
+    defineParent: IContext<IComponent<IParameters>, P, E>;
+
     useComponent: IContext<IComponent<IParameters> | undefined, P, E>;
+
+    clear: IContext<IComponent<IParameters> | undefined, P, E>;
 
     child: IContext<IChildren<P, E>, P, E>;
 
@@ -422,7 +431,7 @@ export interface IWidgetSignalableMap<P extends IAttributes, E extends IWidgetEl
 
     // attribution: IContext<IExtendedAttributes, P, E>;
 
-    attributes: IContext<IWidgetAttributesMap<P>, P, E>;
+    attribute: IContext<IWidgetAttributesMap<P>, P, E>;
 
     remove: IContext<IWidget<P, E>, P, E>;
 
