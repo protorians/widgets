@@ -403,7 +403,7 @@ export interface IWidgetSignalableMap<P extends IAttributes, E extends IWidgetEl
 
     defineParent: IContext<IComponent<IParameters>, P, E>;
 
-    useComponent: IContext<IComponent<IParameters> | undefined, P, E>;
+    useComposite: IContext<IComponent<IParameters> | undefined, P, E>;
 
     clear: IContext<IComponent<IParameters> | undefined, P, E>;
 

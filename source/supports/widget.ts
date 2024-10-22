@@ -156,7 +156,7 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
     if (composite) {
       composite.widget = this;
       this._composite = composite;
-      this.signal.dispatch('useComponent', createContext({
+      this.signal.dispatch('useComposite', createContext({
         payload: this._composite as IComponent<any>,
         widget: this as IWidget<any, any>,
         composite: this._composite,
