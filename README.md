@@ -5,7 +5,7 @@ Create your web user interfaces with widgets
 ## Syntax
 
 ```typescript
-import {Widget, H1, Paragraph} from "@protorians/widget"
+import {Widget, H1, Paragraph} from "@protorians/widgets"
 
 const myWidget = () => Widget({
   classname: "my-widget",
