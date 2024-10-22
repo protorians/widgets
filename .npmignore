@@ -5,3 +5,4 @@ node_modules
 *.lock
 pnpm-lock.yaml
 source
+.github
