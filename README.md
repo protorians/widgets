@@ -42,7 +42,7 @@ Component<MyType>('MyWidget', myWidget)
 /**
  * Or Use in other widget
  */
-const otherWidget = Widget({
+const otherWidget = () => Widget({
   children:[
     H4('Home'),
     myWidget({fullname: 'Carter'})
