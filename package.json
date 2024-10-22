@@ -5,7 +5,7 @@
   "main": "./~esm/index.js",
   "type": "module",
   "scripts": {
-    "dev": "tsc --watch -p esm.tsconfig.json",
+    "dev": "tsc --watch",
     "build": "pnpm run build:esm",
     "build:esm": "tsc -p esm.tsconfig.json",
     "build:cjs": "tsc -p cjs.tsconfig.json"
