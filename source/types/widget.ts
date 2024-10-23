@@ -333,7 +333,7 @@ export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
 /**
  * Widget Manipulate Callback
  */
-export type IManipulateCallback<P extends IAttributes, E extends IWidgetElements> = (context: Partial<IContext<any, P, E>>) => void;
+export type IManipulateCallback<P extends IAttributes, E extends IWidgetElements> = (context: IContext<any, P, E>) => void;
 
 
 // export type IManipulateMap<P extends IProps, E extends IWidgetElements> = {
