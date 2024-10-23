@@ -5,14 +5,13 @@
     "target": "es2020",
     "moduleResolution": "node",
     
-    "declaration": true,
-
     "noImplicitAny": false,
     "allowJs": true,
     "removeComments": false,
-    "declarationMap": true,
-    "inlineSources": true,
-    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": false,
+    "inlineSources": false,
+    "sourceMap": false,
     "preserveConstEnums": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
