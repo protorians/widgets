@@ -84,6 +84,11 @@ export class WidgetComponent<T extends IParameters> implements IComponent<T> {
 }
 
 
+if(typeof HTMLElement === 'undefined') {
+    // @ts-ignore
+    class HTMLElement{}
+}
+
 export class WidgetComponentElement<T extends IParameters> extends HTMLElement {
 
     protected parameterScheme: T = {} as T;
