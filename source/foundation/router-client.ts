@@ -1,4 +1,4 @@
-import {IClientRouter , IClientRouterSettings , IRoutesScheme} from '../types';
+import type {IClientRouter , IClientRouterSettings , IRoutesScheme} from '../types';
 import {Router} from './router';
 
 

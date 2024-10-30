@@ -10,7 +10,7 @@ import {
   IViewsRoutes ,
 } from '../types';
 import {RouterMode} from '../constants';
-import {ISignalables , Signalables} from '@protorians/signalable';
+import {type ISignalables , Signalables} from '@protorians/signalable';
 import {RouterRequest} from './router-request';
 
 

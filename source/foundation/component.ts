@@ -11,7 +11,7 @@ import type {
     IWidgetElements,
 } from '../types';
 import {decamelize} from '../utilities';
-import {ISignalables, Signalables} from '@protorians/signalable';
+import {type ISignalables, Signalables} from '@protorians/signalable';
 import {SchemeValidator} from './scheme-validator';
 import {WidgetComposite} from './composite';
 import {createContext} from "./context";
@@ -81,12 +81,6 @@ export class WidgetComponent<T extends IParameters> implements IComponent<T> {
         return this._widget;
     }
 
-}
-
-
-if(typeof HTMLElement === 'undefined') {
-    // @ts-ignore
-    class HTMLElement{}
 }
 
 export class WidgetComponentElement<T extends IParameters> extends HTMLElement {

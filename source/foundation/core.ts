@@ -1,5 +1,5 @@
 import {Manticore} from "./manticore";
-import {ICoreRuntime} from "../types";
+import type {ICoreRuntime} from "../types";
 
 
 export class WidgetCore {

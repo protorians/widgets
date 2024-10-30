@@ -1,4 +1,4 @@
-import {
+import type {
   IAttributes ,
   IContextualChildCallback ,
   IState , IStateSignals ,
@@ -7,7 +7,7 @@ import {
 } from '../types';
 import {createContext , WidgetState} from '../foundation';
 import {Environment} from '../foundation/environment';
-import {ISignalables , Signalables} from '@protorians/signalable';
+import {type ISignalables , Signalables} from '@protorians/signalable';
 import {WidgetNode} from '../supports';
 
 export function State<V extends ISupportableValue> (initial : V) {

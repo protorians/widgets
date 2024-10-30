@@ -2,7 +2,7 @@ import type {IComponentConstruct , IElementSignal , IParameters , IWidget} from 
 import {decamelize} from '../utilities';
 // import {WidgetElement} from './elements';
 import {Environment} from './environment';
-import {ISignalables , Signalables} from '@protorians/signalable';
+import {type ISignalables , Signalables} from '@protorians/signalable';
 
 
 export function Bind<Props extends IParameters> (name : string , component : IComponentConstruct<Props>) {

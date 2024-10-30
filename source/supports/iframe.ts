@@ -1,4 +1,4 @@
-import {IIFrameAttributes, IWidget} from '../types';
+import type {IIFrameAttributes, IWidget} from '../types';
 import {WidgetNode} from './widget';
 
 

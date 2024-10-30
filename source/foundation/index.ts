@@ -1,7 +1,6 @@
 export * from './core';
 export * from './coreable';
 export * from './context';
-// export * from './component';
 export * from './bind';
 export * from './state';
 export * from './pointer';

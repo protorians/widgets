@@ -1,4 +1,4 @@
-import {
+import type {
   IAttributes,
   IReference,
   IWidget,
