@@ -388,6 +388,8 @@ export class WidgetNode<P extends IAttributes, E extends IWidgetElements> implem
       event: undefined
     }));
 
+    this._ready = true;
+
     return this;
   }
 
