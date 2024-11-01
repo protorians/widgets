@@ -55,19 +55,35 @@ export const Manticore: ICoreRuntime = {
   ): IWidget<P, E> {
 
     if (value) {
-
       value = Directives.parse('children', {widget, payload: value});
 
-      if (value instanceof PointerWidget) {
+      if (value instanceof WidgetNode) {
+        const child = value.useComposite(widget.composite);
+        const hasAppendChild = 'appendChild' in widget.element
+
+        if (!child.isReady) child.render()
+
+        if(hasAppendChild) widget.element.appendChild(child.element)
+        if(!hasAppendChild) widget.element.append(child.element)
+
+        child.defineParent(widget as IWidget<any, any>);
+        value.signal.dispatch('mount', createContext({
+          payload: widget as IWidget<any, any>,
+          widget: child,
+          composite: widget.composite,
+          event: undefined
+        }));
+
+      } else if (value instanceof PointerWidget) {
 
         const r = (value as IPointer<IChildren<IAttributes, IWidgetElements>, P, E>).bind(widget).render().marker;
         if (r && r.current) {
           if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
-            widget.element.append(
+            widget.element.appendChild(
               Directives.parse('children.pointer', {widget, payload: r.current}),
             );
           } else if (widget.element instanceof WidgetPassiveElement) {
-            // widget.element.append(r.current)
+            // widget.element.appendChild(r.current)
           }
         }
 
@@ -83,34 +99,16 @@ export const Manticore: ICoreRuntime = {
 
       } else if (value instanceof Promise) {
         value.then(c => widget.children(c));
-      } else if (value instanceof WidgetNode) {
-
-        const child = value.useComposite(widget.composite).render();
-
-        if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
-          widget.element.append(child.element);
-        } else if (widget.element instanceof WidgetPassiveElement) {
-          widget.element.append(child.element);
-        }
-
-        child.defineParent(widget as IWidget<any, any>);
-        value.signal.dispatch('mount', createContext({
-          payload: widget as IWidget<any, any>,
-          widget: child,
-          composite: widget.composite,
-          event: undefined
-        }));
-
       } else if (typeof HTMLElement !== 'undefined' && (value instanceof HTMLElement || value instanceof DocumentFragment)) {
         if (widget.element instanceof HTMLElement) {
-          widget.element.append(value);
+          widget.element.appendChild(value);
         }
       } else if (value instanceof WidgetPassiveElement) {
         this.children(widget, value.toString());
       } else if (typeof value == 'string') {
 
         if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
-          widget.element.append(document.createTextNode(value));
+          widget.element.appendChild(document.createTextNode(value));
         } else if (widget.element instanceof WidgetPassiveElement) {
           widget.element.append(value);
         }
@@ -118,7 +116,7 @@ export const Manticore: ICoreRuntime = {
       } else {
 
         if (typeof HTMLElement !== 'undefined' && widget.element instanceof HTMLElement) {
-          widget.element.append(document.createTextNode(`${value}`));
+          widget.element.appendChild(document.createTextNode(`${value}`));
         } else if (widget.element instanceof WidgetPassiveElement && (value instanceof WidgetPassiveElement)) {
           widget.element.append(value);
         }
@@ -227,7 +225,7 @@ export const Manticore: ICoreRuntime = {
   manipulate<P extends IAttributes, E extends IWidgetElements>(
     widget: IWidget<P, E>,
     callback: IManipulateCallback<P, E>
-  ): IWidget<P, E>{
+  ): IWidget<P, E> {
     callback(createContext<IManipulateCallback<P, E>, P, E>({
       widget,
       composite: widget.composite,
