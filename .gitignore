@@ -3,6 +3,7 @@ node_modules
 .idea/*
 ~cjs
 ~esm
+Writerside
 *-lock.*
 *.lock
 pnpm-lock.yaml
