@@ -1,25 +1,29 @@
-import {IAttributes} from './attributes';
-import {IWidget , IWidgetElements} from './widget';
-import {IParameters} from './values';
+import type {IPropStack, IWidgetNode} from "./widget";
+import type {IStateStack} from "./state";
 
+export interface IComponentElement extends HTMLElement {
+  connectedCallback(): void;
 
-export type IComponentConstruct<Parameters extends IParameters> = (props : Parameters) => IWidget<any , any>
+  disconnectedCallback(): void;
 
-export interface IComponent<Parameters extends IParameters> {
-  get parameters () : Parameters | undefined;
-
-  set widget (widget : IWidget<any , any>);
-
-  get widget () : (IWidget<IAttributes , IWidgetElements>) | undefined;
+  adoptedCallback(): void;
 }
 
-export type IComponentRecord<T extends IParameters> = {
-  component : IComponentConstruct<T>;
-  element : CustomElementConstructor;
+export type IComponentCallable = (element: IComponentElement) => IWidgetNode<any, any>
+
+export type IComponentPayload<P extends IPropStack, S extends IStateStack> = {
+  props: Readonly<P>;
+  states: S;
 }
 
-export type IComponentRecords = {
-  [K : string] : IComponentRecord<any>
-}
+export type IComponentConstruct<P extends IPropStack, S extends IStateStack> = (store: IComponentPayload<P, S>) => IWidgetNode<any, any>
 
-export type IComponentFunction<T extends IParameters> = IComponentRecord<T> | IComponent<T> | undefined
+export type IContextual<S extends IComponentPayload<any, any>> = Readonly<Pick<S, 'props'>> & Pick<S, 'states'>
+
+export type IComposableFunction<S extends IComponentPayload<any, any>> = (contextual: IContextual<S>) => IWidgetNode<any, any>
+
+export type IExpandableFunction<S extends IComponentPayload<any, any>> = (props: Pick<S, 'props'>) => IWidgetNode<any, any> | undefined;
+
+export interface IViewCollection {
+  [key: string]: <S extends IComponentPayload<any, any>>(props: S['props']) => IWidgetNode<any, any> | undefined;
+}

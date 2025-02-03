@@ -1,504 +1,367 @@
-import type {
-    IStyle,
-    IChildren,
-    IExtendedAttributes,
-    IAttributes,
-    IClassNames,
-    IParameterValue,
-    IComponent,
-    IReference,
-    IParameters,
-    IChildCallback,
-    IContext,
-    IEventStaticListeners,
-    IEventListeners,
-    IEventStaticListenerPayload,
-    IVideoAttributes,
-    ITextareaAttributes,
-    ISpanAttributes,
-    IParagraphAttributes,
-    IStrongAttributes,
-    IHeadingAttributes,
-    IItalicAttributes,
-    IPassiveWidgetElement,
-} from './index';
-import type {ISignalables, ISignalListenOption} from '@protorians/signalable';
+import type {IChildren} from "./children";
+import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from "./value";
+import type {IMockup, IRuntime, IStateStack, IStyle, IStyleDeclaration} from "./index";
+import type {IAttributes} from "./attributes";
+import type {IMockupElement, IMockupMeasure} from "./mockup";
+import type {ISignalStack} from "./signals";
+import {ToggleOption, TreatmentQueueStatus} from "../enums";
 
-
-/**
- * Widget Element
- */
-export type IWidgetElements = HTMLElement | DocumentFragment | IPassiveWidgetElement;
-
-
-/**
- * Widget Primitive Props
- */
-export type IWidgetPrimitiveProps<P extends IAttributes, E extends IWidgetElements> = {
-
-    /**
-     * Signals : Listen events
-     */
-    signal?: Partial<IWidgetSignalableMaps<P, E>>;
-
-    /**
-     * Store widget's instance
-     */
-    ref?: IReference<P, E> | undefined
-
-    /**
-     * Widget Children
-     */
-    children: IChildren<any, any> | undefined;
-
-    /**
-     * Make widget's style
-     */
-    style?: IStyle<P, E>;
-
-    /**
-     * Make widget's CSS class name
-     */
-    className?: IClassNames<P, E>;
-
-    /**
-     * Widget's dataset
-     */
-    data?: IExtendedAttributes;
-
-    /**
-     * Namespace Attributes
-     */
-    nsa?: IParameters;
-
-    // attribution? : IExtendedAttributes;
-
-    /**
-     * Element Events
-     */
-    on?: IEventStaticListeners<P, E>;
-
-    /**
-     * Events listeners
-     */
-    listen?: IEventListeners<P, E>;
-
-    /**
-     * Attributes
-     */
-    attributes?: Partial<P>;
-
+export type IGlobalAttributes = {
+  [K: string]: IPrimitives;
 }
 
-/**
- * Widget Props Callback
- */
-export type IPropsCallback<P extends IAttributes, E extends IWidgetElements> = (context: IContext<any, P, E>) => string | undefined;
-
-/**
- * Widget Extensible Props
- */
-export type IPropsExtensible<P extends IAttributes, E extends IWidgetElements> = {
-
-    [K in keyof P]: P[keyof P] | IPropsCallback<P, E>
-
+export type IGlobalFunctioningAttributes = {
+  [K: string]: IFunctioningPrimitives;
 }
 
-/**
- * Widget Attribute Scope
- */
-export type IAttributesScope<P extends IAttributes, E extends IWidgetElements> =
-    P
-    & IPropsExtensible<P, E>
-    & IWidgetPrimitiveProps<P, E>;
+export interface IRef<E extends HTMLElement, A extends IAttributes> {
+  get current(): IWidgetNode<E, A> | undefined;
 
-/**
- * Widget Interface
- */
-export interface IWidget<P extends IAttributes, E extends IWidgetElements> {
+  attach(widget: IWidgetNode<E, A>): this;
 
-    /**
-     * Widget Props
-     */
-    props: Readonly<Partial<IAttributesScope<P, E>>>;
-
-    /**
-     * Widget Signalable
-     */
-    signal: IWidgetSignalable<P, E>
-
-    /**
-     * Widget's Parent
-     */
-    get parent(): IWidget<IAttributes, IWidgetElements> | undefined
-
-
-    /**
-     * Widget HTMLElement tag name
-     */
-    get tag(): string;
-
-    /**
-     * Widget HTMLElement instance
-     */
-    get element(): E;
-
-    /**
-     * Widget Component instance
-     */
-    get composite(): IComponent<IParameters> | undefined;
-
-    /**
-     * Widget Ready state
-     */
-    get isReady(): boolean;
-
-    /**
-     * Create Widget element
-     */
-    createElement(): E;
-
-    /**
-     * Call when widget's constructor
-     */
-    construct(): void
-
-    /**
-     * Get widget's composite to use
-     */
-    useComposite<Props extends IParameters>(composite: IComponent<Props> | undefined): this;
-
-    /**
-     * Widget widget's element
-     */
-    defineElement(element: E): this;
-
-    /**
-     * Define widget component
-     */
-    defineComposite<C extends IParameters>(component: IComponent<C>): this;
-
-    /**
-     * Define Widget's current parent
-     * @param widget
-     */
-    defineParent(widget: IWidget<IAttributes, IWidgetElements>): this;
-
-    /**
-     * Erase all children
-     */
-    clear(): this;
-
-    /**
-     * Set widget's Child
-     */
-    children(value: IChildren<P, E>): this;
-
-    /**
-     * Set widget's style
-     * @param value
-     */
-    style(value: IStyle<P, E>): this;
-
-    /**
-     * Set widget classname
-     * @param value
-     */
-    className(value: IClassNames<P, E>): this;
-
-    /**
-     * Set widget's value
-     * @param value
-     */
-    value(value?: string): this;
-
-    /**
-     * Set widget's content from `HTML` string
-     */
-    html(value?: string): this;
-
-    /**
-     * Trigger events listened to on a widget
-     */
-    trigger(fn : keyof HTMLElementEventMap): this;
-
-    /**
-     * Listen to an event on a widget
-     * @param type
-     * @param listener
-     * @param options
-     */
-    listen(
-        type: keyof HTMLElementEventMap,
-        listener: IChildCallback<P, E>,
-        options?: boolean | AddEventListenerOptions,
-    ): this;
-
-    listens(listeners: IEventListeners<P, E>): this;
-
-    /**
-     * Add listener event
-     * @param type
-     * @param listener
-     */
-    on(type: keyof HTMLElementEventMap, listener: IChildCallback<P, E>): this;
-
-    /**
-     * Add many listeners events
-     * @param listeners
-     */
-    ons(listeners: IEventStaticListeners<P, E>): this;
-
-    /**
-     * Manipulate the widget in callback
-     * @param callback
-     */
-    manipulate(callback: IManipulateCallback<P, E>): this;
-
-    /**
-     * Set dataset
-     * @param value
-     */
-    data(value: IExtendedAttributes): this;
-
-    /**
-     * Set namespace attributes
-     * @param value
-     */
-
-    // attribution (value? : IExtendedAttributes) : this;
-
-    /**
-     * Set Widget Attributes
-     * @param name
-     * @param value
-     */
-    attrib(name: keyof P, value: P[keyof P] | IParameterValue): this;
-
-    /**
-     * Set many Widget Attributes
-     * @param attributes
-     */
-    attribs(attributes: P): this;
-
-    /**
-     * Remove Widget Element instance
-     */
-    remove(): this;
-
-    /**
-     * Destroy widget instance
-     */
-    destroy(): void;
-
-    /**
-     * Define a signal
-     * @param name
-     * @param callback
-     */
-    setSignal<Si extends keyof IWidgetSignalableMap<P, E>>(name: Si, callback: ISignalListenOption<Readonly<Partial<IAttributesScope<P, E>>>, IWidgetSignalableMap<P, E>[Si]>): this
-
-    /**
-     * Define many signals
-     * @param signals
-     */
-    setSignals(signals: Partial<IWidgetSignalableMaps<P, E>>): this
-
-    /**
-     * Namespace Attributes
-     * @param nsa
-     */
-    nsa(nsa: IParameters): this;
-
-    /**
-     * Replace Widget with another widget
-     * @param widget
-     */
-    replaceWith(widget: IWidget<any, any>): this
-
-    /**
-     * Render Widget
-     */
-    render(): this;
-
-
-    /**
-     * To string
-     */
-    toString(): string;
-
+  detach(): void;
 }
 
+export type IRefCallable<E extends HTMLElement, A extends IAttributes> = (ref: IRef<E, A>) => void
 
-/**
- * Widget Manipulate Callback
- */
-export type IManipulateCallback<P extends IAttributes, E extends IWidgetElements> = (context: IContext<any, P, E>) => void;
-
-
-// export type IManipulateMap<P extends IProps, E extends IWidgetElements> = {
-//   type: keyof HTMLElementEventMap,
-//   listener: IChildCallback<P, E>,
-//   options?: boolean | AddEventListenerOptions
+// export type IContextWidgets = {
+//   [K: string]: IWidget<any, any>
 // }
 
-/**
- * Widget Listener Map
- */
-export type IWidgetListenerMap<P extends IAttributes, E extends IWidgetElements> = {
-    type: keyof HTMLElementEventMap,
-    listener: IChildCallback<P, E>,
-    options?: boolean | AddEventListenerOptions
-}
-
-/**
- * Widget Event Map
- */
-export type IWidgetEventMap<P extends IAttributes, E extends IWidgetElements> = {
-    type: keyof HTMLElementEventMap,
-    listener: IChildCallback<P, E>
-}
-
-/**
- * Widget Attribute Map
- */
-export type IWidgetAttributesMap<P extends IAttributes> = {
-    name: keyof P,
-    value: P[keyof P] | IParameterValue
-}
-
-
-/**
- * Widget Signalable
- */
-export type IWidgetSignalable<P extends IAttributes, E extends IWidgetElements> = ISignalables<Readonly<Partial<IAttributesScope<P, E>>>, IWidgetSignalableMap<P, E>>
-
-
-/**
- * Widget Signalables Dispatcher
- */
-// export type IWidgetSignalableDispatcher<T, P extends IAttributes, E extends IWidgetElements> = {
-//
-//   context : Partial<IContext<P, E>>;
-//
-//   payload : T;
-//
+// export type IOldContext<E extends HTMLElement, A extends IAttributes, Payload> = {
+//   component: IWidget<E, A>;
+//   event: Event | undefined;
+//   payload?: Payload;
 // }
+
+
+export type IPropStack = {
+  [K: string]: IPrimitives
+}
+
+// export type IContextStore<T extends Object> = ISignalController<T>
+
+export interface IContext<P extends IPropStack, S extends IStateStack> {
+  root: IWidgetNode<any, any> | undefined;
+  readonly widget: IWidgetNode<any, any>;
+  props: P;
+  state: S;
+  runtime: IRuntime<any, any> | undefined;
+}
+
+export type ICallablePayload<E extends HTMLElement, A extends IAttributes, Payload> = {
+  root: IWidgetNode<any, any>;
+  widget: IWidgetNode<E, A>;
+  payload: Payload;
+}
+
+export type ICallable<E extends HTMLElement, A extends IAttributes, Payload> = (payload: ICallablePayload<E, A, Payload>) => TreatmentQueueStatus | any;
+
+// export type IEventMap = {
+//   create: CustomEvent;
+//   clear: CustomEvent;
+//   unmount: CustomEvent;
+//   mount: CustomEvent;
+//   before: CustomEvent;
+//   after: CustomEvent;
+//   remove: CustomEvent;
+//   enable: CustomEvent;
+//   disable: CustomEvent;
+//   lock: CustomEvent;
+//   unlock: CustomEvent;
+//   trigger: CustomEvent;
+//   hide: CustomEvent;
+//   show: CustomEvent;
+//   data: CustomEvent;
+//   style: CustomEvent;
+//   className: CustomEvent;
+//   value: CustomEvent;
+//   html: CustomEvent;
+// }
+
+export type INativeEventMap = {
+  [K in keyof HTMLElementEventMap]: HTMLElementEventMap[K]
+}
+
+export type IGlobalEventMap = INativeEventMap;
+
+export type IGlobalEventCallableMap<E extends HTMLElement, A extends IAttributes> = {
+  [K in keyof IGlobalEventMap]: ICallable<E, A, IGlobalEventMap[K]>
+};
+
+export type IGlobalEventPayload<T extends keyof IGlobalEventMap> = {
+  type: T;
+  event: IGlobalEventMap[T] | Event;
+};
+
+export type IChildrenSupported = IPrimitives | IWidgetNode<any, any>
+
+export type IBehaviorOptions = {
+  locked: boolean;
+  disabled: boolean;
+}
+
+// export type ISelfEvents<E extends HTMLElement, A extends IAttributes> = {
+//   mount: ICallable<E, A, undefined>[];
+//   unmount: ICallable<undefined>[];
+//   before: ICallable<undefined>[];
+//   after: ICallable<undefined>[];
+// }
+
+export type IWidgetConstruct<E extends HTMLElement, A extends IAttributes> = (attributes: IWidgetDeclaration<E, A>) => IWidgetNode<E, A> | undefined;
+
+export interface IWidgetCollection {
+  [key: string]: <E extends HTMLElement, A extends IAttributes>(attributes: IWidgetDeclaration<E, A>) => IWidgetNode<E, A> | undefined;
+}
+
+export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
+  get fingerprint(): string;
+
+  get tag(): string;
+
+  get mockup(): IMockup<E, A> | undefined;
+
+  get element(): IMockupElement<E, A> | undefined;
+
+  get children(): IChildren<IChildrenSupported>;
+
+  get attributes(): A;
+
+  get props(): INativeProperties<E, A>;
+
+  get datasets(): IGlobalAttributes;
+
+  get reference(): IRef<E, A> | undefined;
+
+  get locked(): boolean;
+
+  set locked(value: boolean);
+
+  get signal(): ISignalStack<ISignalableMap<E, A>>;
+
+  get measure(): IMockupMeasure;
+
+  get stylesheet(): IStyle | undefined;
+
+  get context(): IContext<any, any> | undefined
+
+  useContext(context?: IContext<any, any>): this;
+
+  construct(callback: ICallable<E, A, undefined>): this;
+
+  clear(): this;
+
+  remove(): this;
+
+  enable(): this;
+
+  disable(): this;
+
+  lock(): this;
+
+  unlock(): this;
+
+  toggle(options?: ToggleOption): this;
+
+  show(): this
+
+  hide(): this
+
+  // replaceWith(component: IWidget<any, any>): this;
+
+  // insert(component: IWidget<any, any>, position?: InsertionPosition): this;
+
+  mount(callback: ICallable<E, A, undefined>): this;
+
+  unmount(callback: ICallable<E, A, undefined>): this;
+
+  before(callback: ICallable<E, A, undefined>): this;
+
+  after(callback: ICallable<E, A, undefined>): this;
+
+  // synchronize(component: IWidget<any, any>, type: keyof IGlobalEventMap, callback: ICallable<W, A, undefined>): this;
+
+  // behavior(options: IBehaviorOptions): this;
+
+  data(dataset: IGlobalAttributes): this;
+
+  attribute(attributes: Partial<A>): this;
+
+  attributeLess(attributes: IGlobalAttributes): this;
+
+  // nsa(nsa: IGlobalAttributes, ns?: string, separator?: string): this;
+
+  style(declaration: Partial<IStyleDeclaration>): this;
+
+  className(token: IStringToken): this;
+
+  value(data: IPrimitive): this;
+
+  html(data: string): this;
+
+  content(children: IChildren<IChildrenSupported>): this;
+
+  listen<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>>, options?: boolean | AddEventListenerOptions): this;
+
+  on<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>> | null): this;
+
+  trigger(type: keyof IGlobalEventMap): this;
+
+  stase(state: boolean): this;
+
+  computedStyle(token: keyof IStyleDeclaration): string | undefined;
+
+  // render(): this;
+}
+
+
+export type IEventListeners<E extends HTMLElement, A extends IAttributes> = {
+  [K in keyof IGlobalEventMap]: ICallable<E, A, IGlobalEventMap[K]>;
+}
 
 
 /**
  * Widget Signalable Map
  */
-export interface IWidgetSignalableMap<P extends IAttributes, E extends IWidgetElements> {
+export interface ISignalableMap<E extends HTMLElement, A extends IAttributes> {
 
-    // initialize : IWidget<P, E>;
+  construct: ICallablePayload<E, A, undefined>;
 
-    mount: IContext<IWidget<any, any>, P, E>;
+  mount: ICallablePayload<E, A, undefined>;
 
-    render: IContext<IWidget<P, E>, P, E>;
+  unmount: ICallablePayload<E, A, undefined>;
 
-    defineElement: IContext<E, IAttributes, IWidgetElements>;
+  adopted: ICallablePayload<E, A, undefined>;
 
-    defineComponent: IContext<IComponent<IParameters>, P, E>;
+  before: ICallablePayload<E, A, undefined>;
 
-    defineParent: IContext<IComponent<IParameters>, P, E>;
+  after: ICallablePayload<E, A, undefined>;
 
-    useComposite: IContext<IComponent<IParameters> | undefined, P, E>;
+  render: ICallablePayload<E, A, undefined>;
 
-    clear: IContext<IComponent<IParameters> | undefined, P, E>;
+  clear: ICallablePayload<E, A, IWidgetNode<E, A>>;
 
-    child: IContext<IChildren<P, E>, P, E>;
+  child: ICallablePayload<E, A, IChildren<IChildrenSupported>>;
 
-    style: IContext<IStyle<P, E>, P, E>;
+  style: ICallablePayload<E, A, IStyleDeclaration>;
 
-    className: IContext<IClassNames<P, E>, P, E>;
+  className: ICallablePayload<E, A, IStringToken>;
 
-    value: IContext<string | undefined, P, E>;
+  value: ICallablePayload<E, A, IPrimitives>;
 
-    html: IContext<string | undefined, P, E>;
+  html: ICallablePayload<E, A, string>;
 
-    trigger: IContext<keyof HTMLElementEventMap, P, E>;
+  trigger: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
 
-    on: IContext<IEventStaticListenerPayload<keyof HTMLElementEventMap, P, E>, P, E>;
+  on: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
 
-    listen: IContext<IWidgetListenerMap<P, E>, P, E>;
+  listen: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
 
-    event: IContext<IWidgetEventMap<P, E>, P, E>;
+  data: ICallablePayload<E, A, IGlobalAttributes>;
 
-    manipulate: IContext<IManipulateCallback<P, E>, P, E>;
+  attribute: ICallablePayload<E, A, Partial<A> | IGlobalAttributes>;
 
-    data: IContext<IExtendedAttributes, P, E>;
+  remove: ICallablePayload<E, A, undefined>;
 
-    // attribution: IContext<IExtendedAttributes, P, E>;
+  enable: ICallablePayload<E, A, undefined>;
 
-    attribute: IContext<IWidgetAttributesMap<P>, P, E>;
+  disable: ICallablePayload<E, A, undefined>;
 
-    remove: IContext<IWidget<P, E>, P, E>;
+  lock: ICallablePayload<E, A, undefined>;
+
+  unlock: ICallablePayload<E, A, undefined>;
+
+  hide: ICallablePayload<E, A, undefined>;
+
+  show: ICallablePayload<E, A, undefined>;
+
+  toggle: ICallablePayload<E, A, ToggleOption | undefined>;
 
 }
 
-export type IWidgetSignalableMaps<P extends IAttributes, E extends IWidgetElements> = {
+export type ISignalableCallbackMap<E extends HTMLElement, A extends IAttributes> = {
+  [K in keyof ISignalableMap<E, A>]: ICallable<E, A, ISignalableMap<E, A>[K]>
+}
 
-    [K in keyof IWidgetSignalableMap<P, E>]: ISignalListenOption<Readonly<Partial<IAttributesScope<P, E>>>, IWidgetSignalableMap<P, E>[K]>
+/**
+ * Widget Primitive Props
+ */
+export type INativeProperties<E extends HTMLElement, A extends IAttributes> = {
+
+  /**
+   * Features : The features to be consumed by the component's static `featuring` method
+   */
+  features?: IGlobalAttributes | IGlobalFunctioningAttributes;
+
+  /**
+   * Put Widget in stase
+   */
+  stase?: boolean;
+
+  /**
+   * Signals : Listen events
+   */
+  signal?: Partial<ISignalableCallbackMap<E, A>>
+
+  /**
+   * Store component's instance
+   */
+  ref?: IRef<E, A>
+
+  /**
+   * Widget Children
+   */
+  children: IChildren<IChildrenSupported> | undefined;
+
+  /**
+   * Make component's style
+   */
+  style?: IStyle;
+
+  /**
+   * Make component's CSS class name
+   */
+  className?: IStringToken;
+
+  /**
+   * Widget's dataset
+   */
+  data?: IGlobalAttributes;
+
+  // /**
+  //  * Namespace Attributes
+  //  */
+  // nsa?: IGlobalAttributes;
+
+  /**
+   * Element Events
+   */
+  on?: Partial<IEventListeners<E, A>>;
+
+  /**
+   * Events listeners
+   */
+  listen?: Partial<IEventListeners<E, A>>;
 
 }
 
-
 /**
- * Widget Video
+ * Widget Primitive Props
  */
-export type IVideoWidget = IWidget<IVideoAttributes, HTMLVideoElement>;
-
-
-/**
- * Widget Textarea
- */
-export type ITextareaWidget = IWidget<ITextareaAttributes, HTMLTextAreaElement>;
-
-/**
- * Widget Text
- */
-export type ITextWidget = IWidget<ISpanAttributes, HTMLSpanElement>;
-
-/**
- * Widget Text
- */
-export type IItalicWidget = IWidget<IItalicAttributes, HTMLElement>;
-
-/**
- * Widget Text Paragraph
- */
-export type IParagraphWidget = IWidget<IParagraphAttributes, HTMLParagraphElement>;
-
-/**
- * Widget Text Strong
- */
-export type ITextStrongWidget = IWidget<IStrongAttributes, HTMLElement>;
+export type IWidgetDeclaration<E extends HTMLElement, A extends IAttributes> = A & INativeProperties<E, A>
 
 
 /**
- * Widget Text Heading Larger
+ * Widget Extensible Props
  */
-export type IHeadingLargerWidget = IWidget<IHeadingAttributes, HTMLHeadingElement>;
+// export type IPropsExtensible<W extends HTMLElement, A extends IAttributes> = {
+//   [K in keyof A]: A[keyof A] | ICallable<W, A, undefined>
+// }
 
 /**
- * Widget Text Heading Large
+ * Widget Attribute Scope
  */
-export type IHeadingLargeWidget = IWidget<IHeadingAttributes, HTMLHeadingElement>;
-
-/**
- * Widget Text Heading Medium
- */
-export type IHeadingMediumWidget = IWidget<IHeadingAttributes, HTMLHeadingElement>;
-
-/**
- * Widget Text Heading Small
- */
-export type IHeadingSmallWidget = IWidget<IHeadingAttributes, HTMLHeadingElement>;
-
-/**
- * Widget Text Heading Smaller
- */
-export type IHeadingSmallerWidget = IWidget<IHeadingAttributes, HTMLHeadingElement>;
-
-
+export type IAttributesScope<E extends HTMLElement, A extends IAttributes> =
+  A
+  // & IPropsExtensible<E, A>
+  & IWidgetDeclaration<E, A>;
