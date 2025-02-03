@@ -1,21 +1,22 @@
-import {IComponentConstruct , IComponentFunction} from './component';
-import {IRouterSettings , IRoutesScheme} from './router';
-import {IParameters} from './values';
+import type {IWidgetNode} from "./widget";
+import type {IComponentPayload} from "./component";
 
-export type IViewsRoutes<Routes extends IRoutesScheme> = {
-  [Key in keyof Routes] : IView<Routes[Key]>;
+export interface IView<S extends IComponentPayload<any, any>> {
+
+  get states(): S['states'];
+
+  get props(): S['props'];
+
+  __use__(segment: string, value: any): this;
+
+  mounted(): void;
+
+  unmounted(): void;
+
+  helmet(): IWidgetNode<any, any> | undefined;
+
+  navigation(): IWidgetNode<any, any> | undefined;
+
+  body(props?: S['props']): IWidgetNode<any, any> | undefined;
+
 }
-
-export type IViewOptions<Props extends IParameters> = {
-  parametersScheme? : Props;
-  /**
-   * @comingSoon : transition?: ITransitions<IWidget<any , HTMLElement>>
-   */
-}
-
-export type IView<Props extends IParameters> = {
-  readonly component : IComponentConstruct<Props>
-  options? : IViewOptions<Props>;
-}
-
-export type IViews<Routes extends IRoutesScheme> = IComponentFunction<IRouterSettings<Routes>>

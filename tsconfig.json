@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-
     "module": "ESNext",
     "target": "es2020",
     "moduleResolution": "node",
     
     "noImplicitAny": false,
-    "allowJs": true,
-    "removeComments": false,
-    "declaration": true,
+    "allowJs": false,
+    "removeComments": true,
+    "declaration": false,
     "preserveConstEnums": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -23,6 +22,7 @@
     "node_modules",
     "~cjs",
     "~esm",
+    "./tests",
   ],
   "include": [
     "./source"
