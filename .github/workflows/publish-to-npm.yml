@@ -31,9 +31,11 @@ jobs:
       run: npm run build
 
     - name: Configure npm
-      run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        echo "@protorians:registry=https://registry.npmjs.org/" >> ~/.npmrc
 
     - name: Publish to npm
-      run: npm publish --access=public
+      run: npm publish --access=public --provenance
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Assurez-vous d'avoir ajouté votre token npm dans les secrets du dépôt
