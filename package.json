@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsc --watch -p esm.tsconfig.json",
-    "build": "rm -rf ~esm ~cjs && pnpm run build:esm && pnpm run build:cjs",
+    "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p esm.tsconfig.json && ts-add-js-extension --dir=~esm",
     "build:cjs": "tsc -p cjs.tsconfig.json && ts-add-js-extension --dir=~cjs",
     "fix:esm": "ts-add-js-extension --dir=~esm",
@@ -91,7 +91,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.5",
+    "@types/node": "^22.13.1",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",

@@ -19,10 +19,7 @@ jobs:
           node-version: '22'  # Remplacez par la version de Node.js que vous utilisez
 
       - name: Install dependencies
-        run: npm install -g
-
-      - name: Install `PNPM`
-        run: npm install pnpm -g
+        run: npm install
 
       - name: Install `ts-add-js-extension`
         run: npm install ts-add-js-extension -g
