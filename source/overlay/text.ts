@@ -1,7 +1,25 @@
 import {Composable, Mountable} from "../decorators";
 import {WidgetNode} from "../widget-node";
-import type {IItalicAttributes, ISpanAttributes, IStrongAttributes, IStyle, IWidgetDeclaration} from "../types";
+import type {
+  IItalicAttributes,
+  ILinkAttributes,
+  ISpanAttributes,
+  IStrongAttributes,
+  IStyle,
+  IWidgetDeclaration
+} from "../types";
 import {Style} from "../style";
+
+/**
+ * @description Link Widget
+ */
+@Mountable()
+@Composable()
+export class LinkWidget extends WidgetNode<HTMLAnchorElement, ILinkAttributes> {
+  get tag(): string {
+    return 'a'
+  };
+}
 
 /**
  * @description Strong Text Widget
@@ -108,6 +126,16 @@ export class LargerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttribute
       fontSize: `larger`
     })
   }
+}
+
+
+/**
+ * @description Construct's Function of `LinkWidget`
+ * @param declaration
+ * @constructor
+ */
+export function Link(declaration: IWidgetDeclaration<HTMLAnchorElement, ILinkAttributes>): LinkWidget {
+  return new LinkWidget(declaration)
 }
 
 
