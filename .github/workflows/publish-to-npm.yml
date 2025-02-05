@@ -33,6 +33,6 @@ jobs:
           echo "@protorians:registry=https://registry.npmjs.org/" >> ~/.npmrc
 
       - name: Publish to npm
-        run: npm publish --access=public --provenance
+        run: npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Assurez-vous d'avoir ajouté votre token npm dans les secrets du dépôt
