@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create your web user interfaces with widgets",
   "main": "./source/index.ts",
   "type": "module",
@@ -84,9 +84,6 @@
     "type": "git",
     "url": "https://github.com/protorians/widgets.git",
     "directory": "source"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
   },
   "license": "ISC",
   "dependencies": {
