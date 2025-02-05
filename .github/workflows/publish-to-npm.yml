@@ -21,6 +21,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Install `PNPM`
+      run: npm install pnpm -g
+
     - name: Install `ts-add-js-extension`
       run: npm install ts-add-js-extension -g
 
