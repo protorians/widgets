@@ -19,7 +19,7 @@ jobs:
           node-version: '22'  # Remplacez par la version de Node.js que vous utilisez
 
       - name: Install dependencies
-        run: npm install
+        run: npm install -g
 
       - name: Install `PNPM`
         run: npm install pnpm -g
