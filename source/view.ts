@@ -1,49 +1,109 @@
-import type {IWidgetNode, IView, IComponentPayload} from "./types";
+import type {
+  IWidgetNode,
+  IView,
+  ISignalController,
+  IViewMockup,
+  IViewOptions,
+  IViewWidgetCollection, IViewMockupView
+} from "./types";
+import {SignalHook} from "./hooks";
 
-export class WidgetView<S extends IComponentPayload<any, any>> implements IView<S> {
 
-  _states: S['states'] = {} as S['states'];
-  _props: S['props'] = {} as S['props'];
+export class Views {
 
-  get states(): S['states'] {
-    return this._states;
+  static useMockup: IViewMockup<any> | undefined
+
+  static mockup<Props extends Object>(view: IViewMockupView<Props>, props: Props): IViewWidgetCollection {
+    return [
+      view.helmet(),
+      view.body(props),
+      view.navbar(),
+      view.toolbar(),
+    ]
+  };
+
+  static render<Props extends Object>(
+    view: IView<Props>,
+    props: Props,
+    mockup?: IViewMockup<Props>,
+  ): IViewWidgetCollection {
+    view.useProps(props)
+    return (mockup || this.mockup)(view, props)
   }
 
-  get props(): S['props'] {
-    return this._props;
+}
+
+export class ViewWidget<Props extends Object> implements IView<Props> {
+
+  protected _props: Readonly<Props> | ISignalController<Props> | undefined;
+
+  get props(): Readonly<Props> | ISignalController<Props> {
+    return this._props || ({} as Readonly<Props> | ISignalController<Props>);
   }
 
-  __use__(segment: string, value: any): this {
+  constructor(
+    public readonly options: IViewOptions<Props>
+  ) {
+  }
 
-    switch (segment) {
-      case 'states':
-        this._states = value as S['states'];
-        break;
-      case 'props':
-        this._props = value as S['props'];
-        break;
-    }
+  mounted(): void {
+  }
 
+  unmounted(): void {
+  }
+
+  useProps(props: Props): this {
+    this._props = this._props || props;
     return this;
-  }
-
-  mounted() {
-  }
-
-  unmounted() {
   }
 
   helmet(): IWidgetNode<any, any> | undefined {
     return undefined
   }
 
-  navigation(): IWidgetNode<any, any> | undefined {
+  toolbar(): IWidgetNode<any, any> | undefined {
     return undefined
   }
 
-  body(props?: S['props']): IWidgetNode<any, any> | undefined {
-    console.error(props)
+  navbar(): IWidgetNode<any, any> | undefined {
+    return undefined
+  }
+
+  body(props?: Props | undefined): IWidgetNode<any, any> | undefined {
+    console.error('View Properties', props)
     throw new Error('Not < body > implemented')
+  }
+
+}
+
+
+export class StatefulView<Props extends Object> extends ViewWidget<Props> {
+
+  protected _props: ISignalController<Props> | undefined;
+
+  get props(): ISignalController<Props> {
+    return this._props || ({} as ISignalController<Props>);
+  }
+
+  useProps(props: Props): this {
+    this._props = this._props || new SignalHook.Controller(props);
+    return this;
+  }
+
+}
+
+
+export class StatelessView<Props extends Object> extends ViewWidget<Props> {
+
+  protected _props: Readonly<Props> | undefined;
+
+  get props(): Readonly<Props> {
+    return this._props || ({} as Readonly<Props>);
+  }
+
+  useProps(props: Props): this {
+    this._props = this._props || props;
+    return this;
   }
 
 }
