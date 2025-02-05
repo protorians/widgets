@@ -1,0 +1,33 @@
+name: Publish to npm
+
+on:
+  push:
+    branches:
+      - main  # Remplacez "main" par la branche que vous ciblez
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'  # Remplacez par la version de Node.js que vous utilisez
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install `ts-add-js-extension`
+      run: npm install ts-add-js-extension -g
+
+    - name: Build project
+      run: npm run build
+
+    - name: Publish to npm
+      run: npm publish --access=public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  # Assurez-vous d'avoir ajouté votre token npm dans les secrets du dépôt
