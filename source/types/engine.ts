@@ -66,7 +66,7 @@ export interface IRuntime<E extends HTMLElement, A extends IAttributes> {
 
   attributeLess(widget: IWidgetNode<E, A>, attributes: IGlobalAttributes): this;
 
-  children(widget: IWidgetNode<E, A>, children: IChildren<IChildrenSupported>): this;
+  content(widget: IWidgetNode<E, A>, children: IChildren<IChildrenSupported>): this;
 
   style(widget: IWidgetNode<E, A>, declaration: Partial<IStyleDeclaration>): this;
 

@@ -1,5 +1,5 @@
 import {IComponentPayload, IView, IViewCollection, IWidgetCollection, IWidgetNode} from "./types";
-import {WidgetView} from "./view";
+import {ViewWidget} from "./view";
 import {extractComponentName, ucFirstLetter} from "./helpers";
 import {View, Widget} from "./collection";
 import {WidgetException} from "./errors";
@@ -25,14 +25,9 @@ const Make = {
       },
       definition: <S extends IComponentPayload<any, any>>(target: any, props: S['props']) => {
         const view = new target() as IView<S>;
-        view
-          .__use__('props', props)
-          .__use__('states', {});
-
-        const widget = view.body(props)
+        const widget = view.body(props);
         widget?.signal.listen('mount', view.mounted.bind(view))
         widget?.signal.listen('unmount', view.unmounted.bind(view))
-
         return widget || undefined
       },
     },
@@ -56,7 +51,7 @@ export function Composable(
   collectionKey?: string
 ) {
   return function (target: any) {
-    if (target.prototype instanceof WidgetView) {
+    if (target.prototype instanceof ViewWidget) {
       Make.composable.view.initialize(target, collection, collectionKey);
     } else if (target.prototype instanceof WidgetNode) {
       Make.composable.widget.initialize(target, collection, collectionKey);
@@ -68,7 +63,7 @@ export function Composable(
 export function Mountable() {
   return function (target: any) {
     const name = extractComponentName(target.name)
-    if (target.prototype instanceof WidgetView) {
+    if (target.prototype instanceof ViewWidget) {
       Mount(`View${ucFirstLetter(name)}`, (props) =>
         Make.composable.view.definition(target, props) || (new WidgetNode({children: ''}))
       );

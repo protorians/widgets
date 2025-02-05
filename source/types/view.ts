@@ -1,22 +1,48 @@
 import type {IWidgetNode} from "./widget";
-import type {IComponentPayload} from "./component";
+import type {ISignalController} from "./signals";
 
-export interface IView<S extends IComponentPayload<any, any>> {
+export type IViewMockupScheme = {
+  [K in keyof IViewWidgets<any>]: IViewWidgets<any>[K]
+}
 
-  get states(): S['states'];
+export type IViewOptions<Props extends Object> = {
+  mockup?: IViewMockup<Props>;
+  // transition?: {
+  //   entry: any;
+  //   exit: any;
+  // }
+}
 
-  get props(): S['props'];
+export type IViewWidgetCollection = (IWidgetNode<any, any> | undefined)[]
 
-  __use__(segment: string, value: any): this;
+export type IViewWidgets<Props extends Object> = {
+  helmet(): IWidgetNode<any, any> | undefined;
+
+  toolbar(): IWidgetNode<any, any> | undefined;
+
+  navbar(): IWidgetNode<any, any> | undefined;
+
+  body(props?: Props): IWidgetNode<any, any> | undefined;
+}
+
+export type IViewMockupView<Props extends Object> = IViewMockupScheme & IViewUsingMethods<Props>
+
+export type IViewMockup<Props extends Object> = (scheme: IViewMockupView<Props>, props: Props) => IViewWidgetCollection
+
+export type IViewUsingMethods<Props extends Object> = {
+  useProps(props: Props): IView<Props>;
+}
+
+export interface IView<Props extends Object> extends IViewWidgets<Props>, IViewUsingMethods<Props> {
+  get props(): Readonly<Props> | ISignalController<Props>;
+
+  readonly options: IViewOptions<Props>;
 
   mounted(): void;
 
   unmounted(): void;
+}
 
-  helmet(): IWidgetNode<any, any> | undefined;
-
-  navigation(): IWidgetNode<any, any> | undefined;
-
-  body(props?: S['props']): IWidgetNode<any, any> | undefined;
-
+export interface IViewConstructor<Props extends Object> extends IView<Props> {
+  new(options?: IViewOptions<Props>): IView<Props>
 }

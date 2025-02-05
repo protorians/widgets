@@ -1,3 +1,12 @@
+export enum HttpMethod {
+  POST = 'POST',
+  GET = 'GET',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
+  OPTION = 'OPTION',
+}
+
 export enum InsertionPosition {
   BeforeBegin = 'BeforeBegin',
   BeforeEnd = 'BeforeEnd',
@@ -92,7 +101,7 @@ export enum Sizer {
   XL = 'x-large',
 }
 
-export enum AbsoluteUnit{
+export enum AbsoluteUnit {
   Cm = 'cm',
   Mm = 'mm',
   In = 'in',
@@ -101,7 +110,7 @@ export enum AbsoluteUnit{
   Pc = 'pc',
 }
 
-export enum RelativeUnit{
+export enum RelativeUnit {
   Em = 'em',
   Ex = 'ex',
   Ch = 'ch',

@@ -246,27 +246,29 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     return this;
   }
 
-  children(widget: IWidgetNode<E, A>, children: IChildren<IChildrenSupported>): this {
+  content(widget: IWidgetNode<E, A>, children: IChildren<IChildrenSupported>): this {
 
-    if (Array.isArray(children)) {
-      children.forEach(child => this.children(widget, child));
-    } else if (children instanceof Promise) {
-      children.then(child => this.children(widget, child));
-    } else if (children instanceof WidgetNode) {
-      this.render(children, this.widget.context || new ContextWidget(children))
-      widget.mockup?.append(children.element);
-      children.useContext(widget.context);
-      children.signal.dispatch('mount', {root: this.widget, widget: children, payload: undefined}, children.signal);
+    if (typeof children !== 'undefined') {
+      if (Array.isArray(children)) {
+        children.forEach(child => this.content(widget, child));
+      } else if (children instanceof WidgetNode) {
+        this.render(children, this.widget.context || new ContextWidget(children))
+        widget.mockup?.append(children.element);
+        children.useContext(widget.context);
+        children.signal.dispatch('mount', {root: this.widget, widget: children, payload: undefined}, children.signal);
 
-    } else if (children instanceof HTMLElement) {
-      widget.mockup?.append(children);
-    } else if (children instanceof StateWidget) {
-      children.effect(({name, value}) => {
-        console.warn('Update New state', name, value)
-      })
-      this.children(widget, children.value)
-    } else {
-      widget.mockup?.append(document.createTextNode(`${children}`))
+      } else if (children instanceof Promise) {
+        children.then(child => this.content(widget, child));
+      } else if (children instanceof HTMLElement) {
+        widget.mockup?.append(children);
+      } else if (children instanceof StateWidget) {
+        children.effect(({name, value}) => {
+          console.warn('Update New state', name, value)
+        })
+        this.content(widget, children.value)
+      } else {
+        widget.mockup?.append(document.createTextNode(`${children}`))
+      }
     }
 
     return this;
@@ -400,7 +402,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
 
     if (widget.stylesheet) widget.stylesheet.bind(widget);
 
-    if (widget.children) this.children(widget, widget.children);
+    if (widget.children) this.content(widget, widget.children);
 
     if (widget.attributes) this.attribute(widget, widget.attributes)
 

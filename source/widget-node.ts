@@ -283,7 +283,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
   }
 
   content(children: IChildren<IChildrenSupported>): this {
-    this.context?.runtime?.children(this, children);
+    this.context?.runtime?.content(this, children);
     return this;
   }
 
