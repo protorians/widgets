@@ -282,7 +282,10 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
 
   className(widget: IWidgetNode<E, A>, token: IStringToken): this {
     (Array.isArray(token) ? token : [token])
-      .forEach((t) => widget.mockup?.className.add(t));
+      .forEach((t) => {
+        if(Environment.Client) widget.element?.classList.add(t);
+        else widget.mockup?.className.add(t);
+      });
     widget.signal.dispatch('className', {root: this.widget, widget, payload: token}, widget.signal);
     return this;
   }
