@@ -1,9 +1,9 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "Create your web user interfaces with widgets",
-  "main": "./source/index.ts",
-  "type": "module",
+  "main": "./~cjs/index.js",
+  "module": "./~esm/index.js",
   "scripts": {
     "dev": "tsc --watch -p esm.tsconfig.json",
     "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
@@ -15,63 +15,7 @@
   "exports": {
     ".": {
       "require": "./~cjs/index.js",
-      "import": "./~esm/index.js",
-      "default": "./source/index.ts"
-    },
-    "./overlay": {
-      "require": "./~cjs/overlay/index.js",
-      "import": "./~esm/overlay/index.js",
-      "default": "./source/overlay/index.ts"
-    },
-    "./layout": {
-      "require": "./~cjs/layout/index.js",
-      "import": "./~esm/layout/index.js",
-      "default": "./source/layout/index.ts"
-    },
-    "./composite": {
-      "require": "./~cjs/composite/index.js",
-      "import": "./~esm/composite/index.js",
-      "default": "./source/composite/index.ts"
-    },
-    "./kits": {
-      "require": "./~cjs/kits/index.js",
-      "import": "./~esm/kits/index.js",
-      "default": "./source/kits/index.ts"
-    },
-    "./icons": {
-      "require": "./~cjs/icons/index.js",
-      "import": "./~esm/icons/index.js",
-      "default": "./source/icons/index.ts"
-    },
-    "./runtime": {
-      "require": "./~cjs/runtime/index.js",
-      "import": "./~esm/runtime/index.js",
-      "default": "./source/runtime/index.ts"
-    },
-    "./errors": {
-      "require": "./~cjs/errors/index.js",
-      "import": "./~esm/errors/index.js",
-      "default": "./source/errors/index.ts"
-    },
-    "./hooks": {
-      "require": "./~cjs/hooks/index.js",
-      "import": "./~esm/hooks/index.js",
-      "default": "./source/hooks/index.ts"
-    },
-    "./types": {
-      "require": "./~cjs/types/index.js",
-      "import": "./~esm/types/index.js",
-      "default": "./source/types/index.ts"
-    },
-    "./helpers": {
-      "require": "./~cjs/helpers/index.js",
-      "import": "./~esm/helpers/index.js",
-      "default": "./source/helpers/index.ts"
-    },
-    "./*": {
-      "require": "./~cjs/*",
-      "import": "./~esm/*",
-      "default": "./source/*"
+      "import": "./~esm/index.js"
     }
   },
   "keywords": [
