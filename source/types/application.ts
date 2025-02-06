@@ -1,8 +1,12 @@
 import {IRouter, IRouterBaseScheme} from "./router";
 
 export type IApplicationConfig<RouterScheme extends IRouterBaseScheme> = {
-  target: string;
+  element: string;
   router: IRouter<RouterScheme>;
+  targets?: string[];
+  icon?: string;
+  name?: string;
+  title?: string;
 }
 
 export interface IApplication<RouterScheme extends IRouterBaseScheme> {
