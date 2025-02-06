@@ -8,6 +8,7 @@ import type {
   ITarget,
   IYesNo
 } from "./value";
+import {ICallable} from "./widget";
 
 export type IAttributes = Partial<
   ICommonAttributes
@@ -169,6 +170,12 @@ export interface IButtonAttributes extends IInputableAttributes {
   type?: IButtonType;
 }
 
+export interface IButtonAttributesBase extends IInputableAttributes {
+  onPress: ICallable<HTMLButtonElement, IButtonAttributes, MouseEvent | Event | UIEvent>;
+  onPressStart?: ICallable<HTMLButtonElement, IButtonAttributes, MouseEvent | Event | UIEvent>;
+  onPressEnd?: ICallable<HTMLButtonElement, IButtonAttributes, MouseEvent | Event | UIEvent>;
+}
+
 export interface IInputAttributes extends IInputableAttributes {
   type?: IInputType;
   children?: undefined;
@@ -270,6 +277,7 @@ export interface IImageAttributes extends ICommonAttributes {
   src?: string;
   alt?: string;
   srcset?: string;
+  children?: undefined;
 }
 
 export interface IAudioAttributes extends ICommonAttributes {
