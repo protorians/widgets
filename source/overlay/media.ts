@@ -77,8 +77,8 @@ export function Picture(declaration: IWidgetDeclaration<HTMLPictureElement, IPic
  * @param declaration
  * @constructor
  */
-export function Image(declaration: IWidgetDeclaration<HTMLImageElement, IImageAttributes>): ImageWidget {
-  return new ImageWidget(declaration)
+export function Image(declaration: Omit<IWidgetDeclaration<HTMLImageElement, IImageAttributes>, 'children'>): ImageWidget {
+  return new ImageWidget({...declaration, children: undefined})
 }
 
 
