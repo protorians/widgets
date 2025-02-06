@@ -1,5 +1,6 @@
 import type {IWidgetNode} from "./widget";
 import type {ISignalController} from "./signals";
+import {IRouterBaseRoute, IRouterRoute} from "./router";
 
 export type IViewMockupScheme = {
   [K in keyof IViewWidgets<any>]: IViewWidgets<any>[K]
@@ -13,12 +14,17 @@ export type IViewOptions<Props extends Object> = {
   // }
 }
 
+export type IViewStack = {
+  collection: IViewWidgetCollection;
+  route: IRouterRoute<any, keyof any> & IRouterBaseRoute;
+}
+
 export type IViewWidgetCollection = (IWidgetNode<any, any> | undefined)[]
 
 export type IViewWidgets<Props extends Object> = {
   helmet(): IWidgetNode<any, any> | undefined;
 
-  toolbar(): IWidgetNode<any, any> | undefined;
+  toolbox(): IWidgetNode<any, any> | undefined;
 
   navbar(): IWidgetNode<any, any> | undefined;
 

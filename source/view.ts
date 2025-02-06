@@ -4,12 +4,14 @@ import type {
   ISignalController,
   IViewMockup,
   IViewOptions,
-  IViewWidgetCollection, IViewMockupView
+  IViewWidgetCollection, IViewMockupView, IViewStack
 } from "./types";
 import {SignalHook} from "./hooks";
 
 
 export class Views {
+
+  static stacked: IViewStack | undefined;
 
   static useMockup: IViewMockup<any> | undefined
 
@@ -18,7 +20,7 @@ export class Views {
       view.helmet(),
       view.body(props),
       view.navbar(),
-      view.toolbar(),
+      view.toolbox(),
     ]
   };
 
@@ -61,7 +63,7 @@ export class ViewWidget<Props extends Object> implements IView<Props> {
     return undefined
   }
 
-  toolbar(): IWidgetNode<any, any> | undefined {
+  toolbox(): IWidgetNode<any, any> | undefined {
     return undefined
   }
 
