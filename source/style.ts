@@ -8,7 +8,7 @@ import type {
   IStyleCascadesDeclarations,
   IStyleDeclaration,
   IStyleOptions,
-  IStyleSettings,
+  IStyleSettings, IStyleSheet, IStyleSheetDeclaration, IStyleSheetDeclarations,
   IStyleSupportedValue,
   IWidgetNode,
 } from "./types";
@@ -19,6 +19,103 @@ import {Environment} from "./environment";
 import {unCamelCase} from "@protorians/core";
 import {RelativeUnit} from "./enums";
 import {RemMetric} from "./metric";
+
+
+export class StyleRepository {
+
+  static retrieve(master: string, identity: string): HTMLStyleElement | undefined {
+    if (!Environment.Client) return undefined;
+
+    return document.querySelector<HTMLStyleElement>(`style[widget\\:${master}="${identity}"]`)
+      || this.create(master, identity);
+  }
+
+  static create(master: string, identity: string): HTMLStyleElement | undefined {
+    if (!Environment.Client) return undefined;
+
+    const doc = document.createElement('style')
+    doc.setAttribute(`widget:${master}`, identity);
+
+    document.head.append(doc)
+    return doc;
+  }
+
+}
+
+
+export class WidgetStyleSheet implements IStyleSheet {
+
+  protected _repository: HTMLStyleElement | undefined = undefined;
+
+  public declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations
+
+  static settings: IStyleSettings = {
+    bytes: 4,
+    unit: RelativeUnit.Rem,
+    spacing: 4,
+    corner: 0,
+  };
+
+  constructor(public readonly options: IStyleOptions = {} as IStyleOptions) {
+  }
+
+  get repository(): HTMLStyleElement {
+    this._repository = this._repository || document.createElement('style');
+    this._repository.setAttribute('widget:style', 'sheet');
+    document.head.append(this._repository);
+    return this._repository;
+  }
+
+  parse(selector: string, declaration: IStyleSheetDeclaration): string {
+    const has_type = typeof declaration;
+
+    switch (has_type) {
+      case "object":
+        if (declaration instanceof WidgetStyleSheet) {
+          return this.parse(selector, declaration)
+        } else {
+
+          const sheet = Object.entries(declaration)
+            .map(([id, tree]) => {
+              switch (typeof tree) {
+
+                case "string":
+                case "number":
+                  return `${id}: ${tree}`;
+
+                case 'object':
+                  return this.parse(id, tree);
+
+                default:
+                  return ``;
+              }
+            })
+
+          return `${selector}{${sheet.join(';')}}`
+
+        }
+    }
+    return "";
+  }
+
+  merge(declarations: IStyleSheetDeclarations): this {
+    this.declarations = {...this.declarations, ...declarations}
+    return this;
+  }
+
+  update(declarations?: IStyleSheetDeclarations): this {
+
+    const build = Object.entries(this.merge(declarations || {}).declarations)
+      .map(([selector, declaration]) => this.parse(selector, declaration))
+
+    if (this.options.attach === true || typeof this.options.attach === 'undefined') {
+      this.repository.innerHTML = build.map(line => `${line}`).join("\n");
+    }
+
+    return this;
+  }
+
+}
 
 
 export class WidgetStyleCascade {

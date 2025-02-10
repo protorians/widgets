@@ -1,12 +1,12 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.1.1",
+  "version": "0.1.6",
   "description": "Create your web user interfaces with widgets",
-  "main": "./source/index.ts",
-  "type": "module",
+  "main": "./~cjs/index.js",
+  "module": "./~esm/index.js",
   "scripts": {
     "dev": "tsc --watch -p esm.tsconfig.json",
-    "build": "rm -rf ~esm ~cjs && pnpm run build:esm && pnpm run build:cjs",
+    "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p esm.tsconfig.json && ts-add-js-extension --dir=~esm",
     "build:cjs": "tsc -p cjs.tsconfig.json && ts-add-js-extension --dir=~cjs",
     "fix:esm": "ts-add-js-extension --dir=~esm",
@@ -15,63 +15,7 @@
   "exports": {
     ".": {
       "require": "./~cjs/index.js",
-      "import": "./~esm/index.js",
-      "default": "./source/index.ts"
-    },
-    "./overlay": {
-      "require": "./~cjs/overlay/index.js",
-      "import": "./~esm/overlay/index.js",
-      "default": "./source/overlay/index.ts"
-    },
-    "./layout": {
-      "require": "./~cjs/layout/index.js",
-      "import": "./~esm/layout/index.js",
-      "default": "./source/layout/index.ts"
-    },
-    "./composite": {
-      "require": "./~cjs/composite/index.js",
-      "import": "./~esm/composite/index.js",
-      "default": "./source/composite/index.ts"
-    },
-    "./kits": {
-      "require": "./~cjs/kits/index.js",
-      "import": "./~esm/kits/index.js",
-      "default": "./source/kits/index.ts"
-    },
-    "./icons": {
-      "require": "./~cjs/icons/index.js",
-      "import": "./~esm/icons/index.js",
-      "default": "./source/icons/index.ts"
-    },
-    "./runtime": {
-      "require": "./~cjs/runtime/index.js",
-      "import": "./~esm/runtime/index.js",
-      "default": "./source/runtime/index.ts"
-    },
-    "./errors": {
-      "require": "./~cjs/errors/index.js",
-      "import": "./~esm/errors/index.js",
-      "default": "./source/errors/index.ts"
-    },
-    "./hooks": {
-      "require": "./~cjs/hooks/index.js",
-      "import": "./~esm/hooks/index.js",
-      "default": "./source/hooks/index.ts"
-    },
-    "./types": {
-      "require": "./~cjs/types/index.js",
-      "import": "./~esm/types/index.js",
-      "default": "./source/types/index.ts"
-    },
-    "./helpers": {
-      "require": "./~cjs/helpers/index.js",
-      "import": "./~esm/helpers/index.js",
-      "default": "./source/helpers/index.ts"
-    },
-    "./*": {
-      "require": "./~cjs/*",
-      "import": "./~esm/*",
-      "default": "./source/*"
+      "import": "./~esm/index.js"
     }
   },
   "keywords": [
@@ -91,7 +35,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.5",
+    "@types/node": "^22.13.1",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",

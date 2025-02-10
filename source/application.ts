@@ -1,33 +1,100 @@
-import type {IApplication, IApplicationConfig, IRouterBaseScheme, IWidgetNode} from "./types";
+import type {IApplication, IApplicationConfig, IRouterBaseScheme, IViewStack, IWidgetNode} from "./types";
 import {Views} from "./view";
 import {Mount} from "./component";
-import {Section} from "./overlay";
+import {Image, Layer, Section, SmallerText, Text,} from "./overlay";
+import {Style} from "./style";
 
-export class ApplicationMain<RouterScheme extends IRouterBaseScheme> implements IApplication<RouterScheme> {
-  protected widgetMain: IWidgetNode<any, any>;
+
+export class ApplicationStyle {
+  static main = Style({
+    display: 'flex',
+    width: '100vw',
+    height: '100vh',
+    flexDirection: 'column',
+  });
+
+  static content = Style({
+    flex: '1 1 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 1,
+    width: '100%',
+    height: '100%',
+  })
+}
+
+export class Application<RouterScheme extends IRouterBaseScheme> implements IApplication<RouterScheme> {
+  protected main: IWidgetNode<any, any>;
 
   constructor(
     public readonly config: IApplicationConfig<RouterScheme>
   ) {
-    this.widgetMain = Section({
-      children: 'Loading...'
+    this.main = Section({
+      style: ApplicationStyle.main,
+      children: Layer({
+        style: ApplicationStyle.content,
+        children: [
+
+          this.config.icon
+            ? Image({
+              src: `${this.config.icon}`
+            })
+            : undefined,
+
+          this.config.name
+            ? Text({
+              children: `${this.config.name}`
+            })
+            : undefined,
+
+          this.config.title
+            ? SmallerText({
+              children: `${this.config.title}`
+            })
+            : undefined,
+
+        ]
+      })
     })
   }
 
   run() {
 
-    Mount(this.config.target, () => this.widgetMain)
+    Mount(this.config.element, () => this.main)
 
     this.config.router
       .signal
       .listen('navigate', ({route, params}) => {
-        this.widgetMain.clear().content(
-          Views.render(
+
+        if (Views.stacked) {
+          Views.stacked.collection
+            .forEach(widget => {
+              if (widget && widget.context?.root) {
+                widget.signal.dispatch('unmount', {
+                  root: widget.context.root,
+                  widget,
+                  payload: undefined
+                })
+              }
+            })
+        }
+
+        const stack: IViewStack = {
+          route,
+          collection: Views.render(
             new route.view(route.options || {}),
             params,
-            Views.useMockup
+            Views.useMockup,
           )
-        )
+        }
+
+        Views.stacked = stack;
+
+        this.main
+          .clear()
+          .content(stack.collection)
       })
 
     this.config.router.run()
@@ -36,8 +103,8 @@ export class ApplicationMain<RouterScheme extends IRouterBaseScheme> implements 
 
 }
 
-export function Application<RouterScheme extends IRouterBaseScheme>(
+export function createApplication<RouterScheme extends IRouterBaseScheme>(
   config: IApplicationConfig<RouterScheme>
 ) {
-  return (new ApplicationMain<RouterScheme>(config))
+  return (new Application<RouterScheme>(config))
 }

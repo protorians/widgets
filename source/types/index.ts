@@ -1,3 +1,4 @@
+export type * from "./colorimetric"
 export type * from "./util"
 export type * from "./attributes"
 export type * from "./composite"

@@ -7,6 +7,16 @@ export enum HttpMethod {
   OPTION = 'OPTION',
 }
 
+export enum ColorSchemes {
+  Light = 'light',
+  Dark = 'dark',
+}
+
+export enum ColorimetricType {
+  Hex = 'hex',
+  Oklch = 'oklch',
+}
+
 export enum InsertionPosition {
   BeforeBegin = 'BeforeBegin',
   BeforeEnd = 'BeforeEnd',
@@ -78,7 +88,7 @@ export enum WidgetsNativeProperty {
   Ref = 'ref',
   Children = 'children',
   Style = 'style',
-  ClassName = 'classname',
+  ClassName = 'className',
   Data = 'data',
   Nsa = 'nsa',
   On = 'on',

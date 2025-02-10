@@ -63,8 +63,9 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
   protected _context: IContext<any, any> | undefined = undefined;
 
   constructor(declaration: IWidgetDeclaration<E, A>) {
+    this.extractProperties(declaration);
     this._mockup = new Mockup.Morphic(
-      this.extractProperties(declaration).tag,
+      this.tag,
       this._props.children,
       this._attributes,
     )

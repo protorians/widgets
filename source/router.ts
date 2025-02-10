@@ -91,19 +91,22 @@ export class ClientRouter<Scheme extends IRouterBaseScheme> implements IRouter<S
   }
 
   resolve<K extends keyof Scheme>(uri: string, props?: Scheme[K]): IRouterRoute<Scheme, keyof Scheme> & IRouterBaseRoute {
+    // const oldRoute = this._route;
+
     for (const route of Object.values(this.routes)) {
       const match = this.match(uri, route.pattern);
       if (match) {
         const params = this.excavation(route.parameters, match);
 
         this._route = route;
-        props = props || {} as Scheme[K]
+        props = props || {} as Scheme[K];
 
         this.signal.dispatch('navigate', {
           route: route as IRouterRoute<Scheme, keyof Scheme> & IRouterBaseRoute,
           params: params as Scheme[keyof Scheme],
           props,
         })
+
         return route as IRouterRoute<Scheme, keyof Scheme> & IRouterBaseRoute;
       }
     }

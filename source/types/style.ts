@@ -45,6 +45,27 @@ export interface IStyleCascadesAttaches {
   [K: string]: HTMLStyleElement | undefined;
 }
 
+
+export type IStyleSheetDeclaration = IStyleDeclarationController | IStyleSheet | Partial<IStyleDeclaration>;
+
+export interface IStyleSheetDeclarations {
+  [k: string]: IStyleSheetDeclaration | IStyleSheetDeclarations;
+}
+
+export interface IStyleSheet {
+  declarations: IStyleSheetDeclarations;
+  readonly options: IStyleOptions;
+
+  get repository(): HTMLStyleElement;
+
+  parse(selector: string, declaration: IStyleSheetDeclaration): string;
+
+  merge(declarations: IStyleSheetDeclarations): this
+
+  update(declarations?: IStyleSheetDeclarations): this;
+}
+
+
 export interface IStyle {
   get fingerprint(): string | undefined;
 
