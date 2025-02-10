@@ -351,10 +351,18 @@ export namespace Mockup {
 
         this.hooks.attributes.effect(({name, value}) => {
           if (Environment.Client) {
-            (!value
-                ? (this._instance as HTMLElement).removeAttribute(name.toString())
-                : (this._instance as HTMLElement).setAttribute(name.toString(), value)
-            )
+            if (![
+              "classname",
+              "data",
+              "dataset",
+            ].includes(name.toString().toLowerCase())
+            ) {
+
+              (!value
+                  ? (this._instance as HTMLElement).removeAttribute(name.toString())
+                  : (this._instance as HTMLElement).setAttribute(name.toString(), value)
+              )
+            }
           }
           return true;
         })
