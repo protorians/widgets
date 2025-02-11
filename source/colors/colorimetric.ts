@@ -524,6 +524,22 @@ export namespace Colorimetric {
       return undefined;
     }
 
+    static variation(color: IColorOklch | string, value: string) {
+      const parsed = typeof color === 'string' ? this.parse(color) : color;
+
+      if (parsed) {
+        if (!isNaN(parseInt(value))) {
+          parsed.lightness = 100 - (parseInt(value) * .10);
+        } else if (value === 'alpha') {
+          parsed.lightness = 50;
+        } else if (value === 'invert') {
+          parsed.lightness = 100 - parsed.lightness;
+        }
+      }
+
+      return parsed;
+    }
+
     static toHex(oklch: IColorOklch): string {
       const lch = this.toLch(oklch);
       const lab = Lch.toLab(lch);
