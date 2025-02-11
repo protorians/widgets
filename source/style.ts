@@ -56,6 +56,14 @@ export class WidgetStyleSheet implements IStyleSheet {
     corner: 0,
   };
 
+  static unit(value: string | number): string {
+    const check = (/^-?\d+(\.\d+)?$/).test(value.toString());
+
+    if (check) {
+      return RemMetric.parse(`${parseFloat(value.toString())}${this.settings.unit}`);
+    } else return RemMetric.parse(value.toString())
+  }
+
   constructor(public readonly options: IStyleOptions = {} as IStyleOptions) {
   }
 
@@ -81,7 +89,7 @@ export class WidgetStyleSheet implements IStyleSheet {
 
                 case "string":
                 case "number":
-                  return `${id}: ${tree}`;
+                  return `${id}: ${WidgetStyleSheet.unit(tree)}`;
 
                 case 'object':
                   return this.parse(id, tree);
@@ -103,10 +111,12 @@ export class WidgetStyleSheet implements IStyleSheet {
     return this;
   }
 
-  update(declarations?: IStyleSheetDeclarations): this {
+  sync(declarations?: IStyleSheetDeclarations): this {
 
     const build = Object.entries(this.merge(declarations || {}).declarations)
-      .map(([selector, declaration]) => this.parse(selector, declaration))
+      .map(([selector, declaration]) =>
+        this.parse(selector, declaration)
+      )
 
     if (this.options.attach === true || typeof this.options.attach === 'undefined') {
       this.repository.innerHTML = build.map(line => `${line}`).join("\n");

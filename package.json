@@ -9,6 +9,10 @@
     "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p esm.tsconfig.json && ts-add-js-extension --dir=~esm",
     "build:cjs": "tsc -p cjs.tsconfig.json && ts-add-js-extension --dir=~cjs",
+    "prepare:major": "npm version premajor --preid=beta",
+    "prepare:minor": "npm version preminor --preid=beta",
+    "prepare:patch": "npm version prepatch --preid=beta",
+    "prepare:prerelease": "npm version prerelease",
     "fix:esm": "ts-add-js-extension --dir=~esm",
     "fix:cjs": "ts-add-js-extension --dir=~cjs"
   },

@@ -1,6 +1,6 @@
 import type {
   IColorExtended,
-  IColorKey,
+  IColorKey, IColorOklch,
   IColorScheme,
   IColorSchemes,
   IColorSlots, IStyleSheet,
@@ -99,9 +99,8 @@ export class ColorPalette {
   protected static declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations;
 
   static stylesheet(): IStyleSheet {
-    return (
-      this._stylesheet || (new WidgetStyleSheet({attach: true}))
-    )
+    this._stylesheet = this._stylesheet || (new WidgetStyleSheet({attach: true}))
+    return this._stylesheet;
   }
 
   static value<T extends IColorExtended<IColorKey>>(key: T) {
@@ -124,30 +123,20 @@ export class ColorPalette {
         const variants = xpath.slice(1);
         let value = Oklch.toString(parsed);
 
-        if (variants.length === 1) {
-          const variant = variants[0].toLowerCase();
+        let calculate: IColorOklch | undefined = parsed;
 
-          if (!isNaN(parseInt(variant))) {
-            value = Oklch.toString({...parsed, lightness: 100 - (parseInt(variant) * .10)})
-          } else if (variant === 'alpha') {
-          } else if (variant === 'rgb') {
-          } else if (variant === 'invert') {
-          } else if (variant === 'intensity') {
+        console.warn('variants', variants)
 
-          }
+        for (let index = 0; index < variants.length; index++)
+          if (calculate) calculate = Oklch.variation(calculate, variants[index])
 
-        } else if (variants.length === 2) {
-          // console.warn('Deep 2',color, variants)
-        }
+        if (!calculate) return undefined;
 
-        // if (!this.record(key, value)) return undefined
+        value = Oklch.toString(calculate);
 
         this.declarations[`--color-${type}-${key}`] = value;
 
-        return {
-          type,
-          value
-        };
+        return {type, value};
       })
       .filter(v => typeof v !== 'undefined')
 
@@ -158,7 +147,7 @@ export class ColorPalette {
         ).join(',')
       })`
 
-      this.stylesheet()?.update({':root': this.declarations,})
+      this.stylesheet()?.sync({':root, :host': this.declarations,})
     }
 
     return `var(--color-${key})`;

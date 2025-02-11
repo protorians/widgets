@@ -62,7 +62,7 @@ export interface IStyleSheet {
 
   merge(declarations: IStyleSheetDeclarations): this
 
-  update(declarations?: IStyleSheetDeclarations): this;
+  sync(declarations?: IStyleSheetDeclarations): this;
 }
 
 

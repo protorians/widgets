@@ -108,8 +108,8 @@ export type IColorAlphas =
 
 export type IColorExtended<T extends string> = `${T}`
   | `${T}-alpha`
-  | `${T}-rgb`
-  | `${T}-intensity`
+  // | `${T}-rgb`
+  // | `${T}-intensity`
   | `${`${T}`}-${IColorAlphas}`
   | `${`${T}`}-${IColorIntensities}`
   | `${`${T}`}-${IColorIntensities}-${IColorAlphas}`
