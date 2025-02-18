@@ -2,18 +2,17 @@ import type {IApplication, IApplicationConfig, IRouterBaseScheme, IViewStack, IW
 import {Views} from "./view";
 import {Mount} from "./component";
 import {Image, Layer, Section, SmallerText, Text,} from "./overlay";
-import {Style} from "./style";
 
 
 export class ApplicationStyle {
-  static main = Style({
+  static main = {
     display: 'flex',
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '100%',
     flexDirection: 'column',
-  });
+  }
 
-  static content = Style({
+  static content = {
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
@@ -22,7 +21,7 @@ export class ApplicationStyle {
     gap: 1,
     width: '100%',
     height: '100%',
-  })
+  }
 }
 
 export class Application<RouterScheme extends IRouterBaseScheme> implements IApplication<RouterScheme> {
