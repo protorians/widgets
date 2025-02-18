@@ -1,89 +1,112 @@
-import type {ISignalController, IWidgetNode} from "./index";
+import type {IWidgetNode} from "./index";
 import {AbsoluteUnit, RelativeUnit} from "../enums";
 
 export type IStyleSupportedValue = object | string | number | undefined
 
 export type IStyleExtendedDeclaration = {
-  'padding-x': IStyleSupportedValue;
-  'padding-y': IStyleSupportedValue;
-  'margin-x': IStyleSupportedValue;
-  'margin-y': IStyleSupportedValue;
+    'paddingX': IStyleSupportedValue;
+    'paddingY': IStyleSupportedValue;
+    'marginX': IStyleSupportedValue;
+    'marginY': IStyleSupportedValue;
 }
 
 export type IStyleDeclaration = {
-  [K in (keyof CSSStyleDeclaration | keyof IStyleExtendedDeclaration)]: IStyleSupportedValue;
+    [K in (keyof CSSStyleDeclaration | keyof IStyleExtendedDeclaration)]: IStyleSupportedValue;
 }
 
 export type IStyleSettings = {
-  bytes: number;
-  unit: AbsoluteUnit | RelativeUnit;
-  spacing?: string | number;
-  corner?: string | number;
+    bytes: number;
+    unit: AbsoluteUnit | RelativeUnit;
+    spacing?: string | number;
+    corner?: string | number;
 }
 
 export type IStyleOptions = {
-  attach?: boolean;
+    attach?: boolean;
 }
 
-export type IStyleDeclarationController = ISignalController<Partial<IStyleDeclaration>>
+// export type IStyleDeclarationController = ISignalController<Partial<IStyleDeclaration>>
 
-export type IStyleCascadeCallable = (fingerprint: string, computed: string) => void
+// export type IStyleCascadeCallable = (fingerprint: string, computed: string) => void
+//
+// export interface IStyleCascades {
+//     [K: string]: IStyleDeclarationController | undefined
+// }
+//
+// export interface IStyleCascadesDeclarations {
+//     [K: string]: Partial<IStyleDeclaration> | undefined
+// }
+//
+// export interface IStyleCascadesComputed {
+//     [K: string]: string
+// }
+//
+// export interface IStyleCascadesAttaches {
+//     [K: string]: HTMLStyleElement | undefined;
+// }
 
-export interface IStyleCascades {
-  [K: string]: IStyleDeclarationController | undefined
-}
 
-export interface IStyleCascadesDeclarations {
-  [K: string]: Partial<IStyleDeclaration> | undefined
-}
+// export type IStyleSheetInlineDeclaration = {
+//     [K in keyof IStyleDeclaration]: IStyleDeclaration[K]
+// }
 
-export interface IStyleCascadesComputed {
-  [K: string]: string
-}
+// export type IStyleSheetCascadeDeclaration = {
+//     [K: string]: IStyleSheet | string;
+// }
 
-export interface IStyleCascadesAttaches {
-  [K: string]: HTMLStyleElement | undefined;
-}
+export type IStyleSheetCascade = {
+    [K: string]: IStyleSheet | string | null | undefined
+};
 
+export type IStyleSheetPropertyKey = `--${string}`
 
-export type IStyleSheetDeclaration = IStyleDeclarationController | IStyleSheet | Partial<IStyleDeclaration>;
-
-export interface IStyleSheetDeclarations {
-  [k: string]: IStyleSheetDeclaration | IStyleSheetDeclarations;
-}
+export type IStyleSheetDeclarations = Partial<IStyleDeclaration> | IStyleSheetCascade
 
 export interface IStyleSheet {
-  declarations: IStyleSheetDeclarations;
-  readonly options: IStyleOptions;
+    declarations: IStyleSheetDeclarations;
+    readonly options: IStyleOptions;
 
-  get repository(): HTMLStyleElement;
+    get repository(): HTMLStyleElement | undefined;
 
-  parse(selector: string, declaration: IStyleSheetDeclaration): string;
+    get rules(): string;
 
-  merge(declarations: IStyleSheetDeclarations): this
+    get selector(): string;
 
-  sync(declarations?: IStyleSheetDeclarations): this;
+    clear(): this;
+
+    parse(declaration: IStyleSheetDeclarations | undefined, selector?: string): string | undefined;
+
+    merge(declarations: IStyleSheetDeclarations | IStyleSheet | undefined): this
+
+    sync(declarations?: IStyleSheetDeclarations): this;
+
+    bind(widget: IWidgetNode<any, any>): this
+
+    remove<K extends keyof IStyleSheetDeclarations>(key: K | K[]): this
+
+    update<K extends keyof IStyleSheetDeclarations>(key: K, value: IStyleSheetDeclarations[K]): this
+
 }
 
 
-export interface IStyle {
-  get fingerprint(): string | undefined;
-
-  get options(): IStyleOptions;
-
-  get declaration(): Partial<IStyleDeclaration>;
-
-  bind(widget: IWidgetNode<any, any>): Partial<IStyleDeclaration> | HTMLStyleElement | undefined;
-
-  upgrade(): this;
-
-  update(property: keyof IStyleDeclaration, value: IStyleSupportedValue): this;
-
-  merge(style: IStyle, enforce?: boolean): this;
-
-  remove(properties: (keyof IStyleDeclaration)[]): this;
-
-  clear(): this;
-
-  detach(): void;
-}
+// export interface IStyle {
+//     get fingerprint(): string | undefined;
+//
+//     get options(): IStyleOptions;
+//
+//     get declaration(): Partial<IStyleDeclaration>;
+//
+//     bind(widget: IWidgetNode<any, any>): Partial<IStyleDeclaration> | HTMLStyleElement | undefined;
+//
+//     upgrade(): this;
+//
+//     update(property: keyof IStyleDeclaration, value: IStyleSupportedValue): this;
+//
+//     merge(style: IStyle, enforce?: boolean): this;
+//
+//     remove(properties: (keyof IStyleDeclaration)[]): this;
+//
+//     clear(): this;
+//
+//     detach(): void;
+// }
