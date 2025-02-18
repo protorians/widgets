@@ -1,0 +1,29 @@
+import type {IColorExtended, IColorKey, IColorScheme, IProviderAgent, IProviderCallable} from "../types";
+import {ColorPalette} from "../colors";
+
+
+export function colorPaletteAgent(scheme: 'light' | 'dark'): IProviderCallable {
+
+    return (provider: IProviderAgent) => {
+        const declarations = Object.entries(provider.declarations)
+        const prefix = '--color-';
+
+        if (provider.scopes.length) {
+            provider.scopes.forEach((scope) => {
+                if (scope.startsWith(prefix))
+                    ColorPalette.value((scope.substring(prefix.length)) as IColorExtended<IColorKey>);
+            })
+        }
+
+        if (declarations.length) {
+            const palette: IColorScheme = {} as IColorScheme;
+
+            declarations
+                .forEach(([key, value]) =>
+                    (key.startsWith(prefix)) ? palette[key.substring(prefix.length)] = value : void (0));
+
+            ColorPalette[scheme] = {...ColorPalette[scheme], ...palette};
+        }
+    }
+
+}
