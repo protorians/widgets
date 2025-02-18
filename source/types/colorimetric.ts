@@ -8,6 +8,19 @@ export type IColorSlots = {
   [K in IColorExtended<string>]: string
 }
 
+export type IColorPalette = {
+  [K in IColorExtended<IColorKey>]: string
+}
+
+export type IColorPaletteAlias = {
+  [K in IColorExtendedAlias<IColorKey>]: string
+}
+
+export type IColorAny = {
+  [K in string]: string
+}
+
+
 export type IColorAspects = 'outline' | 'semi' | 'link' | 'semi-outline';
 
 // export type IColorScheme = {
@@ -54,7 +67,6 @@ export type IColorHslProps = {
   saturation: number;
   lightness: number;
 }
-
 
 
 export type IColorKey =
@@ -106,17 +118,33 @@ export type IColorAlphas =
   | 'alpha-9'
   ;
 
+export type IColorAlphasAlias =
+  'alpha_1'
+  | 'alpha_2'
+  | 'alpha_3'
+  | 'alpha_4'
+  | 'alpha_5'
+  | 'alpha_6'
+  | 'alpha_7'
+  | 'alpha_8'
+  | 'alpha_9'
+  ;
+
 export type IColorExtended<T extends string> = `${T}`
   | `${T}-alpha`
-  // | `${T}-rgb`
-  // | `${T}-intensity`
   | `${`${T}`}-${IColorAlphas}`
   | `${`${T}`}-${IColorIntensities}`
   | `${`${T}`}-${IColorIntensities}-${IColorAlphas}`
   | `${T}-invert`
-  // | `${`${T}`}-${IColorAlphas}-invert`
-  | `${`${T}`}-${IColorIntensities}-invert`
-// | `${`${T}`}-${IColorIntensities}-${IColorAlphas}-invert`
+  // | `${`${T}`}-${IColorIntensities}-invert`
+
+export type IColorExtendedAlias<T extends string> = `${T}`
+  | `${T}_alpha`
+  | `${`${T}`}_${IColorAlphasAlias}`
+  | `${`${T}`}_${IColorIntensities}`
+  | `${`${T}`}_${IColorIntensities}_${IColorAlphasAlias}`
+  | `${T}_invert`
+  // | `${`${T}`}_${IColorIntensities}_invert`
 
 export type IColorHex = string;
 
