@@ -1,5 +1,5 @@
-export const NativeText = Text;
-export const NativeImage = Image;
+export const NativeText = typeof Text !== "undefined" ? Text : undefined;
+export const NativeImage = typeof Image !== "undefined" ? Image : undefined;
 
 export type * from "./types"
 export * from "./environment"
@@ -26,4 +26,5 @@ export * from "./kits"
 export * from "./layout"
 export * from "./overlay"
 export * from "./colors"
-export * from "./runtime"
+export * from "./engine"
+export * from "./agents"
