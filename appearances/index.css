@@ -1,0 +1,29 @@
+@import "reset-fusion.css";
+
+:root, :host {
+    color-scheme: dark light;
+
+    --widget-typography-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "sans-serif";
+    --widget-typography-size: 14px;
+    --widget-typography-weight: 400;
+    --widget-typography-line: 1.5;
+    --widget-typography-spacing: initial;
+    --widget-typography-align: justify;
+
+    font-family: var(--widget-typography-family);
+}
+
+html, body{
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    color: var(--color-text, #000000);
+    background: var(--color-tint, #efefef);
+    font-size: var(--widget-typography-size);
+    font-weight: var(--widget-typography-weight);
+    line-height: var(--widget-typography-line);
+    letter-spacing: var(--widget-typography-spacing);
+    text-align: var(--widget-typography-align);
+}
