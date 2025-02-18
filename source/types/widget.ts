@@ -1,6 +1,6 @@
 import type {IChildren} from "./children";
 import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from "./value";
-import type {IMockup, IRuntime, IStateStack, IStyle, IStyleDeclaration} from "./index";
+import type {IMockup, IEngine, IStateStack, IStyleDeclaration, IStyleSheetDeclarations, IStyleSheet} from "./index";
 import type {IAttributes} from "./attributes";
 import type {IMockupElement, IMockupMeasure} from "./mockup";
 import type {ISignalStack} from "./signals";
@@ -46,7 +46,7 @@ export interface IContext<P extends IPropStack, S extends IStateStack> {
   readonly widget: IWidgetNode<any, any>;
   props: P;
   state: S;
-  runtime: IRuntime<any, any> | undefined;
+  engine: IEngine<any, any> | undefined;
 }
 
 export type ICallablePayload<E extends HTMLElement, A extends IAttributes, Payload> = {
@@ -141,7 +141,7 @@ export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
 
   get measure(): IMockupMeasure;
 
-  get stylesheet(): IStyle | undefined;
+  get stylesheet(): IStyleSheet;
 
   get context(): IContext<any, any> | undefined
 
@@ -191,7 +191,8 @@ export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
 
   // nsa(nsa: IGlobalAttributes, ns?: string, separator?: string): this;
 
-  style(declaration: Partial<IStyleDeclaration>): this;
+  style(declaration: IStyleSheetDeclarations): this;
+  // style(declaration: Partial<IStyleDeclaration>): this;
 
   className(token: IStringToken): this;
 
@@ -243,7 +244,8 @@ export interface ISignalableMap<E extends HTMLElement, A extends IAttributes> {
 
   child: ICallablePayload<E, A, IChildren<IChildrenSupported>>;
 
-  style: ICallablePayload<E, A, IStyleDeclaration>;
+  style: ICallablePayload<E, A, IStyleSheetDeclarations>;
+  // style: ICallablePayload<E, A, IStyleDeclaration>;
 
   className: ICallablePayload<E, A, IStringToken>;
 
@@ -316,7 +318,7 @@ export type INativeProperties<E extends HTMLElement, A extends IAttributes> = {
   /**
    * Make component's style
    */
-  style?: IStyle;
+  style?: IStyleSheetDeclarations | IStyleSheet;
 
   /**
    * Make component's CSS class name

@@ -13,14 +13,14 @@ import type {
   INativeProperties,
   IPrimitive,
   IPropStack,
-  IRef, IRuntime,
+  IRef, IEngine,
   ISignalStack,
   IStateStack,
   IStringToken,
-  IStyle,
   IStyleDeclaration,
   IWidgetNode,
-  IWidgetDeclaration, ISignalableMap,
+  IWidgetDeclaration, ISignalableMap, IStyleSheetDeclarations,
+  IStyleSheet,
 } from "./types";
 import {MetricRandom} from "@protorians/core";
 import {Mockup} from "./mockup";
@@ -28,6 +28,7 @@ import {ToggleOption, WidgetsNativeProperty} from "./enums";
 import {SignalHook} from "./hooks";
 import {Widgets} from "./widgets";
 import {Environment} from "./environment";
+import {StyleWidget} from "./style";
 
 
 export const WidgetNativeProperties = Object.values(WidgetsNativeProperty)
@@ -37,7 +38,7 @@ export class ContextWidget<P extends IPropStack, S extends IStateStack> implemen
   public root: IWidgetNode<any, any> | undefined;
   public props: P
   public state: S
-  public runtime: IRuntime<any, any> | undefined
+  public engine: IEngine<any, any> | undefined
 
   constructor(
     public readonly widget: IWidgetNode<any, any>,
@@ -61,6 +62,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
   protected _signal: ISignalStack<ISignalableMap<E, A>>;
   protected _locked: boolean = false;
   protected _context: IContext<any, any> | undefined = undefined;
+  protected _stylesheet: IStyleSheet | undefined = undefined;
 
   constructor(declaration: IWidgetDeclaration<E, A>) {
     this.extractProperties(declaration);
@@ -73,7 +75,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
     this._signal = new SignalHook.Stack;
   }
 
-  static get style(): IStyle | undefined {
+  static get style(): IStyleSheetDeclarations | undefined {
     return undefined;
   }
 
@@ -149,8 +151,9 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
     return this._mockup.measure;
   }
 
-  get stylesheet(): IStyle | undefined {
-    return this._props.style;
+  get stylesheet(): IStyleSheet {
+    this._stylesheet = this._stylesheet || (new StyleWidget()).bind(this);
+    return this._stylesheet;
   }
 
   get context(): IContext<any, any> | undefined {
@@ -164,127 +167,127 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
   }
 
   construct(callback: ICallable<E, A, undefined>): this {
-    this.context?.runtime?.construct(this, callback);
+    this.context?.engine?.construct(this, callback);
     return this;
   }
 
   mount(callback: ICallable<E, A, undefined>): this {
-    this.context?.runtime?.mount(this, callback);
+    this.context?.engine?.mount(this, callback);
     return this;
   }
 
   unmount(callback: ICallable<E, A, undefined>): this {
-    this.context?.runtime?.unmount(this, callback);
+    this.context?.engine?.unmount(this, callback);
     return this;
   }
 
   before(callback: ICallable<E, A, undefined>): this {
-    this.context?.runtime?.before(this, callback);
+    this.context?.engine?.before(this, callback);
     return this;
   }
 
   after(callback: ICallable<E, A, undefined>): this {
-    this.context?.runtime?.after(this, callback);
+    this.context?.engine?.after(this, callback);
     return this;
   }
 
   clear(): this {
-    this.context?.runtime?.clear(this);
+    this.context?.engine?.clear(this);
     return this;
   }
 
   remove(): this {
-    this.context?.runtime?.remove(this);
+    this.context?.engine?.remove(this);
     return this;
   }
 
   enable(): this {
-    this.context?.runtime?.enable(this);
+    this.context?.engine?.enable(this);
     return this;
   }
 
   disable(): this {
-    this.context?.runtime?.disable(this);
+    this.context?.engine?.disable(this);
     return this;
   }
 
   lock(): this {
-    this.context?.runtime?.lock(this);
+    this.context?.engine?.lock(this);
     return this;
   }
 
   unlock(): this {
-    this.context?.runtime?.unlock(this);
+    this.context?.engine?.unlock(this);
     return this;
   }
 
   trigger(type: keyof IGlobalEventMap): this {
-    this.context?.runtime?.trigger(this, type);
+    this.context?.engine?.trigger(this, type);
     return this;
   }
 
   stase(state: boolean): this{
-    this.context?.runtime?.stase(this, state)
+    this.context?.engine?.stase(this, state)
     return this;
   }
 
   computedStyle(token: keyof IStyleDeclaration): string | undefined {
-    return this.context?.runtime?.computedStyle(this, token);
+    return this.context?.engine?.computedStyle(this, token);
   }
 
   hide(): this {
     console.log('Hide', this)
-    this.context?.runtime?.hide(this);
+    this.context?.engine?.hide(this);
     return this;
   }
 
   show(): this {
-    this.context?.runtime?.show(this);
+    this.context?.engine?.show(this);
     return this;
   }
 
   toggle(option?: ToggleOption): this {
-    this.context?.runtime?.toggle(this, option);
+    this.context?.engine?.toggle(this, option);
     return this
   }
 
   data(dataset: IGlobalAttributes): this {
-    this.context?.runtime?.data(this, dataset);
+    this.context?.engine?.data(this, dataset);
     return this;
   }
 
   attribute(attributes: Partial<A>): this {
-    this.context?.runtime?.attribute(this, attributes);
+    this.context?.engine?.attribute(this, attributes);
     return this;
   }
 
   attributeLess(attributes: IGlobalAttributes): this {
-    this.context?.runtime?.attributeLess(this, attributes);
+    this.context?.engine?.attributeLess(this, attributes);
     return this;
   }
 
-  style(declaration: Partial<IStyleDeclaration>): this {
-    this.context?.runtime?.style(this, declaration);
+  style(declaration: IStyleSheetDeclarations): this {
+    this.context?.engine?.style(this, declaration);
     return this;
   }
 
   className(token: IStringToken): this {
-    this.context?.runtime?.className(this, token);
+    this.context?.engine?.className(this, token);
     return this;
   }
 
   value(data: IPrimitive): this {
-    this.context?.runtime?.value(this, data);
+    this.context?.engine?.value(this, data);
     return this;
   }
 
   html(data: string): this {
-    this.context?.runtime?.html(this, data);
+    this.context?.engine?.html(this, data);
     return this;
   }
 
   content(children: IChildren<IChildrenSupported>): this {
-    this.context?.runtime?.content(this, children);
+    this.context?.engine?.content(this, children);
     return this;
   }
 
@@ -293,12 +296,12 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
     callback: ICallable<E, A, IGlobalEventPayload<T>>,
     options: boolean | AddEventListenerOptions = false,
   ): this {
-    this.context?.runtime?.listen(this, type, callback, options);
+    this.context?.engine?.listen(this, type, callback, options);
     return this;
   }
 
   on<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>> | null): this {
-    this.context?.runtime?.on(this, type, callback)
+    this.context?.engine?.on(this, type, callback)
     return this;
   }
 
@@ -327,7 +330,7 @@ export function WidgetBuilder<E extends HTMLElement, A extends IAttributes, P ex
   widget: IWidgetNode<E, A>,
   context: IContext<P, S>,
 ): string | E | undefined {
-  const runtime = ((Environment.Client) ? Widgets.Runtime.client(widget) : Widgets.Runtime.server(widget));
-  context.runtime = runtime;
-  return runtime.render<P, S>(widget, context);
+  const engine = ((Environment.Client) ? Widgets.Engine.client(widget) : Widgets.Engine.server(widget));
+  context.engine = engine;
+  return engine.render<P, S>(widget, context);
 }
