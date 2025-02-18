@@ -11,21 +11,21 @@ import type {
 import type {IMockupElement} from "./mockup";
 import type {IStateStack} from "./state";
 import type {IChildren} from "./children";
-import {ToggleOption} from "../enums";
-import type {IStyleDeclaration} from "./style";
+import type {IStyleDeclaration, IStyleSheetDeclarations} from "./style";
 import type {IPrimitive, IStringToken} from "./value";
+import {ToggleOption} from "../enums";
 
 
-export type IRuntimeMap = {
-  server<E extends HTMLElement, A extends IAttributes>(widget: IWidgetNode<E, A>): IRuntime<E, A>;
-  client<E extends HTMLElement, A extends IAttributes>(widget: IWidgetNode<E, A>): IRuntime<E, A>;
+export type IEngineMap = {
+  server<E extends HTMLElement, A extends IAttributes>(widget: IWidgetNode<E, A>): IEngine<E, A>;
+  client<E extends HTMLElement, A extends IAttributes>(widget: IWidgetNode<E, A>): IEngine<E, A>;
 }
 
-export interface IRuntimeConstructor<E extends HTMLElement, A extends IAttributes> extends IRuntime<E, A>{
-  new (widget: IWidgetNode<E, A>): IRuntime<E, A>;
+export interface IEngineConstructor<E extends HTMLElement, A extends IAttributes> extends IEngine<E, A>{
+  new (widget: IWidgetNode<E, A>): IEngine<E, A>;
 }
 
-export interface IRuntime<E extends HTMLElement, A extends IAttributes> {
+export interface IEngine<E extends HTMLElement, A extends IAttributes> {
   get element(): IMockupElement<E, A> | undefined;
 
   construct(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
@@ -68,7 +68,8 @@ export interface IRuntime<E extends HTMLElement, A extends IAttributes> {
 
   content(widget: IWidgetNode<E, A>, children: IChildren<IChildrenSupported>): this;
 
-  style(widget: IWidgetNode<E, A>, declaration: Partial<IStyleDeclaration>): this;
+  style(widget: IWidgetNode<E, A>, declaration: IStyleSheetDeclarations): this;
+  // style(widget: IWidgetNode<E, A>, declaration: Partial<IStyleDeclaration>): this;
 
   className(widget: IWidgetNode<E, A>, token: IStringToken): this;
 
