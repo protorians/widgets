@@ -5,10 +5,9 @@ import type {
   ILinkAttributes,
   ISpanAttributes,
   IStrongAttributes,
-  IStyle,
+  IStyleSheetDeclarations,
   IWidgetDeclaration
 } from "../types";
-import {Style} from "../style";
 
 /**
  * @description Link Widget
@@ -53,10 +52,10 @@ export class SmallerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttribut
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `smaller`
-    })
+    }
   }
 }
 
@@ -70,10 +69,10 @@ export class SmallTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `small`
-    })
+    }
   }
 }
 
@@ -87,10 +86,10 @@ export class TextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `medium`
-    })
+    }
   }
 }
 
@@ -104,10 +103,10 @@ export class LargeTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `large`
-    })
+    }
   }
 }
 
@@ -121,10 +120,10 @@ export class LargerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttribute
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `larger`
-    })
+    }
   }
 }
 

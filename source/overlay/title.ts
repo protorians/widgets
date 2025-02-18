@@ -1,7 +1,6 @@
 import {Composable, Mountable} from "../decorators";
 import {WidgetNode} from "../widget-node";
-import type {ISpanAttributes, IStyle, IWidgetDeclaration} from "../types";
-import {Style} from "../style";
+import type {ISpanAttributes, IStyleSheetDeclarations, IWidgetDeclaration} from "../types";
 
 
 /**
@@ -14,10 +13,10 @@ export class SubTitleWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes>
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `x-large`
-    })
+    }
   }
 }
 
@@ -31,10 +30,10 @@ export class TitleWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `xx-large`
-    })
+    }
   }
 }
 
@@ -48,10 +47,10 @@ export class HugeTitleWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes
     return 'span'
   };
 
-  static get style(): IStyle {
-    return Style({
+  static get style(): IStyleSheetDeclarations {
+    return {
       fontSize: `xxx-large`
-    })
+    }
   }
 }
 

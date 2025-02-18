@@ -120,8 +120,8 @@ export function Label(declaration: IWidgetDeclaration<HTMLLabelElement, ILabelAt
  * @param declaration
  * @constructor
  */
-export function Input(declaration: IWidgetDeclaration<HTMLInputElement, IInputAttributes>): InputWidget {
-  return new InputWidget(declaration)
+export function Input(declaration: Omit<IWidgetDeclaration<HTMLInputElement, IInputAttributes>, 'children'>): InputWidget {
+  return new InputWidget({...declaration, children: undefined})
 }
 
 /**
