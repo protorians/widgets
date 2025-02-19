@@ -7,7 +7,7 @@ export enum HttpMethod {
   OPTION = 'OPTION',
 }
 
-export enum ColorSchemes {
+export enum ColorSchemeType {
   Light = 'light',
   Dark = 'dark',
 }
