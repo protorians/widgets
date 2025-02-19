@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.1.7-beta.0",
+  "version": "0.1.7-beta.1",
   "description": "Create your web user interfaces with widgets",
   "main": "./~cjs/index.js",
   "type": "module",
@@ -9,10 +9,6 @@
     "build": "rm -rf ~esm ~cjs && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p esm.tsconfig.json && ts-add-js-extension --dir=~esm",
     "build:cjs": "tsc -p cjs.tsconfig.json && ts-add-js-extension --dir=~cjs",
-    "pkg:major": "npm version premajor --preid=beta",
-    "pkg:minor": "npm version preminor --preid=beta",
-    "pkg:patch": "npm version prepatch --preid=beta",
-    "pkg:prerelease": "npm version prerelease",
     "fix:esm": "ts-add-js-extension --dir=~esm",
     "fix:cjs": "ts-add-js-extension --dir=~cjs"
   },
