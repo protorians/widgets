@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.1.7-beta.1",
+  "version": "0.1.7-beta.2",
   "description": "Create your web user interfaces with widgets",
   "main": "./~cjs/index.js",
   "type": "module",
