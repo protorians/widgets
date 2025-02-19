@@ -7,7 +7,7 @@ import type {
     IStyleSheetDeclarations,
     IStyleSheetPropertyKey
 } from "../types";
-import {ColorSchemes} from "../enums";
+import {ColorSchemeType} from "../enums";
 import {Colorimetric} from "./colorimetric";
 import {Style, StyleWidget} from "../style";
 
@@ -19,7 +19,7 @@ const schemes: IColorSchemes = {
 
 export class ColorScheme {
 
-    static generates(type: ColorSchemes, declarations: IColorScheme): IColorSlots {
+    static generates(type: ColorSchemeType, declarations: IColorScheme): IColorSlots {
         Object.keys(declarations)
             .forEach(key => {
                 schemes[type] = {...schemes[type], ...Colorimetric.generates(key as IColorKey, declarations[key])}
@@ -31,8 +31,8 @@ export class ColorScheme {
         return (window.matchMedia)
             ? (
                 window.matchMedia('(prefers-color-scheme: dark)').matches
-                    ? ColorSchemes.Dark
-                    : ColorSchemes.Light
+                    ? ColorSchemeType.Dark
+                    : ColorSchemeType.Light
             )
             : undefined;
     }
@@ -50,7 +50,7 @@ export class ColorScheme {
         const noUse = document.documentElement.hasAttribute('theme:no-scheme')
 
         if (!noUse) {
-            return (document.documentElement.getAttribute('theme:scheme') || this.detect()) as ColorSchemes
+            return (document.documentElement.getAttribute('theme:scheme') || this.detect()) as ColorSchemeType
         }
         return undefined;
     }
@@ -63,7 +63,7 @@ export class ColorPalette {
 
     static _stylesheet: IStyleSheet | undefined;
 
-    static light: IColorScheme = {
+    static light: Partial<IColorScheme> = {
         one: 'oklch(56.29% 0.1933 256.16)',
         two: 'oklch(67.51% 0.1493 246.05)',
         three: 'oklch(48.7% 0.1959 328.46)',
@@ -76,9 +76,9 @@ export class ColorPalette {
         success: 'oklch(55.04% 0.1827 142.37)',
         white: 'oklch(100% 0 0)',
         black: 'oklch(0% 0 0)',
-    }
+    };
 
-    static dark: IColorScheme = {
+    static dark: Partial<IColorScheme> = {
         one: 'oklch(43.71% 0.1933 256.16)',
         two: 'oklch(32.49% 0.1493 246.05)',
         three: 'oklch(51.3% 0.1959 328.46)',
@@ -91,7 +91,7 @@ export class ColorPalette {
         success: 'oklch(44.96% 0.1827 142.37)',
         white: 'oklch(100% 0 0)',
         black: 'oklch(0% 0 0)',
-    }
+    };
 
     protected static declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations;
 
@@ -100,21 +100,17 @@ export class ColorPalette {
         return this._stylesheet;
     }
 
-    static clear(): typeof this{
-
+    static clear(): typeof this {
         this.declarations = {} as IStyleSheetDeclarations;
-
         this._stylesheet?.clear()
-
         return this;
     }
 
     static value<T extends IColorExtended<IColorKey>>(key: T) {
-        const schemes = Object.values(ColorSchemes);
+        const schemes = Object.values(ColorSchemeType);
 
         const parsed = schemes
             .map(type => {
-
                 if (!type) return undefined;
 
                 const scheme = this[type]
@@ -159,22 +155,10 @@ export class ColorPalette {
 
 }
 
-//
-// const paletteProxy = new Proxy({}, {
-//   get(target: {}, p: string | symbol, receiver: any): any {
-//   }
-// })
-
-
-const _color_palette_manager = new Proxy<IColorPaletteAlias>({} as IColorPaletteAlias, {
-    get(target: IColorSlots, key: string): any {
+export const Color = new Proxy<IColorPaletteAlias>({} as IColorPaletteAlias, {
+    get(target: IColorSlots, key: string): string | undefined {
         key = key.replace(/[_]/gi, '-');
         target[key] = ColorPalette.value(key as IColorExtended<IColorKey>)
-        return target[key] || undefined
-    }
+        return target[key] || undefined;
+    },
 })
-
-export class Color {
-    static palette: IColorPaletteAlias = _color_palette_manager
-}
-
