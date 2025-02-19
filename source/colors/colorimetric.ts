@@ -37,6 +37,12 @@ export namespace Colorimetric {
 
     export const Settings: IColorimetricSettings = {
         type: ColorimetricType.Oklch,
+        lightness: {
+            breakpoint: 70,
+            min: 20,
+            middle: 50,
+            max: 80,
+        },
     }
 
     export function render(hex: string, alpha: number = 100): string {
@@ -531,14 +537,22 @@ export namespace Colorimetric {
             const parsed = typeof color === 'string' ? this.parse(color) : color;
 
             if (parsed) {
-                const integer = parseInt(value);
+                let integer = parseInt(value);
                 if (!isNaN(integer)) {
                     if (integer < 100) parsed.alpha = adjustPercent(integer * 10);
-                    else parsed.lightness = 100 - (integer * .10);
+                    else {
+                        const difference = (100 - parsed.lightness);
+                        parsed.lightness = parsed.lightness <= Settings.lightness.breakpoint
+                            ? (100 - (parsed.lightness + difference * integer * .001)) + (difference * Settings.lightness.max * .01)
+                            : parsed.lightness - (parsed.lightness * integer * .001) + (parsed.lightness * Settings.lightness.min * .01)
+                        ;
+                    }
                 } else if (value === 'alpha') {
-                    parsed.lightness = 50;
+                    parsed.lightness = Settings.lightness.middle;
                 } else if (value === 'invert') {
-                    parsed.lightness = 100 - parsed.lightness;
+                    parsed.lightness = parsed.lightness >= Settings.lightness.breakpoint
+                        ? Settings.lightness.min
+                        : Settings.lightness.max;
                 }
             }
 

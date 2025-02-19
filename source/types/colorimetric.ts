@@ -1,7 +1,15 @@
 import {ColorimetricType} from "../enums";
 
+export type IColorimetricLightnessSetting = {
+  min: number;
+  max: number;
+  middle: number;
+  breakpoint: number;
+}
+
 export type IColorimetricSettings = {
-  type: ColorimetricType
+  type: ColorimetricType;
+  lightness: IColorimetricLightnessSetting;
 }
 
 export type IColorSlots = {
@@ -14,6 +22,14 @@ export type IColorPalette = {
 
 export type IColorPaletteAlias = {
   [K in IColorExtendedAlias<IColorKey>]: string
+}
+
+export type IColorCustomScheme = {
+  [K in keyof IColorExtended<any>]: string
+}
+
+export type IColorCustomAliasScheme = {
+  [K in keyof IColorExtendedAlias<any>]: string
 }
 
 export type IColorAny = {
@@ -92,9 +108,10 @@ export type IColorSchemes = {
   light: IColorSlots;
   dark: IColorSlots;
 }
+
 export type IColorScheme = {
   [K in IColorKey]: string
-}
+};
 
 export type IColorIntensities = 100
   | 200
