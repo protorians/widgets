@@ -553,6 +553,8 @@ export namespace Colorimetric {
                     parsed.lightness = parsed.lightness >= Settings.lightness.breakpoint
                         ? Settings.lightness.min
                         : Settings.lightness.max;
+                } else if (value.startsWith('a')) {
+                    parsed.alpha = adjustPercent(parseInt(value.substring(1)) * 10);
                 }
             }
 
