@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "es6",
-    "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "module": "NodeNext",
     "forceConsistentCasingInFileNames": true,
-    
     "noImplicitAny": false,
     "allowJs": false,
     "removeComments": true,
@@ -23,7 +26,8 @@
     "node_modules",
     "~cjs",
     "~esm",
-    "./tests",
+    "build",
+    "./tests"
   ],
   "include": [
     "./source"
