@@ -1,4 +1,4 @@
-import type {IStringObject} from "./objects";
+import type {IStringObject} from "./objects.js";
 
 
 export type IProviderCallable = (provider: IProviderAgent, id?: string) => void;

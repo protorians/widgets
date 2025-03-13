@@ -1,3 +1,1 @@
-
-export * from "./colorimetric"
-export * from "./color"
+export * from "./color.js"

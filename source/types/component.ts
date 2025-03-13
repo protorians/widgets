@@ -1,5 +1,5 @@
-import type {IPropStack, IWidgetNode} from "./widget";
-import type {IStateStack} from "./state";
+import type {IPropStack, IWidgetNode} from "./widget.js";
+import type {IStateStack} from "./state.js";
 
 export interface IComponentElement extends HTMLElement {
   connectedCallback(): void;

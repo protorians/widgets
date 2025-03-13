@@ -1,6 +1,6 @@
-import {Composable, Mountable} from "../decorators";
-import {WidgetNode} from "../widget-node";
-import type {ISpanAttributes, IStyleSheetDeclarations, IWidgetDeclaration} from "../types";
+import {Composable, Mountable} from "../decorators.js";
+import {WidgetNode} from "../widget-node.js";
+import type {ISpanAttributes, IStyleSheetDeclarations, IWidgetDeclaration} from "../types/index.js";
 
 
 /**

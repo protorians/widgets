@@ -18,14 +18,13 @@ import type {
     IPrimitive,
     ISignalableCallbackMap,
     ISignalableMap,
-    ISignalStackCallable,
     IStyleSheetDeclarations
-} from "../types";
-import {ContextWidget, WidgetNode} from "../widget-node";
-import {StateWidget} from "../hooks";
-import {Environment} from "../environment";
-import {ToggleOption, TreatmentQueueStatus} from "../enums";
-import {Mockup} from "../mockup";
+} from "../types/index.js";
+import {ContextWidget, WidgetNode} from "../widget-node.js";
+import {StateWidget} from "../hooks/index.js";
+import {Environment, type ISignalStackCallable} from "@protorians/core";
+import {ToggleOption, TreatmentQueueStatus} from "../enums.js";
+import {Mockup} from "../mockup.js";
 
 export class Manticore<E extends HTMLElement, A extends IAttributes> implements IEngine<E, A> {
     get element(): E | undefined {
@@ -37,30 +36,30 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     ) {
     }
 
-    construct(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
-        widget.signal.listen('construct', callback)
-        return this;
-    }
-
-    mount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
-        widget.signal.listen('mount', callback)
-        return this;
-    }
-
-    unmount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
-        widget.signal.listen('unmount', callback)
-        return this;
-    }
-
-    before(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
-        widget.signal.listen('before', callback)
-        return this;
-    }
-
-    after(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
-        widget.signal.listen('after', callback)
-        return this;
-    }
+    // construct(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
+    //     widget.signal.listen('construct', callback)
+    //     return this;
+    // }
+    //
+    // mount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
+    //     widget.signal.listen('mount', callback)
+    //     return this;
+    // }
+    //
+    // unmount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
+    //     widget.signal.listen('unmount', callback)
+    //     return this;
+    // }
+    //
+    // before(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
+    //     widget.signal.listen('before', callback)
+    //     return this;
+    // }
+    //
+    // after(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this {
+    //     widget.signal.listen('after', callback)
+    //     return this;
+    // }
 
     clear(widget: IWidgetNode<E, A>,): this {
         if (widget.element)
@@ -269,16 +268,16 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                     widget: children,
                     payload: undefined
                 }, children.signal);
-
             } else if (children instanceof Promise) {
                 children.then(child => this.content(widget, child));
-            } else if (children instanceof HTMLElement) {
+            } else if (
+                children instanceof HTMLElement ||
+                children instanceof DocumentFragment ||
+                children instanceof Text
+            ) {
                 widget.mockup?.append(children);
             } else if (children instanceof StateWidget) {
-                children.effect(({name, value}) => {
-                    console.warn('Update New state', name, value)
-                })
-                this.content(widget, children.value)
+                children.bind(widget)
             } else {
                 widget.mockup?.append(document.createTextNode(`${children}`))
             }
@@ -337,7 +336,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         widget: IWidgetNode<E, A>,
         type: T,
         callback: ICallable<E, A, IGlobalEventPayload<T>>,
-        options: boolean | AddEventListenerOptions = false,
+        options?: boolean | AddEventListenerOptions,
     ): this {
 
         if (Environment.Client) {
@@ -431,6 +430,8 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         if (widget.props.data) this.data(widget, widget.props.data)
 
         if (widget.props.stase) this.stase(widget, widget.props.stase)
+
+        widget.signal.dispatch('construct', {root: context.root || widget, widget, payload: undefined}, widget.signal)
 
         return this.element;
     }

@@ -1,6 +1,6 @@
-import type {IViewConstructor, IViewOptions} from "./view";
-import {ViewWidget} from "../view";
-import type {ISignalStack} from "./signals";
+import type {IViewConstructor} from "./view.js";
+import {ViewWidget} from "../view.js";
+import {ISignalStack} from "@protorians/core";
 
 
 /**
@@ -81,12 +81,12 @@ export type IRouterConfig<Scheme extends IRouterBaseScheme> = {
 }
 
 
-export type IRouteView<T extends Object> = IViewConstructor<T>
+export type IRouteView = IViewConstructor
 
 export type IRouterRoute<Scheme extends IRouterBaseScheme, K extends keyof Scheme> = {
     path: K;
-    view: typeof ViewWidget<Scheme[K]>;
-    options?: IViewOptions<Scheme[K]>
+    view: typeof ViewWidget;
+    // options?: IViewOptions<Scheme[K]>
 }
 
 export type IRouterBaseRoute = {

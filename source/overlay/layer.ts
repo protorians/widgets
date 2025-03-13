@@ -1,6 +1,6 @@
-import type {ICommonAttributes, IWidgetDeclaration} from "../types";
-import {WidgetNode} from "../widget-node";
-import {Composable, Mountable} from "../decorators";
+import type {ICommonAttributes, IWidgetDeclaration} from "../types/index.js";
+import {WidgetNode} from "../widget-node.js";
+import {Composable, Mountable} from "../decorators.js";
 
 
 /**

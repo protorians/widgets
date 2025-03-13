@@ -1,7 +1,7 @@
-import type {IButtonAttributes, IButtonAttributesBase, IWidgetDeclaration} from "../types";
-import {WidgetNode} from "../widget-node";
-import {Composable, Mountable} from "../decorators";
-import {declarationExcavates} from "../helpers";
+import type {IButtonAttributes, IButtonAttributesBase, IWidgetDeclaration} from "../types/index.js";
+import {WidgetNode} from "../widget-node.js";
+import {Composable, Mountable} from "../decorators.js";
+import {declarationExcavates} from "../helpers/index.js";
 
 
 /**

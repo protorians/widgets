@@ -1,4 +1,4 @@
-import type {IConsumerAgent, IProviderCallable} from "../types";
+import type {IConsumerAgent, IProviderCallable} from "../types/index.js";
 
 export class ConsumerAgent implements IConsumerAgent {
 

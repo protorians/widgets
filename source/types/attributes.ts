@@ -7,8 +7,8 @@ import type {
   ISandbox,
   ITarget,
   IYesNo
-} from "./value";
-import {ICallable} from "./widget";
+} from "./value.js";
+import {ICallable} from "./widget.js";
 
 export type IAttributes = Partial<
   ICommonAttributes

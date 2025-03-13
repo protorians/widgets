@@ -1,5 +1,6 @@
-import type {IColorExtended, IColorKey, IColorScheme, IProviderAgent, IProviderCallable} from "../types";
-import {ColorPalette} from "../colors";
+import type {IProviderAgent, IProviderCallable} from "../types/index.js";
+import {ColorPalette} from "../colors/index.js";
+import type {IColorExtended, IColorKey, IColorScheme} from "@protorians/colorimetric";
 
 
 export function colorPaletteAgent(scheme: 'light' | 'dark'): IProviderCallable {

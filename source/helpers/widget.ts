@@ -1,6 +1,6 @@
-import {IAttributes, IStyleDeclaration, IWidgetNode} from "../types";
-import {resolveAlignment, resolveAlignmentProperty, resolveDirection} from "./constant";
-import {Aligning, AligningDirection, AligningProperty} from "../enums";
+import {IAttributes, IStyleDeclaration, IWidgetNode} from "../types/index.js";
+import {resolveAlignment, resolveAlignmentProperty, resolveDirection} from "./constant.js";
+import {Aligning, AligningDirection, AligningProperty} from "../enums.js";
 
 
 export function widgetAligningDirectionFeature<E extends HTMLElement, A extends IAttributes>(widget: IWidgetNode<E, A>): Partial<IStyleDeclaration> {

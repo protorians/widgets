@@ -1,5 +1,5 @@
-import type {ICallable, IWidgetNode} from "./widget";
-import type {IAttributes} from "./attributes";
+import type {ICallable, IWidgetNode} from "./widget.js";
+import type {IAttributes} from "./attributes.js";
 
 
 export interface ICapability<E extends HTMLElement, A extends IAttributes, Payload> {

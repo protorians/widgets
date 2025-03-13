@@ -1,4 +1,4 @@
-import type {IStringObject, IProviderAgent} from "../types";
+import type {IStringObject, IProviderAgent} from "../types/index.js";
 
 export class ProviderAgent implements IProviderAgent {
 

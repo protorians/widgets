@@ -1,4 +1,4 @@
-import type {IAttributes, IWidgetDeclaration} from "../types";
+import type {IAttributes, IWidgetDeclaration} from "../types/index.js";
 
 export function declarationExcavates<E extends HTMLElement, A extends IAttributes, T>(
   props: IWidgetDeclaration<E, A & T>,

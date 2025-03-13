@@ -1,25 +1,32 @@
-import type {IChildren} from "./children";
-import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from "./value";
-import type {IMockup, IEngine, IStateStack, IStyleDeclaration, IStyleSheetDeclarations, IStyleSheet} from "./index";
-import type {IAttributes} from "./attributes";
-import type {IMockupElement, IMockupMeasure} from "./mockup";
-import type {ISignalStack} from "./signals";
-import {ToggleOption, TreatmentQueueStatus} from "../enums";
+import type {IChildren} from "./children.js";
+import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from "./value.js";
+import type {
+    IMockup,
+    IEngine,
+    IStateStack,
+    IStyleDeclaration,
+    IStyleSheetDeclarations,
+    IStyleSheet,
+} from "./index.js";
+import type {IAttributes} from "./attributes.js";
+import type {IMockupElement, IMockupMeasure} from "./mockup.js";
+import {ToggleOption, TreatmentQueueStatus} from "../enums.js";
+import {ISignalStack} from "@protorians/core";
 
-export type IGlobalAttributes = {
-  [K: string]: IPrimitives;
+export interface IGlobalAttributes {
+    [K: string]: IPrimitives;
 }
 
-export type IGlobalFunctioningAttributes = {
-  [K: string]: IFunctioningPrimitives;
+export interface IGlobalFunctioningAttributes {
+    [K: string]: IFunctioningPrimitives;
 }
 
 export interface IRef<E extends HTMLElement, A extends IAttributes> {
-  get current(): IWidgetNode<E, A> | undefined;
+    get current(): IWidgetNode<E, A> | undefined;
 
-  attach(widget: IWidgetNode<E, A>): this;
+    attach(widget: IWidgetNode<E, A>): this;
 
-  detach(): void;
+    detach(): void;
 }
 
 export type IRefCallable<E extends HTMLElement, A extends IAttributes> = (ref: IRef<E, A>) => void
@@ -36,23 +43,23 @@ export type IRefCallable<E extends HTMLElement, A extends IAttributes> = (ref: I
 
 
 export type IPropStack = {
-  [K: string]: IPrimitives
+    [K: string]: IPrimitives
 }
 
 // export type IContextStore<T extends Object> = ISignalController<T>
 
 export interface IContext<P extends IPropStack, S extends IStateStack> {
-  root: IWidgetNode<any, any> | undefined;
-  readonly widget: IWidgetNode<any, any>;
-  props: P;
-  state: S;
-  engine: IEngine<any, any> | undefined;
+    root: IWidgetNode<any, any> | undefined;
+    readonly widget: IWidgetNode<any, any>;
+    props: P;
+    state: S;
+    engine: IEngine<any, any> | undefined;
 }
 
 export type ICallablePayload<E extends HTMLElement, A extends IAttributes, Payload> = {
-  root: IWidgetNode<any, any>;
-  widget: IWidgetNode<E, A>;
-  payload: Payload;
+    root: IWidgetNode<any, any>;
+    widget: IWidgetNode<E, A>;
+    payload: Payload;
 }
 
 export type ICallable<E extends HTMLElement, A extends IAttributes, Payload> = (payload: ICallablePayload<E, A, Payload>) => TreatmentQueueStatus | any;
@@ -80,25 +87,25 @@ export type ICallable<E extends HTMLElement, A extends IAttributes, Payload> = (
 // }
 
 export type INativeEventMap = {
-  [K in keyof HTMLElementEventMap]: HTMLElementEventMap[K]
+    [K in keyof HTMLElementEventMap]: HTMLElementEventMap[K]
 }
 
 export type IGlobalEventMap = INativeEventMap;
 
 export type IGlobalEventCallableMap<E extends HTMLElement, A extends IAttributes> = {
-  [K in keyof IGlobalEventMap]: ICallable<E, A, IGlobalEventMap[K]>
+    [K in keyof IGlobalEventMap]: ICallable<E, A, IGlobalEventMap[K]>
 };
 
 export type IGlobalEventPayload<T extends keyof IGlobalEventMap> = {
-  type: T;
-  event: IGlobalEventMap[T] | Event;
+    type: T;
+    event: IGlobalEventMap[T] | Event;
 };
 
 export type IChildrenSupported = IPrimitives | IWidgetNode<any, any>
 
 export type IBehaviorOptions = {
-  locked: boolean;
-  disabled: boolean;
+    locked: boolean;
+    disabled: boolean;
 }
 
 // export type ISelfEvents<E extends HTMLElement, A extends IAttributes> = {
@@ -111,113 +118,114 @@ export type IBehaviorOptions = {
 export type IWidgetConstruct<E extends HTMLElement, A extends IAttributes> = (attributes: IWidgetDeclaration<E, A>) => IWidgetNode<E, A> | undefined;
 
 export interface IWidgetCollection {
-  [key: string]: <E extends HTMLElement, A extends IAttributes>(attributes: IWidgetDeclaration<E, A>) => IWidgetNode<E, A> | undefined;
+    [key: string]: <E extends HTMLElement, A extends IAttributes>(attributes: IWidgetDeclaration<E, A>) => IWidgetNode<E, A> | undefined;
 }
 
 export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
-  get fingerprint(): string;
+    get fingerprint(): string;
 
-  get tag(): string;
+    get tag(): string;
 
-  get mockup(): IMockup<E, A> | undefined;
+    get mockup(): IMockup<E, A> | undefined;
 
-  get element(): IMockupElement<E, A> | undefined;
+    get element(): IMockupElement<E, A> | undefined;
 
-  get children(): IChildren<IChildrenSupported>;
+    get children(): IChildren<IChildrenSupported>;
 
-  get attributes(): A;
+    get attributes(): A;
 
-  get props(): INativeProperties<E, A>;
+    get props(): INativeProperties<E, A>;
 
-  get datasets(): IGlobalAttributes;
+    get datasets(): IGlobalAttributes;
 
-  get reference(): IRef<E, A> | undefined;
+    get reference(): IRef<E, A> | undefined;
 
-  get locked(): boolean;
+    get locked(): boolean;
 
-  set locked(value: boolean);
+    set locked(value: boolean);
 
-  get signal(): ISignalStack<ISignalableMap<E, A>>;
+    get signal(): ISignalStack<ISignalableMap<E, A>>;
 
-  get measure(): IMockupMeasure;
+    get measure(): IMockupMeasure;
 
-  get stylesheet(): IStyleSheet;
+    get stylesheet(): IStyleSheet;
 
-  get context(): IContext<any, any> | undefined
+    get context(): IContext<any, any> | undefined
 
-  useContext(context?: IContext<any, any>): this;
+    useContext(context?: IContext<any, any>): this;
 
-  construct(callback: ICallable<E, A, undefined>): this;
+    construct(callback: ICallable<E, A, undefined>): this;
 
-  clear(): this;
+    clear(): this;
 
-  remove(): this;
+    remove(): this;
 
-  enable(): this;
+    enable(): this;
 
-  disable(): this;
+    disable(): this;
 
-  lock(): this;
+    lock(): this;
 
-  unlock(): this;
+    unlock(): this;
 
-  toggle(options?: ToggleOption): this;
+    toggle(options?: ToggleOption): this;
 
-  show(): this
+    show(): this
 
-  hide(): this
+    hide(): this
 
-  // replaceWith(component: IWidget<any, any>): this;
+    // replaceWith(component: IWidget<any, any>): this;
 
-  // insert(component: IWidget<any, any>, position?: InsertionPosition): this;
+    // insert(component: IWidget<any, any>, position?: InsertionPosition): this;
 
-  mount(callback: ICallable<E, A, undefined>): this;
+    mount(callback: ICallable<E, A, undefined>): this;
 
-  unmount(callback: ICallable<E, A, undefined>): this;
+    unmount(callback: ICallable<E, A, undefined>): this;
 
-  before(callback: ICallable<E, A, undefined>): this;
+    before(callback: ICallable<E, A, undefined>): this;
 
-  after(callback: ICallable<E, A, undefined>): this;
+    after(callback: ICallable<E, A, undefined>): this;
 
-  // synchronize(component: IWidget<any, any>, type: keyof IGlobalEventMap, callback: ICallable<W, A, undefined>): this;
+    // synchronize(component: IWidget<any, any>, type: keyof IGlobalEventMap, callback: ICallable<W, A, undefined>): this;
 
-  // behavior(options: IBehaviorOptions): this;
+    // behavior(options: IBehaviorOptions): this;
 
-  data(dataset: IGlobalAttributes): this;
+    data(dataset: IGlobalAttributes): this;
 
-  attribute(attributes: Partial<A>): this;
+    attribute(attributes: Partial<A>): this;
 
-  attributeLess(attributes: IGlobalAttributes): this;
+    attributeLess(attributes: IGlobalAttributes): this;
 
-  // nsa(nsa: IGlobalAttributes, ns?: string, separator?: string): this;
+    // nsa(nsa: IGlobalAttributes, ns?: string, separator?: string): this;
 
-  style(declaration: IStyleSheetDeclarations): this;
-  // style(declaration: Partial<IStyleDeclaration>): this;
+    style(declaration: IStyleSheetDeclarations): this;
 
-  className(token: IStringToken): this;
+    // style(declaration: Partial<IStyleDeclaration>): this;
 
-  value(data: IPrimitive): this;
+    className(token: IStringToken): this;
 
-  html(data: string): this;
+    value(data: IPrimitive): this;
 
-  content(children: IChildren<IChildrenSupported>): this;
+    html(code: string): this;
 
-  listen<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>>, options?: boolean | AddEventListenerOptions): this;
+    content(children: IChildren<IChildrenSupported>): this;
 
-  on<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>> | null): this;
+    listen<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>>, options?: boolean | AddEventListenerOptions): this;
 
-  trigger(type: keyof IGlobalEventMap): this;
+    on<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>> | null): this;
 
-  stase(state: boolean): this;
+    trigger(type: keyof IGlobalEventMap): this;
 
-  computedStyle(token: keyof IStyleDeclaration): string | undefined;
+    stase(state: boolean): this;
 
-  // render(): this;
+    computedStyle(token: keyof IStyleDeclaration): string | undefined;
+
+    // render(): this;
 }
 
 
 export type IEventListeners<E extends HTMLElement, A extends IAttributes> = {
-  [K in keyof IGlobalEventMap]: ICallable<E, A, IGlobalEventMap[K]>;
+    [K in keyof IGlobalEventMap]: ICallable<E, A, IGlobalEventMap[K]>;
 }
 
 
@@ -226,63 +234,63 @@ export type IEventListeners<E extends HTMLElement, A extends IAttributes> = {
  */
 export interface ISignalableMap<E extends HTMLElement, A extends IAttributes> {
 
-  construct: ICallablePayload<E, A, undefined>;
+    construct: ICallablePayload<E, A, undefined>;
 
-  mount: ICallablePayload<E, A, undefined>;
+    mount: ICallablePayload<E, A, undefined>;
 
-  unmount: ICallablePayload<E, A, undefined>;
+    unmount: ICallablePayload<E, A, undefined>;
 
-  adopted: ICallablePayload<E, A, undefined>;
+    adopted: ICallablePayload<E, A, undefined>;
 
-  before: ICallablePayload<E, A, undefined>;
+    before: ICallablePayload<E, A, undefined>;
 
-  after: ICallablePayload<E, A, undefined>;
+    after: ICallablePayload<E, A, undefined>;
 
-  render: ICallablePayload<E, A, undefined>;
+    render: ICallablePayload<E, A, undefined>;
 
-  clear: ICallablePayload<E, A, IWidgetNode<E, A>>;
+    clear: ICallablePayload<E, A, IWidgetNode<E, A>>;
 
-  child: ICallablePayload<E, A, IChildren<IChildrenSupported>>;
+    child: ICallablePayload<E, A, IChildren<IChildrenSupported>>;
 
-  style: ICallablePayload<E, A, IStyleSheetDeclarations>;
-  // style: ICallablePayload<E, A, IStyleDeclaration>;
+    style: ICallablePayload<E, A, IStyleSheetDeclarations>;
+    // style: ICallablePayload<E, A, IStyleDeclaration>;
 
-  className: ICallablePayload<E, A, IStringToken>;
+    className: ICallablePayload<E, A, IStringToken>;
 
-  value: ICallablePayload<E, A, IPrimitives>;
+    value: ICallablePayload<E, A, IPrimitives>;
 
-  html: ICallablePayload<E, A, string>;
+    html: ICallablePayload<E, A, string>;
 
-  trigger: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
+    trigger: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
 
-  on: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
+    on: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
 
-  listen: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
+    listen: ICallablePayload<E, A, IGlobalEventPayload<keyof IGlobalEventMap>>;
 
-  data: ICallablePayload<E, A, IGlobalAttributes>;
+    data: ICallablePayload<E, A, IGlobalAttributes>;
 
-  attribute: ICallablePayload<E, A, Partial<A> | IGlobalAttributes>;
+    attribute: ICallablePayload<E, A, Partial<A> | IGlobalAttributes>;
 
-  remove: ICallablePayload<E, A, undefined>;
+    remove: ICallablePayload<E, A, undefined>;
 
-  enable: ICallablePayload<E, A, undefined>;
+    enable: ICallablePayload<E, A, undefined>;
 
-  disable: ICallablePayload<E, A, undefined>;
+    disable: ICallablePayload<E, A, undefined>;
 
-  lock: ICallablePayload<E, A, undefined>;
+    lock: ICallablePayload<E, A, undefined>;
 
-  unlock: ICallablePayload<E, A, undefined>;
+    unlock: ICallablePayload<E, A, undefined>;
 
-  hide: ICallablePayload<E, A, undefined>;
+    hide: ICallablePayload<E, A, undefined>;
 
-  show: ICallablePayload<E, A, undefined>;
+    show: ICallablePayload<E, A, undefined>;
 
-  toggle: ICallablePayload<E, A, ToggleOption | undefined>;
+    toggle: ICallablePayload<E, A, ToggleOption | undefined>;
 
 }
 
 export type ISignalableCallbackMap<E extends HTMLElement, A extends IAttributes> = {
-  [K in keyof ISignalableMap<E, A>]: ICallable<E, A, ISignalableMap<E, A>[K]>
+    [K in keyof ISignalableMap<E, A>]: ICallable<E, A, ISignalableMap<E, A>[K]>
 }
 
 /**
@@ -290,60 +298,60 @@ export type ISignalableCallbackMap<E extends HTMLElement, A extends IAttributes>
  */
 export type INativeProperties<E extends HTMLElement, A extends IAttributes> = {
 
-  /**
-   * Features : The features to be consumed by the component's static `featuring` method
-   */
-  features?: IGlobalAttributes | IGlobalFunctioningAttributes;
+    /**
+     * Features : The features to be consumed by the component's static `featuring` method
+     */
+    features?: IGlobalAttributes | IGlobalFunctioningAttributes;
 
-  /**
-   * Put Widget in stase
-   */
-  stase?: boolean;
+    /**
+     * Put Widget in stase
+     */
+    stase?: boolean;
 
-  /**
-   * Signals : Listen events
-   */
-  signal?: Partial<ISignalableCallbackMap<E, A>>
+    /**
+     * Signals : Listen events
+     */
+    signal?: Partial<ISignalableCallbackMap<E, A>>
 
-  /**
-   * Store component's instance
-   */
-  ref?: IRef<E, A>
+    /**
+     * Store component's instance
+     */
+    ref?: IRef<E, A>
 
-  /**
-   * Widget Children
-   */
-  children: IChildren<IChildrenSupported> | undefined;
+    /**
+     * Widget Children
+     */
+    children: IChildren<IChildrenSupported> | undefined;
 
-  /**
-   * Make component's style
-   */
-  style?: IStyleSheetDeclarations | IStyleSheet;
+    /**
+     * Make component's style
+     */
+    style?: IStyleSheetDeclarations | IStyleSheet;
 
-  /**
-   * Make component's CSS class name
-   */
-  className?: IStringToken;
+    /**
+     * Make component's CSS class name
+     */
+    className?: IStringToken;
 
-  /**
-   * Widget's dataset
-   */
-  data?: IGlobalAttributes;
+    /**
+     * Widget's dataset
+     */
+    data?: IGlobalAttributes;
 
-  // /**
-  //  * Namespace Attributes
-  //  */
-  // nsa?: IGlobalAttributes;
+    // /**
+    //  * Namespace Attributes
+    //  */
+    // nsa?: IGlobalAttributes;
 
-  /**
-   * Element Events
-   */
-  on?: Partial<IEventListeners<E, A>>;
+    /**
+     * Element Events
+     */
+    on?: Partial<IEventListeners<E, A>>;
 
-  /**
-   * Events listeners
-   */
-  listen?: Partial<IEventListeners<E, A>>;
+    /**
+     * Events listeners
+     */
+    listen?: Partial<IEventListeners<E, A>>;
 
 }
 
@@ -364,6 +372,6 @@ export type IWidgetDeclaration<E extends HTMLElement, A extends IAttributes> = A
  * Widget Attribute Scope
  */
 export type IAttributesScope<E extends HTMLElement, A extends IAttributes> =
-  A
-  // & IPropsExtensible<E, A>
-  & IWidgetDeclaration<E, A>;
+    A
+    // & IPropsExtensible<E, A>
+    & IWidgetDeclaration<E, A>;

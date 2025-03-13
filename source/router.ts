@@ -5,10 +5,9 @@ import type {
     IRouterRoute,
     IRouterScheme,
     IRouterSignalMap,
-    ISignalStack
-} from "./types";
-import {SignalHook} from "./hooks";
-import {WidgetException} from "./errors";
+} from "./types/index.js";
+import {WidgetException} from "./errors/index.js";
+import {type ISignalStack, Signal} from "@protorians/core";
 
 
 export class ClientRouter<Scheme extends IRouterBaseScheme> implements IRouter<Scheme> {
@@ -26,7 +25,7 @@ export class ClientRouter<Scheme extends IRouterBaseScheme> implements IRouter<S
     constructor(
         public readonly config: IRouterConfig<Scheme>
     ) {
-        this.signal = new SignalHook.Stack<IRouterSignalMap<Scheme>>;
+        this.signal = new Signal.Stack<IRouterSignalMap<Scheme>>;
     }
 
     get route(): (IRouterRoute<any, keyof any> & IRouterBaseRoute) | undefined {
@@ -76,7 +75,8 @@ export class ClientRouter<Scheme extends IRouterBaseScheme> implements IRouter<S
     }
 
     use<K extends keyof Scheme>(route: IRouterRoute<Scheme, K>): this {
-        this._routes[route.path] = {...route, ...this.parses(route.path.toString())};
+        this._routes[route.path] = {path: route.path, ...this.parses(route.path.toString())} as IRouterRoute<Scheme, K> & IRouterBaseRoute
+        this._routes[route.path].view = route.view;
         return this;
     }
 

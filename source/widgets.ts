@@ -1,5 +1,5 @@
-import type {IAttributes, IEngine, IEngineConstructor, IEngineMap, IWidgetNode} from "./types";
-import {Manticore} from "./engine";
+import type {IAttributes, IEngine, IEngineConstructor, IEngineMap, IWidgetNode} from "./types/index.js";
+import {Manticore} from "./engine/index.js";
 
 export class Widgets {
 

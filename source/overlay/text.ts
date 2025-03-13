@@ -1,13 +1,13 @@
-import {Composable, Mountable} from "../decorators";
-import {WidgetNode} from "../widget-node";
+import {Composable, Mountable} from "../decorators.js";
+import {WidgetNode} from "../widget-node.js";
 import type {
-  IItalicAttributes,
-  ILinkAttributes,
-  ISpanAttributes,
-  IStrongAttributes,
-  IStyleSheetDeclarations,
-  IWidgetDeclaration
-} from "../types";
+    IItalicAttributes,
+    ILinkAttributes,
+    ISpanAttributes,
+    IStrongAttributes,
+    IStyleSheetDeclarations,
+    IWidgetDeclaration
+} from "../types/index.js";
 
 /**
  * @description Link Widget
@@ -15,9 +15,9 @@ import type {
 @Mountable()
 @Composable()
 export class LinkWidget extends WidgetNode<HTMLAnchorElement, ILinkAttributes> {
-  get tag(): string {
-    return 'a'
-  };
+    get tag(): string {
+        return 'a'
+    };
 }
 
 /**
@@ -26,9 +26,9 @@ export class LinkWidget extends WidgetNode<HTMLAnchorElement, ILinkAttributes> {
 @Mountable()
 @Composable()
 export class StrongTextWidget extends WidgetNode<HTMLElement, IStrongAttributes> {
-  get tag(): string {
-    return 'strong'
-  };
+    get tag(): string {
+        return 'strong'
+    };
 }
 
 /**
@@ -37,9 +37,9 @@ export class StrongTextWidget extends WidgetNode<HTMLElement, IStrongAttributes>
 @Mountable()
 @Composable()
 export class ItalicTextWidget extends WidgetNode<HTMLElement, IItalicAttributes> {
-  get tag(): string {
-    return 'i'
-  };
+    get tag(): string {
+        return 'i'
+    };
 }
 
 /**
@@ -48,15 +48,15 @@ export class ItalicTextWidget extends WidgetNode<HTMLElement, IItalicAttributes>
 @Mountable()
 @Composable()
 export class SmallerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
-  get tag(): string {
-    return 'span'
-  };
+    get tag(): string {
+        return 'span'
+    };
 
-  static get style(): IStyleSheetDeclarations {
-    return {
-      fontSize: `smaller`
+    static get style(): IStyleSheetDeclarations {
+        return {
+            fontSize: `smaller`
+        }
     }
-  }
 }
 
 /**
@@ -65,15 +65,15 @@ export class SmallerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttribut
 @Mountable()
 @Composable()
 export class SmallTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
-  get tag(): string {
-    return 'span'
-  };
+    get tag(): string {
+        return 'span'
+    };
 
-  static get style(): IStyleSheetDeclarations {
-    return {
-      fontSize: `small`
+    static get style(): IStyleSheetDeclarations {
+        return {
+            fontSize: `small`
+        }
     }
-  }
 }
 
 /**
@@ -82,15 +82,15 @@ export class SmallTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes
 @Mountable()
 @Composable()
 export class TextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
-  get tag(): string {
-    return 'span'
-  };
+    get tag(): string {
+        return 'span'
+    };
 
-  static get style(): IStyleSheetDeclarations {
-    return {
-      fontSize: `medium`
+    static get style(): IStyleSheetDeclarations {
+        return {
+            fontSize: `medium`
+        }
     }
-  }
 }
 
 /**
@@ -99,15 +99,15 @@ export class TextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
 @Mountable()
 @Composable()
 export class LargeTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
-  get tag(): string {
-    return 'span'
-  };
+    get tag(): string {
+        return 'span'
+    };
 
-  static get style(): IStyleSheetDeclarations {
-    return {
-      fontSize: `large`
+    static get style(): IStyleSheetDeclarations {
+        return {
+            fontSize: `large`
+        }
     }
-  }
 }
 
 /**
@@ -116,15 +116,15 @@ export class LargeTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes
 @Mountable()
 @Composable()
 export class LargerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttributes> {
-  get tag(): string {
-    return 'span'
-  };
+    get tag(): string {
+        return 'span'
+    };
 
-  static get style(): IStyleSheetDeclarations {
-    return {
-      fontSize: `larger`
+    static get style(): IStyleSheetDeclarations {
+        return {
+            fontSize: `larger`
+        }
     }
-  }
 }
 
 
@@ -134,7 +134,7 @@ export class LargerTextWidget extends WidgetNode<HTMLSpanElement, ISpanAttribute
  * @constructor
  */
 export function Link(declaration: IWidgetDeclaration<HTMLAnchorElement, ILinkAttributes>): LinkWidget {
-  return new LinkWidget(declaration)
+    return new LinkWidget(declaration)
 }
 
 
@@ -144,7 +144,7 @@ export function Link(declaration: IWidgetDeclaration<HTMLAnchorElement, ILinkAtt
  * @constructor
  */
 export function SmallerText(declaration: IWidgetDeclaration<HTMLElement, ISpanAttributes>): SmallerTextWidget {
-  return new SmallerTextWidget(declaration)
+    return new SmallerTextWidget(declaration)
 }
 
 /**
@@ -153,7 +153,7 @@ export function SmallerText(declaration: IWidgetDeclaration<HTMLElement, ISpanAt
  * @constructor
  */
 export function SmallText(declaration: IWidgetDeclaration<HTMLElement, ISpanAttributes>): SmallTextWidget {
-  return new SmallTextWidget(declaration)
+    return new SmallTextWidget(declaration)
 }
 
 /**
@@ -162,7 +162,7 @@ export function SmallText(declaration: IWidgetDeclaration<HTMLElement, ISpanAttr
  * @constructor
  */
 export function Text(declaration: IWidgetDeclaration<HTMLElement, ISpanAttributes>): TextWidget {
-  return new TextWidget(declaration)
+    return new TextWidget(declaration)
 }
 
 /**
@@ -171,7 +171,7 @@ export function Text(declaration: IWidgetDeclaration<HTMLElement, ISpanAttribute
  * @constructor
  */
 export function LargeText(declaration: IWidgetDeclaration<HTMLElement, ISpanAttributes>): LargeTextWidget {
-  return new LargeTextWidget(declaration)
+    return new LargeTextWidget(declaration)
 }
 
 /**
@@ -180,7 +180,7 @@ export function LargeText(declaration: IWidgetDeclaration<HTMLElement, ISpanAttr
  * @constructor
  */
 export function LargerText(declaration: IWidgetDeclaration<HTMLElement, ISpanAttributes>): LargerTextWidget {
-  return new LargerTextWidget(declaration)
+    return new LargerTextWidget(declaration)
 }
 
 /**
@@ -189,7 +189,7 @@ export function LargerText(declaration: IWidgetDeclaration<HTMLElement, ISpanAtt
  * @constructor
  */
 export function StrongText(declaration: IWidgetDeclaration<HTMLElement, IStrongAttributes>): StrongTextWidget {
-  return new StrongTextWidget(declaration)
+    return new StrongTextWidget(declaration)
 }
 
 /**
@@ -197,6 +197,6 @@ export function StrongText(declaration: IWidgetDeclaration<HTMLElement, IStrongA
  * @param declaration
  * @constructor
  */
-export function ItalicText(declaration: IWidgetDeclaration<HTMLElement, IItalicAttributes>): ItalicTextWidget {
-  return new ItalicTextWidget(declaration)
+export function ItalicText(declaration: Omit<IWidgetDeclaration<HTMLElement, IItalicAttributes>, 'children'>): ItalicTextWidget {
+    return new ItalicTextWidget({...declaration, children: undefined})
 }

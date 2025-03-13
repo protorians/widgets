@@ -1,4 +1,4 @@
-import type {IAttributes} from "./attributes";
+import type {IAttributes} from "./attributes.js";
 import type {
   ICallable,
   IChildrenSupported,
@@ -7,13 +7,13 @@ import type {
   IGlobalEventMap, IGlobalEventPayload,
   IPropStack, ISignalableCallbackMap,
   IWidgetNode
-} from "./widget";
-import type {IMockupElement} from "./mockup";
-import type {IStateStack} from "./state";
-import type {IChildren} from "./children";
-import type {IStyleDeclaration, IStyleSheetDeclarations} from "./style";
-import type {IPrimitive, IStringToken} from "./value";
-import {ToggleOption} from "../enums";
+} from "./widget.js";
+import type {IMockupElement} from "./mockup.js";
+import type {IStateStack} from "./state.js";
+import type {IChildren} from "./children.js";
+import type {IStyleDeclaration, IStyleSheetDeclarations} from "./style.js";
+import type {IPrimitive, IStringToken} from "./value.js";
+import {ToggleOption} from "../enums.js";
 
 
 export type IEngineMap = {
@@ -28,15 +28,15 @@ export interface IEngineConstructor<E extends HTMLElement, A extends IAttributes
 export interface IEngine<E extends HTMLElement, A extends IAttributes> {
   get element(): IMockupElement<E, A> | undefined;
 
-  construct(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
-
-  mount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
-
-  unmount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
-
-  before(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
-
-  after(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
+  // construct(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
+  //
+  // mount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
+  //
+  // unmount(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
+  //
+  // before(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
+  //
+  // after(widget: IWidgetNode<E, A>, callback: ICallable<E, A, undefined>): this;
 
   clear(widget: IWidgetNode<E, A>,): this;
 

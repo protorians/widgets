@@ -1,8 +1,8 @@
-import {createCapability} from "../capability";
-import {createKit} from "../kit";
-import type {IAttributes, ISizeKitScheme} from "../types";
-import {Sizer} from "../enums";
-import {StyleWidget} from "../style";
+import {createCapabilities, createCapability} from "../capability.js";
+import type {IAttributes, ISizeKitScheme} from "../types/index.js";
+import {Sizer} from "../enums.js";
+import {StyleWidget} from "../style.js";
+
 
 
 export const SurfaceSizeCapability = createCapability<HTMLElement, IAttributes, string>(
@@ -54,7 +54,7 @@ export const BitSizeCapability = createCapability<HTMLElement, IAttributes, numb
   ({payload}) => `${StyleWidget.unit(payload)}`
 )
 
-export const SizeKit = createKit<ISizeKitScheme>()
+export const SizeCapabilities = createCapabilities<ISizeKitScheme>()
   .attach<'surface'>(SurfaceSizeCapability)
   .attach<'text'>(TextSizeCapability)
   .attach<'unit'>(BitSizeCapability)

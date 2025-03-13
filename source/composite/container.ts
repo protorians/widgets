@@ -1,8 +1,8 @@
-import type {ICommonAttributes, IContainerProps, IWidgetDeclaration} from "../types";
-import {Layer, Section} from "../overlay";
-import {declarationExcavates} from "../helpers";
-import {SizeKit} from "../kits";
-import {Sizer} from "../enums";
+import type {ICommonAttributes, IContainerProps, IWidgetDeclaration} from "../types/index.js";
+import {Layer, Section} from "../overlay/index.js";
+import {declarationExcavates} from "../helpers/index.js";
+import {SizeCapabilities} from "../capabilities/index.js";
+import {Sizer} from "../enums.js";
 
 
 export function Container(declaration: IWidgetDeclaration<HTMLElement, IContainerProps & ICommonAttributes>) {
@@ -21,8 +21,8 @@ export function Container(declaration: IWidgetDeclaration<HTMLElement, IContaine
                     width: '100%',
                     maxWidth: `${(typeof size == 'string')
                         ? (Object.values(Sizer).includes(size as Sizer)
-                                ? SizeKit.capability('surface')?.on(widget).make(size) : size
-                        ) : SizeKit.capability('unit')?.on(widget).make(size)}`,
+                                ? SizeCapabilities.capability('surface')?.on(widget).make(size) : size
+                        ) : SizeCapabilities.capability('unit')?.on(widget).make(size)}`,
                 })
             }
         }

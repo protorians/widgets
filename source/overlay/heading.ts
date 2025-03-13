@@ -1,6 +1,6 @@
-import {Composable, Mountable} from "../decorators";
-import {WidgetNode} from "../widget-node";
-import type {IHeadingAttributes, IWidgetDeclaration} from "../types";
+import {Composable, Mountable} from "../decorators.js";
+import {WidgetNode} from "../widget-node.js";
+import type {IHeadingAttributes, IWidgetDeclaration} from "../types/index.js";
 
 /**
  * @description Smaller Heading Widget
@@ -8,9 +8,9 @@ import type {IHeadingAttributes, IWidgetDeclaration} from "../types";
 @Mountable()
 @Composable()
 export class SmallerHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttributes> {
-  get tag(): string {
-    return 'h5'
-  };
+    get tag(): string {
+        return 'h5'
+    };
 }
 
 /**
@@ -19,9 +19,9 @@ export class SmallerHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAt
 @Mountable()
 @Composable()
 export class SmallHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttributes> {
-  get tag(): string {
-    return 'h4'
-  };
+    get tag(): string {
+        return 'h4'
+    };
 }
 
 /**
@@ -30,9 +30,9 @@ export class SmallHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttr
 @Mountable()
 @Composable()
 export class HeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttributes> {
-  get tag(): string {
-    return 'h3'
-  };
+    get tag(): string {
+        return 'h3'
+    };
 }
 
 /**
@@ -41,9 +41,9 @@ export class HeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttribute
 @Mountable()
 @Composable()
 export class LargeHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttributes> {
-  get tag(): string {
-    return 'h2'
-  };
+    get tag(): string {
+        return 'h2'
+    };
 }
 
 /**
@@ -52,9 +52,9 @@ export class LargeHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttr
 @Mountable()
 @Composable()
 export class LargerHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAttributes> {
-  get tag(): string {
-    return 'h1'
-  };
+    get tag(): string {
+        return 'h1'
+    };
 }
 
 /**
@@ -63,7 +63,7 @@ export class LargerHeadingWidget extends WidgetNode<HTMLHeadElement, IHeadingAtt
  * @constructor
  */
 export function SmallerHeading(declaration: IWidgetDeclaration<HTMLElement, IHeadingAttributes>): SmallerHeadingWidget {
-  return new SmallerHeadingWidget(declaration)
+    return new SmallerHeadingWidget(declaration)
 }
 
 /**
@@ -72,7 +72,7 @@ export function SmallerHeading(declaration: IWidgetDeclaration<HTMLElement, IHea
  * @constructor
  */
 export function SmallHeading(declaration: IWidgetDeclaration<HTMLElement, IHeadingAttributes>): SmallHeadingWidget {
-  return new SmallHeadingWidget(declaration)
+    return new SmallHeadingWidget(declaration)
 }
 
 /**
@@ -81,7 +81,7 @@ export function SmallHeading(declaration: IWidgetDeclaration<HTMLElement, IHeadi
  * @constructor
  */
 export function Heading(declaration: IWidgetDeclaration<HTMLElement, IHeadingAttributes>): HeadingWidget {
-  return new HeadingWidget(declaration)
+    return new HeadingWidget(declaration)
 }
 
 /**
@@ -90,7 +90,7 @@ export function Heading(declaration: IWidgetDeclaration<HTMLElement, IHeadingAtt
  * @constructor
  */
 export function LargeHeading(declaration: IWidgetDeclaration<HTMLElement, IHeadingAttributes>): LargeHeadingWidget {
-  return new LargeHeadingWidget(declaration)
+    return new LargeHeadingWidget(declaration)
 }
 
 /**
@@ -99,5 +99,5 @@ export function LargeHeading(declaration: IWidgetDeclaration<HTMLElement, IHeadi
  * @constructor
  */
 export function LargerHeading(declaration: IWidgetDeclaration<HTMLElement, IHeadingAttributes>): LargerHeadingWidget {
-  return new LargerHeadingWidget(declaration)
+    return new LargerHeadingWidget(declaration)
 }

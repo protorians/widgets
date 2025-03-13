@@ -1,15 +1,16 @@
-import type {
-    IColorExtended,
-    IColorKey, IColorOklch, IColorPaletteAlias,
-    IColorScheme,
-    IColorSchemes,
-    IColorSlots, IStyleSheet,
-    IStyleSheetDeclarations,
-    IStyleSheetPropertyKey
-} from "../types";
-import {ColorSchemeType} from "../enums";
-import {Colorimetric} from "./colorimetric";
-import {Style, StyleWidget} from "../style";
+import {ColorSchemeType} from "../enums.js";
+import {Style, StyleWidget} from "../style.js";
+import {
+    Colorimetric,
+    type IColorExtended,
+    type IColorKey,
+    type IColorOklch,
+    type IColorPaletteAlias,
+    type IColorScheme,
+    type IColorSchemes,
+    type IColorSlots
+} from "@protorians/colorimetric";
+import {IStyleSheet, IStyleSheetDeclarations, IStyleSheetPropertyKey} from "../types/index.js";
 
 
 const schemes: IColorSchemes = {
@@ -129,6 +130,8 @@ export class ColorPalette {
 
                 for (let index = 0; index < variants.length; index++)
                     if (calculate) calculate = Colorimetric.Oklch.variation(calculate, variants[index])
+
+                // console.log('Color', xpath, type, color, calculate )
 
                 if (!calculate) return undefined;
 

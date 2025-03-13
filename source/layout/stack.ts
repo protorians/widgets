@@ -1,9 +1,9 @@
-import {Composable, Mountable} from "../decorators";
-import type {IAttributes, ICommonAttributes, IWidgetDeclaration, IWidgetNode} from "../types";
-import {WidgetNode} from "../widget-node";
-import {widgetAligningDirectionFeature, widgetAligningFeature,} from "../helpers";
-import {AligningProperty} from "../enums";
-import {Widget} from "../collection";
+import {Composable, Mountable} from "../decorators.js";
+import type {IAttributes, ICommonAttributes, IWidgetDeclaration, IWidgetNode} from "../types/index.js";
+import {WidgetNode} from "../widget-node.js";
+import {widgetAligningDirectionFeature, widgetAligningFeature,} from "../helpers/index.js";
+import {AligningProperty} from "../enums.js";
+import {Widget} from "../collections.js";
 
 
 /**

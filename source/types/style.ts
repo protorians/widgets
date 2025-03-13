@@ -1,5 +1,5 @@
-import type {IWidgetNode} from "./index";
-import {AbsoluteUnit, RelativeUnit} from "../enums";
+import {AbsoluteUnit, RelativeUnit} from "../enums.js";
+import {IWidgetNode} from "./widget.js";
 
 export type IStyleSupportedValue = object | string | number | undefined
 
@@ -23,6 +23,7 @@ export type IStyleSettings = {
 
 export type IStyleOptions = {
     attach?: boolean;
+    lock?: boolean;
 }
 
 // export type IStyleDeclarationController = ISignalController<Partial<IStyleDeclaration>>

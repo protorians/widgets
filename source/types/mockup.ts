@@ -1,10 +1,9 @@
-import type {IAttributes} from "./attributes";
-import type {IGlobalAttributes} from "./widget";
-import type {ISignalController} from "./signals";
-import type {IStyleDeclaration} from "./style";
-import type {IPrimitive} from "./value";
-import type {ITokenList} from "@protorians/core";
-import {InsertionPosition, InsertionSiblingPosition} from "../enums";
+import type {IAttributes} from "./attributes.js";
+import type {IGlobalAttributes} from "./widget.js";
+import type {IStyleDeclaration} from "./style.js";
+import type {IPrimitive} from "./value.js";
+import type {ISignalController, ITokenList} from "@protorians/core";
+import {InsertionPosition, InsertionSiblingPosition} from "../enums.js";
 
 
 export type IMockupElement<T extends HTMLElement, A extends IAttributes> = T | IMockupSheet<A>;
@@ -38,7 +37,7 @@ export interface IMockup<T extends HTMLElement, A extends IAttributes> {
 
   get tagName(): string;
 
-  get children(): (IMockupSheet<any> | Element)[];
+  get children(): IMockupSheet<any>[] | Element[];
 
   get attributes(): A;
 

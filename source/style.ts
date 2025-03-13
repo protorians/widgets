@@ -3,18 +3,13 @@ import type {
     IStyleSettings,
     IStyleSheet,
     IStyleSheetDeclarations, IWidgetNode,
-} from "./types";
-import {Environment} from "./environment";
-import {RelativeUnit} from "./enums";
-import {RemMetric} from "./metric";
-import {unCamelCase} from "@protorians/core";
+} from "./types/index.js";
+import {RelativeUnit} from "./enums.js";
+import {RemMetric} from "./metric.js";
+import {Environment, unCamelCase} from "@protorians/core";
 
 
 export class StyleWidget implements IStyleSheet {
-
-    protected _repository: HTMLStyleElement | undefined = undefined;
-
-    public declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations
 
     static settings: IStyleSettings = {
         bytes: 4,
@@ -22,18 +17,33 @@ export class StyleWidget implements IStyleSheet {
         spacing: 4,
         corner: 0,
     };
+
+    protected _repository: HTMLStyleElement | undefined = undefined;
     protected _rules: string[] = [];
     protected _selector: string = ':root';
+    protected locked: boolean = false;
+
+    public declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations;
 
     static unit(value: string | number): string {
-        const check = (/^-?\d+(\.\d+)?$/).test(value.toString());
+        // const check = (/^-?\d+(\.\d+)?$/).test(value.toString());
 
-        if (check) {
+        if (typeof value == 'number') {
             return RemMetric.parse(`${parseFloat(value.toString())}${this.settings.unit}`);
         } else return (value.toString())
     }
 
     constructor(public readonly options: IStyleOptions = {} as IStyleOptions) {
+        this.locked = options.lock || false;
+    }
+
+    get status(): boolean {
+        return this.locked;
+    }
+
+    set status(value: boolean) {
+        this.locked = value;
+        this.sync()
     }
 
     get repository(): HTMLStyleElement | undefined {
@@ -120,6 +130,8 @@ export class StyleWidget implements IStyleSheet {
     }
 
     sync(declarations?: IStyleSheetDeclarations): this {
+        if (this.locked) return this;
+
         this._rules = [];
 
         const merged = this.merge(declarations || {}).declarations;
@@ -133,7 +145,14 @@ export class StyleWidget implements IStyleSheet {
 
     bind(widget: IWidgetNode<any, any>): this {
         this._selector = `.${widget.fingerprint}`;
+        this.locked = true;
+
         widget.className(widget.fingerprint);
+        widget.signal.listen('mount', () => {
+            this.locked = false;
+            this.sync();
+        })
+
         return this.merge(widget.props.style).sync();
     }
 

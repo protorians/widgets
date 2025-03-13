@@ -1,1 +1,1 @@
-export * from "./manticore"
+export * from "./manticore.js"

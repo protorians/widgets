@@ -1,4 +1,4 @@
-import {Aligning, AligningDirection, AligningProperty} from "../enums";
+import {Aligning, AligningDirection, AligningProperty} from "../enums.js";
 
 export function resolveDirection(dir: AligningDirection) {
   return (Object.values(AligningDirection) as string[]).includes(dir as string) ? dir : undefined;
