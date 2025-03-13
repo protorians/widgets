@@ -1,16 +1,16 @@
-import type {ICapability} from "./capability";
+import type {ICapability} from "./capability.js";
 
-export type IKitScheme = {
+export type ICapabilitiesScheme = {
   [K: string]: any
 }
 
-export type IKitMap<C> = {
+export type ICapabilitiesMap<C> = {
   [K in keyof C]: ICapability<any, any, any>
 }
 
-export interface IKit<C> {
+export interface ICapabilities<C> {
 
-  get scheme(): Partial<IKitMap<C>>;
+  get scheme(): Partial<ICapabilitiesMap<C>>;
 
   attach<K extends keyof C>(capability: ICapability<any, any, C[K]>): this;
 

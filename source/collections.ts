@@ -1,4 +1,4 @@
-import {IViewCollection, IWidgetCollection} from "./types";
+import {IViewCollection, IWidgetCollection} from "./types/index.js";
 
 export const Widget: IWidgetCollection = {}
 export const View: IViewCollection = {}
