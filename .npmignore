@@ -1,9 +1,11 @@
+.github
+source
 node_modules
+docs
+.idea
 .vscode
-.idea/*
+
 *-lock.*
 *.lock
 pnpm-lock.yaml
-.github
-docs
 .npmrc
