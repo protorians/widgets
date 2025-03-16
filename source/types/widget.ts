@@ -1,17 +1,12 @@
 import type {IChildren} from "./children.js";
 import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from "./value.js";
-import type {
-    IMockup,
-    IEngine,
-    IStateStack,
-    IStyleDeclaration,
-    IStyleSheetDeclarations,
-    IStyleSheet,
-} from "./index.js";
 import type {IAttributes} from "./attributes.js";
-import type {IMockupElement, IMockupMeasure} from "./mockup.js";
+import type {IMockup, IMockupElement, IMockupMeasure} from "./mockup.js";
 import {ToggleOption, TreatmentQueueStatus} from "../enums.js";
 import {ISignalStack} from "@protorians/core";
+import {IStateStack} from "./state.js";
+import {IEngine} from "./engine.js";
+import {IStyleDeclaration, IStyleSheet, IStyleSheetDeclarations} from "./style.js";
 
 export interface IGlobalAttributes {
     [K: string]: IPrimitives;
