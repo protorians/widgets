@@ -12,7 +12,7 @@ export function colorPaletteAgent(scheme: 'light' | 'dark'): IProviderCallable {
         if (provider.scopes.length) {
             provider.scopes.forEach((scope) => {
                 if (scope.startsWith(prefix))
-                    ColorPalette.value((scope.substring(prefix.length)) as IColorExtended<IColorKey>);
+                    ColorPalette.variable((scope.substring(prefix.length)) as IColorExtended<IColorKey>);
             })
         }
 
