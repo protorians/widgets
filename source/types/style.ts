@@ -1,5 +1,5 @@
 import {AbsoluteUnit, RelativeUnit} from "../enums.js";
-import {IWidgetNode} from "./widget.js";
+import {IWidgetNode} from "./index.js";
 
 export type IStyleSupportedValue = object | string | number | undefined
 
