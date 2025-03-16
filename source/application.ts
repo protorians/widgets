@@ -74,16 +74,24 @@ export class Application<RouterScheme extends IRouterBaseScheme> implements IApp
                 document.title = `${this.config.title || document.title}`;
                 const widget = route.view.construct(params);
 
-                if (widget && this.main.context && this.main.element instanceof HTMLElement && widget.element instanceof HTMLElement) {
+                if (
+                    widget &&
+                    this.main.context &&
+                    this.main.context.root &&
+                    this.main.element instanceof HTMLElement &&
+                    widget.element instanceof HTMLElement
+                ) {
+                    this.main.clear();
+
+                    this.main.signal.dispatch('unmount', {
+                        root: this.main.context.root,
+                        widget: this.main.context.widget,
+                        payload: undefined
+                    }, widget)
+
                     const context = this.main.context;
                     context.root = widget;
                     WidgetBuilder(widget, this.main.context)
-
-                    this.main.signal.dispatch('unmount', {
-                        root: widget,
-                        widget: widget,
-                        payload: undefined
-                    }, widget)
 
                     this.main.element.replaceWith(widget.element);
 
