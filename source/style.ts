@@ -81,8 +81,6 @@ export class StyleWidget implements IStyleSheet {
         const accumulate: string[] = []
         const shortKey = key.substring(0, key.length - 2)
 
-        console.log('key', key, shortKey, this.autoCompleteXYProperties.includes(shortKey));
-
         if (key.endsWith('-x') && this.autoCompleteXYProperties.includes(shortKey)) {
             accumulate.push(`${shortKey}-left:${value}`);
             accumulate.push(`${shortKey}-right:${value}`);
