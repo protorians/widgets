@@ -8,9 +8,11 @@ import {
     type IColorPaletteAlias,
     type IColorScheme,
     type IColorSchemes,
-    type IColorSlots
+    type IColorSlots,
+    type IColorimetricAlgo,
 } from "@protorians/colorimetric";
 import {IStyleSheet, IStyleSheetDeclarations, IStyleSheetPropertyKey} from "../types/index.js";
+import {WidgetException} from "../errors/index.js";
 
 
 const schemes: IColorSchemes = {
@@ -38,6 +40,26 @@ export class ColorScheme {
             : undefined;
     }
 
+    static get scheme(): ColorSchemeType {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? ColorSchemeType.Dark : ColorSchemeType.Light;
+    }
+
+    static useScheme(callable: (scheme: ColorSchemeType) => void): typeof this {
+        if ('matchMedia' in window) {
+            const fn = (e?: any) => callable(e.matches ? ColorSchemeType.Dark : ColorSchemeType.Light)
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addEventListener('change', fn);
+            fn()
+        } else throw (new WidgetException(`matchMedia not supported in ColorPalette:Scheme `)).show()
+        return this;
+    }
+
+    static get current() {
+        const noUse = document.documentElement.hasAttribute('theme:no-scheme')
+        if (!noUse) return (document.documentElement.getAttribute('theme:scheme') || this.detect()) as ColorSchemeType
+        return this.detect();
+    }
+
     static set current(scheme) {
         scheme = scheme || this.detect();
         const noUse = document.documentElement.hasAttribute('theme:no-scheme')
@@ -47,22 +69,15 @@ export class ColorScheme {
         }
     }
 
-    static get current() {
-        const noUse = document.documentElement.hasAttribute('theme:no-scheme')
-
-        if (!noUse) {
-            return (document.documentElement.getAttribute('theme:scheme') || this.detect()) as ColorSchemeType
-        }
-        return undefined;
-    }
-
 
 }
 
 
 export class ColorPalette {
 
-    static _stylesheet: IStyleSheet | undefined;
+    protected static _stylesheet: IStyleSheet | undefined;
+    protected static _algo: IColorimetricAlgo<any> | undefined;
+    protected static declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations;
 
     static light: Partial<IColorScheme> = {
         one: 'oklch(56.29% 0.1933 256.16)',
@@ -94,7 +109,13 @@ export class ColorPalette {
         black: 'oklch(0% 0 0)',
     };
 
-    protected static declarations: IStyleSheetDeclarations = {} as IStyleSheetDeclarations;
+    static set algorithm(algo: IColorimetricAlgo<any>) {
+        this._algo = algo;
+    }
+
+    static get algorithm(): IColorimetricAlgo<any> {
+        return this._algo || Colorimetric.Oklch;
+    }
 
     static stylesheet(): IStyleSheet {
         this._stylesheet = this._stylesheet || (new StyleWidget({attach: true}))
@@ -107,7 +128,14 @@ export class ColorPalette {
         return this;
     }
 
-    static value<T extends IColorExtended<IColorKey>>(key: T) {
+    static value<T extends IColorExtended<IColorKey>>(type: ColorSchemeType, name: T): string | undefined {
+        const scheme = this[type];
+        const color = scheme ? scheme[name as keyof IColorScheme] || undefined : undefined;
+        const parsed = color ? this.algorithm.parse(color) : undefined;
+        return parsed ? this.algorithm.toString(parsed) : undefined;
+    }
+
+    static variable<T extends IColorExtended<IColorKey>>(key: T) {
         const schemes = Object.values(ColorSchemeType);
 
         const parsed = schemes
@@ -120,29 +148,25 @@ export class ColorPalette {
 
                 if (!color) return undefined;
 
-                const parsed = Colorimetric.Oklch.parse(color);
+                const parsed = this.algorithm.parse(color);
                 if (!parsed) return undefined;
 
                 const variants = xpath.slice(1);
-                let value = Colorimetric.Oklch.toString(parsed);
+                let value = this.algorithm.toString(parsed);
 
                 let calculate: IColorOklch | undefined = parsed;
 
                 for (let index = 0; index < variants.length; index++)
-                    if (calculate) calculate = Colorimetric.Oklch.variation(calculate, variants[index])
-
-                // console.log('Color', xpath, type, color, calculate )
+                    if (calculate) calculate = this.algorithm.variation(calculate, variants[index])
 
                 if (!calculate) return undefined;
-
-                value = Colorimetric.Oklch.toString(calculate);
+                value = this.algorithm.toString(calculate);
 
                 this.declarations[`--color-${type}-${key}` as IStyleSheetPropertyKey] = value;
 
                 return {type, value};
             })
             .filter(v => typeof v !== 'undefined')
-
 
         this.declarations[`--color-${key}` as IStyleSheetPropertyKey] = `light-dark(${
             parsed.map(({type}) =>
@@ -161,7 +185,7 @@ export class ColorPalette {
 export const Color = new Proxy<IColorPaletteAlias>({} as IColorPaletteAlias, {
     get(target: IColorSlots, key: string): string | undefined {
         key = key.replace(/[_]/gi, '-');
-        target[key] = ColorPalette.value(key as IColorExtended<IColorKey>)
+        target[key] = ColorPalette.variable(key as IColorExtended<IColorKey>)
         return target[key] || undefined;
     },
 })
