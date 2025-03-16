@@ -122,11 +122,11 @@ export class ViewWidget implements IView {
         this._widget?.signal.listen('mount', this.bootstrap.bind(instance))
 
         this._widget?.signal.listen('unmount', (payload) => {
+            this.defuse.apply(instance, [payload]);
             if (this._configs.stateless) {
                 this._widget?.clear();
                 instance = undefined;
             }
-            this.defuse.apply(instance, [payload]);
         })
 
         return this._widget
