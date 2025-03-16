@@ -29,9 +29,17 @@ export enum InsertionSiblingPosition {
   After = 'After',
 }
 
+export enum EdgePosition {
+  Start = 'start',
+  Center = 'center',
+  End = 'end',
+}
+
 export enum AligningDirection {
   Row = 'row',
+  RowReverse = 'row-reverse',
   Column = 'column',
+  ColumnReverse = 'column-reverse',
 }
 
 export enum AligningProperty {
