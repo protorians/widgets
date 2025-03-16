@@ -44,9 +44,14 @@ export class ColorScheme {
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? ColorSchemeType.Dark : ColorSchemeType.Light;
     }
 
-    static useScheme(callable: (scheme: ColorSchemeType) => void): typeof this {
+    static use(callable: (scheme: ColorSchemeType) => void): typeof this {
         if ('matchMedia' in window) {
-            const fn = (e?: any) => callable(e.matches ? ColorSchemeType.Dark : ColorSchemeType.Light)
+            const fn = (e?: any) =>
+                callable(
+                    typeof e === 'undefined'
+                        ? this.current as ColorSchemeType :
+                        (e.matches ? ColorSchemeType.Dark : ColorSchemeType.Light)
+                );
             const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
             mediaQuery.addEventListener('change', fn);
             fn()
