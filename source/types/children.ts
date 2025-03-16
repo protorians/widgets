@@ -1,5 +1,5 @@
-import type {ExtendableType} from "./util";
-import type {IAttributes} from "./attributes";
+import type {ExtendableType} from "./util.js";
+import type {IAttributes} from "./attributes.js";
 
 export type IChild<T> = T | T[] | null | undefined;
 

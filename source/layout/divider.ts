@@ -1,7 +1,7 @@
-import {IAttributes, ICommonAttributes, IStyleDeclaration, IWidgetDeclaration, IWidgetNode} from "../types";
-import {WidgetNode} from "../widget-node";
-import {Composable, Mountable} from "../decorators";
-import {AligningDirection} from "../enums";
+import {IAttributes, ICommonAttributes, IStyleDeclaration, IWidgetDeclaration, IWidgetNode} from "../types/index.js";
+import {WidgetNode} from "../widget-node.js";
+import {Composable, Mountable} from "../decorators.js";
+import {AligningDirection} from "../enums.js";
 
 /**
  * @description Strong Text Widget

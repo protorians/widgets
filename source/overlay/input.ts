@@ -5,9 +5,9 @@ import type {
   ISelectAttributes,
   ITextareaAttributes,
   IWidgetDeclaration
-} from "../types";
-import {WidgetNode} from "../widget-node";
-import {Composable, Mountable} from "../decorators";
+} from "../types/index.js";
+import {WidgetNode} from "../widget-node.js";
+import {Composable, Mountable} from "../decorators.js";
 
 
 /**
@@ -120,8 +120,8 @@ export function Label(declaration: IWidgetDeclaration<HTMLLabelElement, ILabelAt
  * @param declaration
  * @constructor
  */
-export function Input(declaration: IWidgetDeclaration<HTMLInputElement, IInputAttributes>): InputWidget {
-  return new InputWidget(declaration)
+export function Input(declaration: Omit<IWidgetDeclaration<HTMLInputElement, IInputAttributes>, 'children'>): InputWidget {
+  return new InputWidget({...declaration, children: undefined})
 }
 
 /**

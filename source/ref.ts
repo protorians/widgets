@@ -1,5 +1,5 @@
-import type {IAttributes, IRef, IWidgetNode} from "./types";
-import {WidgetException} from "./errors";
+import type {IAttributes, IRef, IWidgetNode} from "./types/index.js";
+import {WidgetException} from "./errors/index.js";
 
 
 export class RefWidget<E extends HTMLElement, A extends IAttributes> implements IRef<E, A> {

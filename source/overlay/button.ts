@@ -1,7 +1,7 @@
-import type {IButtonAttributes, IButtonAttributesBase, IWidgetDeclaration} from "../types";
-import {WidgetNode} from "../widget-node";
-import {Composable, Mountable} from "../decorators";
-import {declarationExcavates} from "../helpers";
+import type {IButtonAttributes, IButtonAttributesBase, IWidgetDeclaration} from "../types/index.js";
+import {WidgetNode} from "../widget-node.js";
+import {Composable, Mountable} from "../decorators.js";
+import {declarationExcavates} from "../helpers/index.js";
 
 
 /**
@@ -31,9 +31,10 @@ export function Button(declaration: IWidgetDeclaration<HTMLButtonElement, IButto
   props.current.listen = {
     ...props.current.listen,
     click: props.excavate.onPress,
-    mousedown: props.excavate.onPressStart,
-    mouseup: props.excavate.onPressEnd,
   }
+
+  if(props.excavate.onPressStart) props.current.listen.mousedown = props.excavate.onPressStart
+  if(props.excavate.onPressEnd) props.current.listen.mouseup = props.excavate.onPressEnd
 
   return new ButtonWidget(props.current)
 }

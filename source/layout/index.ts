@@ -1,2 +1,2 @@
-export * from "./stack"
-export * from "./divider"
+export * from "./stack.js"
+export * from "./divider.js"

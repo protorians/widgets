@@ -1,12 +1,12 @@
-import {WidgetNode} from "../widget-node";
-import {Composable, Mountable} from "../decorators";
+import {WidgetNode} from "../widget-node.js";
+import {Composable, Mountable} from "../decorators.js";
 import type {
   IImageAttributes,
   IPictureAttributes,
   IWidgetDeclaration,
   IVideoAttributes,
   ISourceProps
-} from "../types";
+} from "../types/index.js";
 
 
 /**

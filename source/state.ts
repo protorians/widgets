@@ -1,5 +1,5 @@
-import {StateWidget} from "./hooks";
+import {StateWidget} from "./hooks/index.js";
 
-export function State<T>(initial: T | undefined) {
-  return new StateWidget<T>(initial)
+export function createState<T>(initial: T) {
+    return new StateWidget<T>(initial)
 }

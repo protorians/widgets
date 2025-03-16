@@ -4,6 +4,10 @@ export type IFunctioningPrimitives = IPrimitive | Function;
 
 export type IPrimitives = IPrimitive | object;
 
+export type IPrimitivePayload = IPrimitive | IPrimitive[] | Promise<IPrimitive | IPrimitive[]>;
+
+export type IPrimitivesPayload = IPrimitives | IPrimitives[] | Promise<IPrimitives | IPrimitives[]>;
+
 export type IStringToken = string | string[];
 
 

@@ -1,12 +1,12 @@
-import type {Sizer} from "../enums";
-import type {IChildrenSupported, IWidgetDeclaration} from "./widget";
-import type {IChildren} from "./children";
-import type {ICommonAttributes} from "./attributes";
-import {IStyle} from "./style";
+import type {Sizer} from "../enums.js";
+import type {IChildrenSupported, IWidgetDeclaration} from "./widget.js";
+import type {IChildren} from "./children.js";
+import type {ICommonAttributes} from "./attributes.js";
+import type {IStyleSheetDeclarations} from "./style.js";
 
 export interface IContainerProps {
-  size?: number | string | Sizer;
-  style?: IStyle;
-  contentAttributes?: Omit<IWidgetDeclaration<HTMLElement, ICommonAttributes>, 'children'>;
-  children: IChildren<IChildrenSupported>;
+    size?: number | string | Sizer;
+    style?: IStyleSheetDeclarations;
+    contentAttributes?: Omit<IWidgetDeclaration<HTMLElement, ICommonAttributes>, 'children'>;
+    children: IChildren<IChildrenSupported>;
 }
