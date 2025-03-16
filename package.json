@@ -1,6 +1,6 @@
 {
   "name": "@protorians/widgets",
-  "version": "0.1.7-beta.4",
+  "version": "0.1.8-beta.0",
   "description": "Create your web user interfaces with widgets",
   "main": "./~esm/index.js",
   "type": "module",
@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@protorians/animetric": "^0.0.1",
-    "@protorians/colorimetric": "^0.0.2",
+    "@protorians/colorimetric": "^0.0.4",
     "@protorians/core": "^0.1.21"
   }
 }
