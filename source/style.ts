@@ -18,6 +18,11 @@ export class StyleWidget implements IStyleSheet {
         corner: 0,
     };
 
+    autoCompleteXYProperties: string[] = [
+        'padding',
+        'margin',
+    ]
+
     protected _repository: HTMLStyleElement | undefined = undefined;
     protected _rules: string[] = [];
     protected _selector: string = ':root';
@@ -71,18 +76,17 @@ export class StyleWidget implements IStyleSheet {
     }
 
     parseProperty(key: string, value: string | number): string {
-        const accumulate: string[] = []
         key = unCamelCase(key);
         value = StyleWidget.unit(value);
+        const accumulate: string[] = []
+        const shortKey = key = key.substring(0, key.length - 2)
 
-        if (key.endsWith('-x')) {
-            key = key.substring(0, key.length - 2)
-            accumulate.push(`${key}-left:${value}`);
-            accumulate.push(`${key}-right:${value}`);
-        } else if (key.endsWith('-y')) {
-            key = key.substring(0, key.length - 2)
-            accumulate.push(`${key}-top:${value}`);
-            accumulate.push(`${key}-bottom:${value}`);
+        if (key.endsWith('-x') && this.autoCompleteXYProperties.includes(shortKey)) {
+            accumulate.push(`${shortKey}-left:${value}`);
+            accumulate.push(`${shortKey}-right:${value}`);
+        } else if (key.endsWith('-y') && this.autoCompleteXYProperties.includes(shortKey)) {
+            accumulate.push(`${shortKey}-top:${value}`);
+            accumulate.push(`${shortKey}-bottom:${value}`);
         } else {
             accumulate.push(`${key}:${value}`);
         }
