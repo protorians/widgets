@@ -1,6 +1,7 @@
 import type {IApplication, IApplicationConfig, IRouterBaseScheme, IWidgetNode} from "./types/index.js";
 import {Mount} from "./component.js";
 import {Image, Layer, Section, SmallerText, Text,} from "./overlay/index.js";
+import {WidgetBuilder} from "./widget-node.js";
 
 
 export class ApplicationStyle {
@@ -70,39 +71,31 @@ export class Application<RouterScheme extends IRouterBaseScheme> implements IApp
         this.config.router
             .signal
             .listen('navigate', ({route, params}) => {
-
-                document.title = `${this.config.title}`;
-
-                // if (Views.stacked) {
-                //     Views.stacked.collection
-                //         .forEach(widget => {
-                //             if (widget && widget.context?.root) {
-                //                 widget.signal.dispatch('unmount', {
-                //                     root: widget.context.root,
-                //                     widget,
-                //                     payload: undefined
-                //                 })
-                //             }
-                //         })
-                // }
-
+                document.title = `${this.config.title || document.title}`;
                 const widget = route.view.construct(params);
 
-                // const stack: IViewStack = {
-                //   route,
-                //   collection: Views.render(
-                //     new route.view(route.options || {}),
-                //     params,
-                //     Views.useMockup,
-                //   )
-                // }
-                //
-                // Views.stacked = widget;
-                //
+                if (widget && this.main.context && this.main.element instanceof HTMLElement && widget.element instanceof HTMLElement) {
+                    const context = this.main.context;
+                    context.root = widget;
+                    WidgetBuilder(widget, this.main.context)
 
-                this.main
-                    .clear()
-                    .content(widget)
+                    this.main.signal.dispatch('unmount', {
+                        root: widget,
+                        widget: widget,
+                        payload: undefined
+                    }, widget)
+
+                    this.main.element.replaceWith(widget.element);
+
+                    widget.signal
+                        .dispatch('mount', {
+                            root: widget,
+                            widget: widget,
+                            payload: undefined
+                        }, widget);
+
+                    this.main = widget;
+                }
             })
 
         this.config.router.run()
