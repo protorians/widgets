@@ -81,12 +81,20 @@ export class ClientRouter<Scheme extends IRouterBaseScheme> implements IRouter<S
     }
 
     open<K extends keyof Scheme>(to: K | string, props?: Scheme[K]): this {
-        props = props || {} as Scheme[K]
+        props = props || {} as Scheme[K];
+
+        const hasQuery = Object.keys(props).length;
+        const searchQuery = new URLSearchParams(props as Record<string, any>);
         const url = `${window.location.origin}${
             this.config.useHash === true
                 ? `${window.location.pathname}#`
                 : `${this.config.baseUrl || ''}`
-        }${to.toString()}`;
+        }${to.toString()}${hasQuery ? `?${searchQuery.toString()}` : ``}`;
+
+        console.warn(hasQuery, url, JSON.stringify(this.query()), JSON.stringify(props));
+
+        if (to === this.uri && JSON.stringify(this.query()) == JSON.stringify(props))
+            return this;
 
         window.history.pushState(props || {}, url, `${url}`);
         this.resolve(to.toString(), props)
@@ -94,6 +102,7 @@ export class ClientRouter<Scheme extends IRouterBaseScheme> implements IRouter<S
     }
 
     resolve<K extends keyof Scheme>(uri: string, props?: Scheme[K]): IRouterRoute<Scheme, keyof Scheme> & IRouterBaseRoute {
+        uri = uri.split('?')[0];
 
         for (const route of Object.values(this.routes)) {
             const match = this.match(uri, route.pattern);

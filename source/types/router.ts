@@ -128,7 +128,7 @@ export interface IRouter<Scheme extends IRouterBaseScheme> {
 
     use<K extends keyof Scheme>(route: IRouterRoute<Scheme, K>): this;
 
-    open<K extends keyof Scheme>(to: string, props: Scheme[K]): this;
+    open<K extends keyof Scheme>(to: string, props?: Scheme[K]): this;
 
     resolve<K extends keyof Scheme>(uri: string, props: Scheme[K]): IRouterRoute<Scheme, keyof Scheme> & IRouterBaseRoute;
 
