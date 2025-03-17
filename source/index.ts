@@ -3,6 +3,7 @@ export const NativeImage = typeof Image !== "undefined" ? Image : undefined;
 
 export type * from "./types/index.js"
 export * from "./enums.js"
+export * from "./main.js"
 export * from "./colors/index.js"
 export * from "./mockup.js"
 export * from "./state.js"
