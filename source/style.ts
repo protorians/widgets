@@ -2,11 +2,11 @@ import type {
     IStyleOptions,
     IStyleSettings,
     IStyleSheet,
-    IStyleSheetDeclarations, IWidgetNode,
+    IStyleSheetDeclarations, IStyleAliasDictionary, IWidgetNode,
 } from "./types/index.js";
 import {RelativeUnit} from "./enums.js";
 import {RemMetric} from "./metric.js";
-import {Environment, unCamelCase} from "@protorians/core";
+import {Environment, unCamelCase, IDictionary, Dictionary} from "@protorians/core";
 
 
 export class StyleWidget implements IStyleSheet {
@@ -18,10 +18,7 @@ export class StyleWidget implements IStyleSheet {
         corner: 0,
     };
 
-    autoCompleteXYProperties: string[] = [
-        'padding',
-        'margin',
-    ]
+    static alias: IDictionary<IStyleAliasDictionary> = new Dictionary<IStyleAliasDictionary>();
 
     protected _repository: HTMLStyleElement | undefined = undefined;
     protected _rules: string[] = [];
@@ -76,20 +73,18 @@ export class StyleWidget implements IStyleSheet {
     }
 
     parseProperty(key: string, value: string | number): string {
-        key = unCamelCase(key);
+        const accumulate: string[] = [];
+        const aliases = StyleWidget.alias.get(key);
         value = StyleWidget.unit(value);
-        const accumulate: string[] = []
-        const shortKey = key.substring(0, key.length - 2)
 
-        if (key.endsWith('-x') && this.autoCompleteXYProperties.includes(shortKey)) {
-            accumulate.push(`${shortKey}-left:${value}`);
-            accumulate.push(`${shortKey}-right:${value}`);
-        } else if (key.endsWith('-y') && this.autoCompleteXYProperties.includes(shortKey)) {
-            accumulate.push(`${shortKey}-top:${value}`);
-            accumulate.push(`${shortKey}-bottom:${value}`);
-        } else {
-            accumulate.push(`${key}:${value}`);
-        }
+        if (aliases) {
+            aliases
+                .map(alias =>
+                    accumulate.push(
+                        `${unCamelCase(alias.toString())}:${value}`
+                    )
+                )
+        } else accumulate.push(`${unCamelCase(key)}:${value}`);
 
         return accumulate.join(';');
     }
@@ -171,7 +166,6 @@ export class StyleWidget implements IStyleSheet {
         return this.sync();
     }
 }
-
 
 export function Style(declaration: IStyleSheetDeclarations) {
     return new StyleWidget({

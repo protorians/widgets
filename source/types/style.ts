@@ -1,6 +1,14 @@
 import {AbsoluteUnit, RelativeUnit} from "../enums.js";
 import {IWidgetNode} from "./index.js";
 
+export interface IStyleAliasDictionary {
+    [key: string]: Array<keyof CSSStyleDeclaration>;
+}
+
+// export type IStyleAutoSizingPropertiesDictionary = {
+//     [key in keyof CSSStyleDeclaration]: boolean;
+// }
+
 export type IStyleSupportedValue = object | string | number | undefined
 
 export type IStyleExtendedDeclaration = {
