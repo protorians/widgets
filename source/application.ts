@@ -95,12 +95,14 @@ export class Application<RouterScheme extends IRouterBaseScheme> implements IApp
 
                     this.main.element.replaceWith(widget.element);
 
-                    widget.signal
-                        .dispatch('mount', {
-                            root: widget,
-                            widget: widget,
-                            payload: undefined
-                        }, widget);
+                    requestAnimationFrame(() => {
+                        widget.signal
+                            .dispatch('mount', {
+                                root: widget,
+                                widget: widget,
+                                payload: undefined
+                            }, widget);
+                    })
 
                     this.main = widget;
                 }
