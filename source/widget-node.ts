@@ -26,7 +26,7 @@ import type {
 } from "./types/index.js";
 import {Environment, type ISignalStack, MetricRandom, Signal} from "@protorians/core";
 import {Mockup} from "./mockup.js";
-import {ToggleOption, WidgetsNativeProperty} from "./enums.js";
+import {ToggleOption, WidgetElevation, WidgetsNativeProperty} from "./enums.js";
 import {Widgets} from "./widgets.js";
 import {StyleWidget} from "./style.js";
 
@@ -141,6 +141,8 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
 
     set locked(value: boolean) {
         this._locked = value;
+        if (this._locked) this.lock()
+        else this.unlock();
     }
 
     get signal(): ISignalStack<ISignalableMap<E, A>> {
@@ -281,6 +283,14 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
             this._context?.engine?.toggle(this, option);
         })
         return this
+    }
+
+    elevate(elevation?: WidgetElevation): this {
+        this
+            .stylesheet
+            .merge({zIndex: elevation?.toString() || WidgetElevation.None})
+            .sync()
+        return this;
     }
 
     data(dataset: IGlobalAttributes): this {
