@@ -23,7 +23,7 @@ import type {
 import {ContextWidget, WidgetNode} from "../widget-node.js";
 import {StateWidget} from "../hooks/index.js";
 import {Environment, type ISignalStackCallable} from "@protorians/core";
-import {ToggleOption, TreatmentQueueStatus} from "../enums.js";
+import {ToggleOption, TreatmentQueueStatus, WidgetElevation} from "../enums.js";
 import {Mockup} from "../mockup.js";
 
 export class Manticore<E extends HTMLElement, A extends IAttributes> implements IEngine<E, A> {
@@ -112,6 +112,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     trigger(widget: IWidgetNode<E, A>, type: keyof IGlobalEventMap): this {
+        if (widget.locked) return this;
 
         if (widget.element)
             Mockup.Context(
@@ -150,6 +151,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     hide(widget: IWidgetNode<E, A>,): this {
+        if (widget.locked) return this;
 
         if (widget.element)
             Mockup.Context(
@@ -165,6 +167,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     show(widget: IWidgetNode<E, A>,): this {
+        if (widget.locked) return this;
 
         if (widget.element)
             Mockup.Context(
@@ -180,6 +183,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     toggle(widget: IWidgetNode<E, A>, option?: ToggleOption): this {
+        if (widget.locked) return this;
 
         switch (option) {
 
@@ -214,7 +218,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     data(widget: IWidgetNode<E, A>, dataset: IGlobalAttributes): this {
-
+        if (widget.locked) return this;
         if (widget.element)
             Mockup.Context(
                 widget.element, {
@@ -229,12 +233,13 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     attribute(widget: IWidgetNode<E, A>, attributes: Partial<A>): this {
+        if (widget.locked) return this;
         this.attributeLess(widget, attributes as IGlobalAttributes);
         return this;
     }
 
     attributeLess(widget: IWidgetNode<E, A>, attributes: IGlobalAttributes): this {
-
+        if (widget.locked) return this;
         if (widget.element)
             Mockup.Context(
                 widget.element, {
@@ -255,7 +260,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     content(widget: IWidgetNode<E, A>, children: IChildren<IChildrenSupported>): this {
-
+        if (widget.locked) return this;
         if (typeof children !== 'undefined') {
             if (Array.isArray(children)) {
                 children.forEach(child => this.content(widget, child));
@@ -263,11 +268,13 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                 this.render(children, this.widget.context || new ContextWidget(children))
                 widget.mockup?.append(children.element);
                 children.useContext(widget.context);
-                children.signal.dispatch('mount', {
-                    root: this.widget,
-                    widget: children,
-                    payload: undefined
-                }, children.signal);
+                requestAnimationFrame(() => {
+                    children.signal.dispatch('mount', {
+                        root: this.widget,
+                        widget: children,
+                        payload: undefined
+                    }, children.signal);
+                })
             } else if (children instanceof Promise) {
                 children.then(child => this.content(widget, child));
             } else if (
@@ -287,22 +294,27 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     style(widget: IWidgetNode<E, A>, declaration: IStyleSheetDeclarations): this {
+        if (widget.locked) return this;
         Object.keys(declaration || {}).forEach(key => widget.stylesheet.update(key as keyof IStyleSheetDeclarations, declaration[key]));
         widget.signal.dispatch('style', {root: this.widget, widget, payload: declaration}, widget.signal);
         return this;
     }
 
     className(widget: IWidgetNode<E, A>, token: IStringToken): this {
+        if (widget.locked) return this;
         (Array.isArray(token) ? token : token.split(' '))
             .forEach((t) => {
-                if (Environment.Client) widget.element?.classList.add(t);
-                else widget.mockup?.className.add(t);
+                if (t.trim().length > 0) {
+                    if (Environment.Client) widget.element?.classList.add(t);
+                    else widget.mockup?.className.add(t);
+                }
             });
         widget.signal.dispatch('className', {root: this.widget, widget, payload: token}, widget.signal);
         return this;
     }
 
     value(widget: IWidgetNode<E, A>, data: IPrimitive): this {
+        if (widget.locked) return this;
         if (widget.mockup) {
             widget.mockup.value = data;
             widget.signal.dispatch('value', {root: this.widget, widget, payload: data}, widget.signal);
@@ -311,6 +323,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     html(widget: IWidgetNode<E, A>, data: string): this {
+        if (widget.locked) return this;
         if (widget.mockup) {
             widget.mockup.html = data;
             widget.signal.dispatch('html', {root: this.widget, widget, payload: data}, widget);
@@ -322,7 +335,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         widget: IWidgetNode<E, A>,
         listeners: Partial<IEventListeners<E, A>>
     ): this {
-
+        if (widget.locked) return this;
         Object.entries(listeners)
             .forEach(([type, callable]) => {
                 this.listen(widget, type as keyof IGlobalEventMap, ({payload}) =>
@@ -338,9 +351,10 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         callback: ICallable<E, A, IGlobalEventPayload<T>>,
         options?: boolean | AddEventListenerOptions,
     ): this {
-
+        if (widget.locked) return this;
         if (Environment.Client) {
             (widget.element as HTMLElement)?.addEventListener(type, ev => {
+                if (widget.locked) return;
                 const payload = {type, event: ev}
                 const r = callback({root: this.widget, widget: widget, payload})
                 widget.signal.dispatch('listen', {root: this.widget, widget, payload}, widget.signal);
@@ -356,7 +370,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         widget: IWidgetNode<E, A>,
         listeners: Partial<IGlobalEventCallableMap<E, A>>
     ): this {
-
+        if (widget.locked) return this;
         Object.entries(listeners)
             .forEach(([type, callable]) =>
                 this.on(widget, type as keyof IGlobalEventMap, callable as any))
@@ -371,6 +385,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     ): this {
         if (Environment.Client && widget.element) {
             widget.element['on' + type] = callback ? ev => {
+                if (widget.locked) return;
                 const payload = {type, event: ev};
                 const returned = callback({root: this.widget, widget, payload})
                 widget.signal.dispatch('on', {root: this.widget, widget, payload}, widget.signal);
@@ -394,8 +409,12 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         return this
     }
 
-    render<P extends IPropStack, S extends IStateStack>(widget: IWidgetNode<E, A>, context: IContext<P, S>): E | undefined {
+    elevate(widget: IWidgetNode<E, A>, elevation: WidgetElevation): this {
+        widget.elevate(elevation);
+        return this
+    }
 
+    render<P extends IPropStack, S extends IStateStack>(widget: IWidgetNode<E, A>, context: IContext<P, S>): E | undefined {
         context.root = widget;
         widget
             .useContext(context)
@@ -430,6 +449,8 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
         if (widget.props.data) this.data(widget, widget.props.data)
 
         if (widget.props.stase) this.stase(widget, widget.props.stase)
+
+        if (widget.props.elevate) this.elevate(widget, widget.props.elevate)
 
         widget.signal.dispatch('construct', {root: context.root || widget, widget, payload: undefined}, widget.signal)
 
