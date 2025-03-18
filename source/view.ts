@@ -117,6 +117,8 @@ export class ViewWidget implements IView {
 
         this._widget = instance[this._configs.main].apply(instance, [props || {} as T]) as IWidgetNode<any, any> | undefined
 
+        this._widget?.attributeLess({ariaCurrent: "page"})
+
         // this._widget = (this._configs.stateless || !this._widget)
         //     ? instance[this._configs.main].apply(instance, [props || {} as T]) as IWidgetNode<any, any> | undefined
         //     : this._widget;
