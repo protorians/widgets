@@ -245,12 +245,12 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                 widget.element, {
                     client: (element) => {
                         Object.keys(attributes || {}).forEach(key =>
-                            (attributes[key]) ? element.setAttribute(key, `${attributes[key]}`)
+                            (attributes[key]) ? element.setAttribute(key, `${attributes[key].toString()}`)
                                 : void (0))
                     },
                     server: (sheet) => {
                         Object.keys(attributes || {}).forEach(key =>
-                            (attributes[key]) ? sheet.attributes[key] = attributes[key] : void (0))
+                            (attributes[key]) ? sheet.attributes[key] = `${attributes[key]?.toString()}` : void (0))
                     }
                 }
             );
