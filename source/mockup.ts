@@ -399,7 +399,7 @@ export namespace Mockup {
         if (options.any) return options.any(element)
         else if (options.client || options.server) {
             if (options.client && Environment.Client && element instanceof HTMLElement) return options.client(element)
-            if (options.server && element instanceof Sheet) return options.server(element)
+            if (options.server && !Environment.Client && element instanceof Sheet) return options.server(element)
             throw (new WidgetException(`This element is not supported by the "${Environment.GetChannel()}" context`)).show()
         }
         throw (new WidgetException('No context to execute')).show()
