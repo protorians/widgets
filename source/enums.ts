@@ -129,6 +129,7 @@ export enum RelativeUnit {
 
 export enum WidgetsNativeProperty {
     Signal = 'signal',
+    Stase = 'stase',
     Ref = 'ref',
     Children = 'children',
     Style = 'style',
