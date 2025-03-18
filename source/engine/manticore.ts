@@ -22,7 +22,7 @@ import type {
 } from "../types/index.js";
 import {ContextWidget, WidgetNode} from "../widget-node.js";
 import {StateWidget} from "../hooks/index.js";
-import {Environment, type ISignalStackCallable} from "@protorians/core";
+import {Environment, type ISignalStackCallable, unCamelCase} from "@protorians/core";
 import {ToggleOption, TreatmentQueueStatus, WidgetElevation} from "../enums.js";
 import {Mockup} from "../mockup.js";
 
@@ -153,7 +153,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     hide(widget: IWidgetNode<E, A>,): this {
         if (widget.locked) return this;
 
-        if (widget.element)
+        if (widget.element) {
             Mockup.Context(
                 widget.element, {
                     client: (element) =>
@@ -161,6 +161,8 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                     server: () => void (0),
                 }
             )
+            this.attributeLess(widget, {ariaDisabled: "true",})
+        }
 
         widget.signal.dispatch('hide', {root: this.widget, widget, payload: undefined}, widget.signal);
         return this;
@@ -169,7 +171,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     show(widget: IWidgetNode<E, A>,): this {
         if (widget.locked) return this;
 
-        if (widget.element)
+        if (widget.element) {
             Mockup.Context(
                 widget.element, {
                     client: (element) =>
@@ -177,7 +179,8 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                     server: () => void (0),
                 }
             )
-
+            this.attributeLess(widget, {ariaDisabled: undefined,})
+        }
         widget.signal.dispatch('show', {root: this.widget, widget, payload: undefined}, widget.signal);
         return this;
     }
@@ -244,13 +247,16 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
             Mockup.Context(
                 widget.element, {
                     client: (element) => {
-                        Object.keys(attributes || {}).forEach(key =>
-                            (attributes[key]) ? element.setAttribute(key, `${attributes[key].toString()}`)
-                                : void (0))
+                        Object.keys(attributes || {}).forEach(
+                            key =>
+                                (typeof attributes[key] !== "undefined")
+                                    ? element.setAttribute(unCamelCase(key), `${attributes[key]?.toString()}`)
+                                    : element.removeAttribute(unCamelCase(key))
+                        )
                     },
                     server: (sheet) => {
                         Object.keys(attributes || {}).forEach(key =>
-                            (attributes[key]) ? sheet.attributes[key] = `${attributes[key]?.toString()}` : void (0))
+                            (typeof attributes[key] !== "undefined") ? sheet.attributes[unCamelCase(key)] = `${attributes[key]?.toString()}` : void (0))
                     }
                 }
             );
