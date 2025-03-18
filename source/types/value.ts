@@ -25,6 +25,10 @@ export type IYesNo = 'yes' | 'no';
 
 export type IBoolean = 'true' | 'false';
 
+export type IUndefined = 'undefined';
+
+export type ISorting = "ascending" | "descending" | "none" | "other";
+
 export type ILoading = 'eager' | 'lazy';
 
 export type ISandbox =
