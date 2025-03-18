@@ -149,3 +149,11 @@ export enum WidgetElevation {
     Overlay = 999,
     Critical = 9999,
 }
+
+export enum PopupType {
+    Menu = "menu",
+    Listbox = "listbox",
+    Tree = "tree",
+    Grid = "grid",
+    Dialog = "dialog",
+}
