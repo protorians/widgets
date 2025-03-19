@@ -15,7 +15,6 @@ import type {
     IPrimitive,
     IPropStack,
     IRef,
-    ISignalableMap,
     IStateStack,
     IStringToken,
     IStyleDeclaration,
@@ -23,8 +22,9 @@ import type {
     IStyleSheetDeclarations,
     IWidgetDeclaration,
     IWidgetNode,
+    IWidgetSignalMap,
 } from "./types/index.js";
-import {Environment, type ISignalStack, MetricRandom, Signal} from "@protorians/core";
+import {Environment, type ISignalStack, MetricRandom, Signal, TreatmentQueueStatus} from "@protorians/core";
 import {Mockup} from "./mockup.js";
 import {ToggleOption, WidgetElevation, WidgetsNativeProperty} from "./enums.js";
 import {Widgets} from "./widgets.js";
@@ -59,7 +59,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
     protected _tag: string = 'div';
     protected _attributes: A = {} as A;
     protected _props: INativeProperties<E, A> = {} as INativeProperties<E, A>;
-    protected _signal: ISignalStack<ISignalableMap<E, A>>;
+    protected _signal: ISignalStack<IWidgetSignalMap<E, A>>;
     protected _locked: boolean = false;
     protected _context: IContext<any, any> | undefined = undefined;
     protected _stylesheet: IStyleSheet | undefined = undefined;
@@ -145,7 +145,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         else this.unlock();
     }
 
-    get signal(): ISignalStack<ISignalableMap<E, A>> {
+    get signal(): ISignalStack<IWidgetSignalMap<E, A>> {
         return this._signal;
     }
 
@@ -173,7 +173,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         return this;
     }
 
-    mount(callback: ICallable<E, A, undefined>): this {
+    mount(callback: ICallable<E, A, IWidgetNode<E, A>>): this {
         this._signal.listen('mount', callback);
         return this;
     }
@@ -193,10 +193,24 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         return this;
     }
 
+    // protected recursiveClear() {
+    //     this._props.children = (Array.isArray(this._props.children) ? this._props.children : [this._props.children])
+    //         .map(child => {
+    //             if (child instanceof WidgetNode) {
+    //                 child.clear()
+    //             }
+    //             return undefined;
+    //         }).filter(v => v !== undefined)
+    //
+    // }
+
     clear(): this {
-        if (this._context) this._context?.engine?.clear(this);
+        if (this._context) {
+            this._context?.engine?.clear(this);
+        }
         if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.clear(this);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -205,6 +219,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context?.engine?.remove(this);
         if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.remove(this);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -213,6 +228,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.enable(this);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.enable(this);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -221,6 +237,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.disable(this);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.disable(this);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -229,6 +246,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.lock(this);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.lock(this);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -237,6 +255,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.unlock(this);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.unlock(this);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -245,6 +264,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.trigger(this, type);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.trigger(this, type);
+            return TreatmentQueueStatus.SnapOut;
         });
         return this;
     }
@@ -253,6 +273,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.stase(this, state);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.stase(this, state);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -265,6 +286,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.hide(this);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.hide(this);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -273,6 +295,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.show(this);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.show(this);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -281,6 +304,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.toggle(this, option);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.toggle(this, option);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this
     }
@@ -297,6 +321,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.data(this, dataset);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.data(this, dataset);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -305,6 +330,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.attribute(this, attributes);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.attribute(this, attributes);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -313,6 +339,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.attributeLess(this, attributes);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.attributeLess(this, attributes);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -321,6 +348,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.style(this, declaration);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.style(this, declaration);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -329,6 +357,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.className(this, token);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.className(this, token);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -337,6 +366,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.value(this, data);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.value(this, data);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -345,6 +375,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.html(this, code);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.html(this, code);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -353,6 +384,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.content(this, children);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.content(this, children);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -365,6 +397,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.listen(this, type, callback, options);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.listen(this, type, callback, options);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
@@ -373,6 +406,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
         if (this._context) this._context.engine?.on(this, type, callback);
         else if (!this._context) this._signal.listen('mount', () => {
             this._context?.engine?.on(this, type, callback);
+            return TreatmentQueueStatus.SnapOut;
         })
         return this;
     }
