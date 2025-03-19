@@ -1,20 +1,20 @@
 import type {ICommonAttributes, IContainerProps, IWidgetDeclaration} from "../types/index.js";
 import {Layer, Section} from "../overlay/index.js";
-import {declarationExcavates} from "../helpers/index.js";
+import {declarationExplodes} from "../helpers/index.js";
 import {SizeCapabilities} from "../capabilities/index.js";
 import {Sizer} from "../enums.js";
 
 
 export function Container(declaration: IWidgetDeclaration<HTMLElement, IContainerProps & ICommonAttributes>) {
 
-    const props = declarationExcavates<HTMLElement, ICommonAttributes, IContainerProps>(
+    const props = declarationExplodes<IWidgetDeclaration<HTMLElement, ICommonAttributes & IContainerProps>, IContainerProps>(
         declaration,
         ['size', 'children', 'contentAttributes', 'style']
     )
-    const size = props.excavate.size || 1;
+    const size = props.extended.size || 1;
     const content = Layer({
-        ...(props.excavate.contentAttributes || {}),
-        children: props.excavate.children,
+        ...(props.extended.contentAttributes || {}),
+        children: props.extended.children,
         signal: {
             mount({widget}) {
                 widget.style({
@@ -35,7 +35,7 @@ export function Container(declaration: IWidgetDeclaration<HTMLElement, IContaine
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            ...props.excavate.style
+            ...props.extended.style
         },
         children: content,
     })
