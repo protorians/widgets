@@ -1,7 +1,7 @@
 import type {IButtonAttributes, IButtonAttributesBase, IWidgetDeclaration} from "../types/index.js";
 import {WidgetNode} from "../widget-node.js";
 import {Composable, Mountable} from "../decorators.js";
-import {declarationExcavates} from "../helpers/index.js";
+import {declarationExplodes} from "../helpers/index.js";
 
 
 /**
@@ -10,9 +10,9 @@ import {declarationExcavates} from "../helpers/index.js";
 @Mountable()
 @Composable()
 export class ButtonWidget extends WidgetNode<HTMLButtonElement, IButtonAttributes> {
-  get tag(): string {
-    return 'button'
-  };
+    get tag(): string {
+        return 'button'
+    };
 }
 
 /**
@@ -22,19 +22,18 @@ export class ButtonWidget extends WidgetNode<HTMLButtonElement, IButtonAttribute
  */
 export function Button(declaration: IWidgetDeclaration<HTMLButtonElement, IButtonAttributes & IButtonAttributesBase>): ButtonWidget {
 
-  const props = declarationExcavates<
-    HTMLButtonElement,
-    IButtonAttributes,
-    IButtonAttributesBase
-  >(declaration, ['onPress', 'onPressStart', 'onPressEnd',])
+    const props = declarationExplodes<
+        IWidgetDeclaration<HTMLButtonElement, IButtonAttributes & IButtonAttributesBase>,
+        IButtonAttributesBase
+    >(declaration, ['onPress', 'onPressStart', 'onPressEnd',])
 
-  props.current.listen = {
-    ...props.current.listen,
-    click: props.excavate.onPress,
-  }
+    props.declaration.listen = {
+        ...props.declaration.listen,
+        click: props.extended.onPress,
+    }
 
-  if(props.excavate.onPressStart) props.current.listen.mousedown = props.excavate.onPressStart
-  if(props.excavate.onPressEnd) props.current.listen.mouseup = props.excavate.onPressEnd
+    if (props.extended.onPressStart) props.declaration.listen.mousedown = props.extended.onPressStart;
+    if (props.extended.onPressEnd) props.declaration.listen.mouseup = props.extended.onPressEnd;
 
-  return new ButtonWidget(props.current)
+    return new ButtonWidget(props.declaration as IWidgetDeclaration<HTMLButtonElement, IButtonAttributes>)
 }
