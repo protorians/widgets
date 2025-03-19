@@ -85,12 +85,6 @@ export enum ToggleOption {
     Stase = 'stase',
 }
 
-export enum TreatmentQueueStatus {
-    Continue = 'continue',
-    Cancel = 'cancel',
-    Exit = 'exit',
-}
-
 export enum TextAligning {
     Left = 'left',
     Center = 'center',
