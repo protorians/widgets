@@ -2,8 +2,8 @@ import type {IChildren} from "./children.js";
 import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from "./value.js";
 import type {IAttributes} from "./attributes.js";
 import type {IMockup, IMockupElement, IMockupMeasure} from "./mockup.js";
-import {ToggleOption, TreatmentQueueStatus, WidgetElevation} from "../enums.js";
-import {ISignalStack} from "@protorians/core";
+import {ToggleOption, WidgetElevation} from "../enums.js";
+import {ISignalStack, TreatmentQueueStatus} from "@protorians/core";
 import {IStateStack} from "./state.js";
 import {IEngine} from "./engine.js";
 import {IStyleDeclaration, IStyleSheet, IStyleSheetDeclarations} from "./style.js";
@@ -139,7 +139,7 @@ export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
 
     set locked(value: boolean);
 
-    get signal(): ISignalStack<ISignalableMap<E, A>>;
+    get signal(): ISignalStack<IWidgetSignalMap<E, A>>;
 
     get measure(): IMockupMeasure;
 
@@ -175,7 +175,7 @@ export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
 
     // insert(component: IWidget<any, any>, position?: InsertionPosition): this;
 
-    mount(callback: ICallable<E, A, undefined>): this;
+    mount(callback: ICallable<E, A, IWidgetNode<E, A>>): this;
 
     unmount(callback: ICallable<E, A, undefined>): this;
 
@@ -227,17 +227,17 @@ export type IEventListeners<E extends HTMLElement, A extends IAttributes> = {
 
 
 /**
- * Widget Signalable Map
+ * Widget Signal Map
  */
-export interface ISignalableMap<E extends HTMLElement, A extends IAttributes> {
+export interface IWidgetSignalMap<E extends HTMLElement, A extends IAttributes> {
 
     construct: ICallablePayload<E, A, undefined>;
 
-    mount: ICallablePayload<E, A, undefined>;
+    mount: ICallablePayload<E, A, IWidgetNode<E, A>>;
 
     unmount: ICallablePayload<E, A, undefined>;
 
-    adopted: ICallablePayload<E, A, undefined>;
+    adopted: ICallablePayload<E, A, IWidgetNode<E, A> | undefined>;
 
     before: ICallablePayload<E, A, undefined>;
 
@@ -245,7 +245,7 @@ export interface ISignalableMap<E extends HTMLElement, A extends IAttributes> {
 
     render: ICallablePayload<E, A, undefined>;
 
-    clear: ICallablePayload<E, A, IWidgetNode<E, A>>;
+    clear: ICallablePayload<E, A, undefined>;
 
     child: ICallablePayload<E, A, IChildren<IChildrenSupported>>;
 
@@ -287,7 +287,7 @@ export interface ISignalableMap<E extends HTMLElement, A extends IAttributes> {
 }
 
 export type ISignalableCallbackMap<E extends HTMLElement, A extends IAttributes> = {
-    [K in keyof ISignalableMap<E, A>]: ICallable<E, A, ISignalableMap<E, A>[K]>
+    [K in keyof IWidgetSignalMap<E, A>]: ICallable<E, A, IWidgetSignalMap<E, A>[K]>
 }
 
 /**
@@ -361,6 +361,11 @@ export type INativeProperties<E extends HTMLElement, A extends IAttributes> = {
  * Widget Primitive Props
  */
 export type IWidgetDeclaration<E extends HTMLElement, A extends IAttributes> = A & INativeProperties<E, A>
+
+export type IWidgetDeclarationExploded<D extends IWidgetDeclaration<any, any>, T> = {
+    declaration: D;
+    extended: T;
+}
 
 
 /**
