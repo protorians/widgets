@@ -100,7 +100,7 @@ export class Application<RouterScheme extends IRouterBaseScheme> implements IApp
                             .dispatch('mount', {
                                 root: widget,
                                 widget: widget,
-                                payload: undefined
+                                payload: widget
                             }, widget);
                     })
 
