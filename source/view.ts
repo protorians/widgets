@@ -65,7 +65,7 @@ export class ViewWidget implements IView {
         return this;
     }
 
-    static bootstrap<E extends HTMLElement, A extends IAttributes>(payload: ICallablePayload<E, A, undefined>): void {
+    static bootstrap<E extends HTMLElement, A extends IAttributes>(payload: ICallablePayload<E, A, IWidgetNode<E, A>>): void {
         if (typeof this._configs !== 'object') return;
         if (typeof this._configs.bootstrapper === 'undefined') return;
         if (this._instance && typeof this._instance[this._configs.bootstrapper] !== 'function') return;

@@ -44,7 +44,7 @@ export function Component(
                 this.widget.signal.dispatch('mount', {
                     root: this.widget,
                     widget: this.widget,
-                    payload: undefined
+                    payload: this.widget
                 }, this.widget);
                 this.replaceWith(this.widget.element as HTMLElement)
             }
