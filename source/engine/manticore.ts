@@ -17,13 +17,13 @@ import type {
     IStringToken,
     IPrimitive,
     ISignalableCallbackMap,
-    ISignalableMap,
+    IWidgetSignalMap,
     IStyleSheetDeclarations
 } from "../types/index.js";
 import {ContextWidget, WidgetNode} from "../widget-node.js";
 import {StateWidget} from "../hooks/index.js";
-import {Environment, type ISignalStackCallable, unCamelCase} from "@protorians/core";
-import {ToggleOption, TreatmentQueueStatus, WidgetElevation} from "../enums.js";
+import {Environment, type ISignalStackCallable, TreatmentQueueStatus, unCamelCase} from "@protorians/core";
+import {ToggleOption, WidgetElevation} from "../enums.js";
 import {Mockup} from "../mockup.js";
 
 export class Manticore<E extends HTMLElement, A extends IAttributes> implements IEngine<E, A> {
@@ -62,14 +62,14 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     // }
 
     clear(widget: IWidgetNode<E, A>,): this {
-        if (widget.element)
+        if (widget.element) {
             Mockup.Context(
                 widget.element, {
                     client: (element) => element.innerHTML = '',
                     server: (sheet) => sheet.html = '',
                 })
-
-        widget.signal.dispatch('clear', {root: this.widget, widget, payload: widget}, widget.signal);
+        }
+        widget.signal.dispatch('clear', {root: this.widget, widget, payload: undefined}, widget.signal);
         return this;
     }
 
@@ -278,7 +278,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                     children.signal.dispatch('mount', {
                         root: this.widget,
                         widget: children,
-                        payload: undefined
+                        payload: widget
                     }, children.signal);
                 })
             } else if (children instanceof Promise) {
@@ -405,7 +405,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     signals(widget: IWidgetNode<E, A>, signals: Partial<ISignalableCallbackMap<E, A>>): this {
         Object.entries(signals)
             .forEach(([key, callable]) =>
-                widget.signal.listen(key as keyof ISignalableMap<E, A>, callable as ISignalStackCallable<any>)
+                widget.signal.listen(key as keyof IWidgetSignalMap<E, A>, callable as ISignalStackCallable<any>)
             )
         return this;
     }
