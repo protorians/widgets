@@ -17,6 +17,26 @@ export enum ColorimetricType {
     Oklch = 'oklch',
 }
 
+export enum Position {
+    Top = 'top',
+    Right = 'right',
+    Bottom = 'bottom',
+    Left = 'left',
+    Center = 'center',
+}
+
+export enum PositionX {
+    Right = 'right',
+    Left = 'left',
+    Center = 'center',
+}
+
+export enum PositionY {
+    Top = 'top',
+    Bottom = 'bottom',
+    Center = 'center',
+}
+
 export enum InsertionPosition {
     BeforeBegin = 'BeforeBegin',
     BeforeEnd = 'BeforeEnd',
@@ -151,6 +171,7 @@ export enum PopupType {
     Tree = "tree",
     Grid = "grid",
     Dialog = "dialog",
+    Custom = "custom",
 }
 
 export enum AriaLayoutRole {
@@ -216,7 +237,7 @@ export enum AriaContainerRole {
     ListBox = "listbox",
     ListItem = "listitem",
     Math = "math",
-    None = "none", // Alias de "presentation"
+    None = "none",
     Presentation = "presentation",
     Row = "row",
     RowGroup = "rowgroup",
