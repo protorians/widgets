@@ -1,5 +1,5 @@
 import {createCapabilities, createCapability} from "../capability.js";
-import type {IAttributes, ISizeKitScheme} from "../types/index.js";
+import type {IAttributes, ISizeCapabilityScheme} from "../types/index.js";
 import {Sizer} from "../enums.js";
 import {StyleWidget} from "../style.js";
 
@@ -54,7 +54,7 @@ export const BitSizeCapability = createCapability<HTMLElement, IAttributes, numb
   ({payload}) => `${StyleWidget.unit(payload)}`
 )
 
-export const SizeCapabilities = createCapabilities<ISizeKitScheme>()
+export const SizeCapabilities = createCapabilities<ISizeCapabilityScheme>()
   .attach<'surface'>(SurfaceSizeCapability)
   .attach<'text'>(TextSizeCapability)
   .attach<'unit'>(BitSizeCapability)
