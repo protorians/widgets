@@ -16,7 +16,8 @@ export interface IEncapsulatorConfigs {
     defuser?: string;
     properties?: string[];
     states?: string[];
-    options?: IEncapsulatorOptions
+    options?: IEncapsulatorOptions;
+    structures?: string[];
 }
 
 export interface IEncapsulator {
