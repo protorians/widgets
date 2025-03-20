@@ -283,6 +283,12 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                 })
             } else if (children instanceof Promise) {
                 children.then(child => this.content(widget, child));
+            } else if (typeof children === 'function') {
+                this.content(widget, children({
+                    root: this.widget,
+                    widget: widget,
+                    payload: undefined,
+                }))
             } else if (
                 children instanceof HTMLElement ||
                 children instanceof DocumentFragment ||
