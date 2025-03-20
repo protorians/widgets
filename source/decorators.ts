@@ -99,11 +99,25 @@ export function Mountable() {
 
 /**
  * Widget integrator decorator
- * @description Enable a widget integrator property to host states
+ * @description Enable a widget integrator property to host layout structure
+ */
+export function Structurable(target: any, name: string) {
+    if (target._configs) {
+        if (!Array.isArray(target._configs?.structures)) {
+            target._configs.structures = [];
+        }
+        target._configs?.structures.push(name);
+    }
+}
+
+
+/**
+ * Widget integrator decorator
+ * @description Enable a widget integrator property to host properties
  */
 export function Property() {
     return function (target: any, name: string) {
-        target.constructor._configs = (target.constructor._configs || {}) as IEncapsulatorConfigs;
+        target.constructor._configs = {...(target.constructor._configs || {})} as IEncapsulatorConfigs;
         target.constructor._configs.propertiees = target.constructor._configs.propertiees || [];
         target.constructor._configs.propertiees.push(name);
     }
@@ -115,7 +129,7 @@ export function Property() {
  */
 export function State() {
     return function (target: any, name: string) {
-        target.constructor._configs = (target.constructor._configs || {}) as IEncapsulatorConfigs;
+        target.constructor._configs = {...(target.constructor._configs || {})} as IEncapsulatorConfigs;
         target.constructor._configs.states = target.constructor._configs.states || [];
         target.constructor._configs.states.push(name);
     }
@@ -127,7 +141,7 @@ export function State() {
  */
 export function Optionator(options: IEncapsulatorOptions) {
     return function (target: any) {
-        target.constructor._configs = (target.constructor._configs || {}) as IEncapsulatorConfigs;
+        target.constructor._configs = {...(target.constructor._configs || {})} as IEncapsulatorConfigs;
         target.constructor._configs.options = options;
     }
 }
@@ -138,7 +152,7 @@ export function Optionator(options: IEncapsulatorOptions) {
  */
 export function Override() {
     return function (target: any, name: string) {
-        target.constructor._configs = (target.constructor._configs || {}) as IEncapsulatorConfigs;
+        target.constructor._configs = {...(target.constructor._configs || {})} as IEncapsulatorConfigs;
         target.constructor._configs.main = name;
     }
 }
@@ -149,7 +163,7 @@ export function Override() {
  */
 export function Bootstrapper() {
     return function (target: any, name: string) {
-        target.constructor._configs = (target.constructor._configs || {}) as IEncapsulatorConfigs;
+        target.constructor._configs = {...(target.constructor._configs || {})} as IEncapsulatorConfigs;
         target.constructor._configs.bootstrapper = name;
     }
 }
@@ -160,7 +174,7 @@ export function Bootstrapper() {
  */
 export function Defuser() {
     return function (target: any, name: string) {
-        target.constructor._configs = target.constructor._configs || {}
+        target.constructor._configs = {...(target.constructor._configs || {})} as IEncapsulatorConfigs;
         target.constructor._configs.defuser = name;
     }
 }
