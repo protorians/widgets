@@ -271,9 +271,9 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
             if (Array.isArray(children)) {
                 children.forEach(child => this.content(widget, child));
             } else if (children instanceof WidgetNode) {
-                this.render(children, this.widget.context || new ContextWidget(children))
+                this.render(children, this.widget.context || new ContextWidget(widget))
                 widget.mockup?.append(children.element);
-                children.useContext(widget.context);
+                children.useContext(this.widget.context || widget.context);
                 requestAnimationFrame(() => {
                     children.signal.dispatch('mount', {
                         root: this.widget,
@@ -297,7 +297,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
                 widget.mockup?.append(children);
             } else if (children instanceof StateWidget) {
                 children.bind(widget)
-            } else {
+            } else if (typeof children === 'string' || typeof children === 'number') {
                 widget.mockup?.append(document.createTextNode(`${children}`))
             }
         }
@@ -427,7 +427,7 @@ export class Manticore<E extends HTMLElement, A extends IAttributes> implements 
     }
 
     render<P extends IPropStack, S extends IStateStack>(widget: IWidgetNode<E, A>, context: IContext<P, S>): E | undefined {
-        context.root = widget;
+        context.root = this.widget.context?.root || widget;
         widget
             .useContext(context)
             .stylesheet

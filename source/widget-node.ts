@@ -24,7 +24,7 @@ import type {
     IWidgetNode,
     IWidgetSignalMap,
 } from "./types/index.js";
-import {Environment, type ISignalStack, MetricRandom, Signal, TreatmentQueueStatus} from "@protorians/core";
+import {Environment, type ISignalStack, IUiTarget, MetricRandom, Signal, TreatmentQueueStatus} from "@protorians/core";
 import {Mockup} from "./mockup.js";
 import {ToggleOption, WidgetElevation, WidgetsNativeProperty} from "./enums.js";
 import {Widgets} from "./widgets.js";
@@ -63,6 +63,7 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
     protected _locked: boolean = false;
     protected _context: IContext<any, any> | undefined = undefined;
     protected _stylesheet: IStyleSheet | undefined = undefined;
+    protected _mounted: boolean = false;
 
     constructor(declaration: IWidgetDeclaration<E, A>) {
         this.extractProperties(declaration);
@@ -174,12 +175,22 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
     }
 
     mount(callback: ICallable<E, A, IWidgetNode<E, A>>): this {
-        this._signal.listen('mount', callback);
+        this._signal.listen('mount', payload => {
+            if (!this._mounted) {
+                this._mounted = true;
+                return callback(payload);
+            }
+        });
         return this;
     }
 
     unmount(callback: ICallable<E, A, undefined>): this {
-        this._signal.listen('unmount', callback);
+        this._signal.listen('unmount', payload => {
+            if (this._mounted) {
+                this._mounted = false;
+                return callback(payload);
+            }
+        });
         return this;
     }
 
@@ -408,6 +419,20 @@ export class WidgetNode<E extends HTMLElement, A extends IAttributes> implements
             this._context?.engine?.on(this, type, callback);
             return TreatmentQueueStatus.SnapOut;
         })
+        return this;
+    }
+
+    append(children: IWidgetNode<any, any> | IUiTarget<any>): this {
+        if (Array.isArray(children))
+            children.forEach(child => this.element?.append(child))
+
+        else if (children instanceof WidgetNode) {
+            this.element?.append(children.element)
+            children.useContext(this._context)
+        }
+
+        console.log('Append', children, 'to', this)
+
         return this;
     }
 

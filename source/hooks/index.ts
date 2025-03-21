@@ -8,13 +8,12 @@ import type {
 import {WidgetNode} from "../widget-node.js";
 import {type ISignalController, Signal} from "@protorians/core";
 
-function createMarker(data: IPrimitive | IWidgetNode<any, any>): Text | HTMLElement {
+function createMarker<T>(data: IPrimitive | IWidgetNode<any, any> | T): Text | HTMLElement {
     if (typeof data === "object" && data instanceof WidgetNode) {
         return data.element;
     }
-    return document.createTextNode(`${data}`);
+    return document.createTextNode(`${data || '&nbsp;'}`);
 }
-
 
 export class StateWidget<T> implements IState<T> {
 
@@ -49,10 +48,14 @@ export class StateWidget<T> implements IState<T> {
     }
 
     bind<E extends HTMLElement, A extends IAttributes>(widget: IWidgetNode<E, A>): this {
-        let marker = createMarker(`${this.value}`);
+        let marker = createMarker<T>(this.value);
+
         widget.content(marker);
         this.effect((state) => {
-            const newMarker = createMarker(`${state}`);
+            const newMarker = createMarker<T>(state);
+
+            console.warn('State', this.value, state, newMarker, marker)
+
             marker.replaceWith(newMarker)
             marker = newMarker
         })

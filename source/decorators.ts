@@ -102,11 +102,11 @@ export function Mountable() {
  * @description Enable a widget integrator property to host layout structure
  */
 export function Structurable(target: any, name: string) {
-    if (target._configs) {
-        if (!Array.isArray(target._configs?.structures)) {
-            target._configs.structures = [];
-        }
-        target._configs?.structures.push(name);
+    const configs = (target._configs || target.constructor._configs) as IEncapsulatorConfigs | undefined;
+
+    if (configs) {
+        if (!Array.isArray(configs?.structures)) configs.structures = [];
+        configs?.structures.push(name);
     }
 }
 

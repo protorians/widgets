@@ -3,7 +3,7 @@ import type {IPrimitives, IPrimitive, IStringToken, IFunctioningPrimitives} from
 import type {IAttributes} from "./attributes.js";
 import type {IMockup, IMockupElement, IMockupMeasure} from "./mockup.js";
 import {ToggleOption, WidgetElevation} from "../enums.js";
-import {ISignalStack, TreatmentQueueStatus} from "@protorians/core";
+import {ISignalStack, IUiTarget, TreatmentQueueStatus} from "@protorians/core";
 import {IStateStack} from "./state.js";
 import {IEngine} from "./engine.js";
 import {IStyleDeclaration, IStyleSheet, IStyleSheetDeclarations} from "./style.js";
@@ -210,6 +210,8 @@ export interface IWidgetNode<E extends HTMLElement, A extends IAttributes> {
     listen<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>>, options?: boolean | AddEventListenerOptions): this;
 
     on<T extends keyof IGlobalEventMap>(type: T, callback: ICallable<E, A, IGlobalEventPayload<T>> | null): this;
+
+    append(children: IWidgetNode<any, any> | IUiTarget<any>): this;
 
     trigger(type: keyof IGlobalEventMap): this;
 

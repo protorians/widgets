@@ -98,7 +98,7 @@ export class Application<RouterScheme extends IRouterBaseScheme> implements IApp
                     requestAnimationFrame(() => {
                         widget.signal
                             .dispatch('mount', {
-                                root: widget,
+                                root: this.main,
                                 widget: widget,
                                 payload: widget
                             }, widget);

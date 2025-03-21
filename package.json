@@ -27,14 +27,14 @@
     "directory": "source"
   },
   "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^22.13.1",
-    "ts-node": "^10.9.2",
+  "peerDependencies": {
+    "@types/node": "^18.7.13",
+    "ts-node": "^10.9.1",
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@protorians/animetric": "^0.0.7",
-    "@protorians/colorimetric": "^0.0.5",
-    "@protorians/core": "^0.2.0"
+    "@protorians/animetric": "workspace:*",
+    "@protorians/colorimetric": "workspace:*",
+    "@protorians/core": "workspace:*"
   }
 }
