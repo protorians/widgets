@@ -7,7 +7,11 @@
     "moduleResolution": "NodeNext",
     "target": "ESNext",
     "module": "NodeNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": false,
     "noImplicitAny": false,
     "allowJs": false,
     "removeComments": true,
@@ -16,18 +20,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noEmit": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true,
     "strict": true,
+    "outDir": "./build",
     "rootDir": "./source"
   },
   "exclude": [
     "node_modules",
-    "~cjs",
-    "~esm",
-    "build",
-    "./tests"
+    "build"
   ],
   "include": [
     "./source"
